@@ -1,3 +1,5 @@
+require 'will_paginate/collection'
+
 module RocketPants
   module Respondable
     extend ActiveSupport::Concern
@@ -12,7 +14,7 @@ module RocketPants
           object.serializable_hash options
         elsif object.respond_to?(:as_json)
           object.as_json options
-        elsif object.respond_to?(:map)
+        elsif object.is_a?(Array) || object.is_a?(Set)
           object.map { |o| normalise_object o, options }
         else
           object

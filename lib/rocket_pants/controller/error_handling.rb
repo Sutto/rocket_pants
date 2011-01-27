@@ -22,10 +22,9 @@ module RocketPants
       #   @param [Hash{Symbol => Object}] context the options passed to the error message translation.
       # @raise [RocketPants::Error] the error from the given options
       def error!(name, *args)
-        context           = args.extract_options!
-        klass             = Errors[name] || Error
-        exception         = klass.new(*args)
-        exception.context = context
+        context   = args.extract_options!
+        klass     = Errors[name] || Error
+        exception = klass.new(*args).tap { |e| e.context = context }
         raise exception
       end
       
@@ -36,7 +35,7 @@ module RocketPants
       # @param [StandardError] exception the exception to get the message from
       # @return [String] the found error message.
       def lookup_error_message(exception)
-        # TODO: Add in notification hooks.
+        # TODO: Add in notification hooks for non-standard exceptions.
         context = exception.respond_to?(:context)    ? exception.context : {}
         name    = exception.respond_to?(:error_name) ? exception.error_name : :system
         message = (exception.message == exception.class.name) ? 'An unknown error has occurred.' : exception.message
@@ -48,7 +47,7 @@ module RocketPants
       # api design.
       # @param [StandardError] exception the error to render a response for.
       def render_error(exception)
-        logger.debug "Rendering error for #{exception.class.name}: #{exception.message}"
+        logger.debug "Rendering error for #{exception.class.name}: #{exception.message}" if logger
         self.status = (exception.respond_to?(:http_status) ? exception.http_status : 500)
         render_json({
           :error             => (exception.respond_to?(:error_name) ? exception.error_name : :system).to_s,

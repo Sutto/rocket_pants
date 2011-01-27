@@ -11,4 +11,5 @@ Dir[Pathname(__FILE__).dirname.join("support/**/*.rb")].each { |f| require f }
 
 RSpec.configure do |config|
   config.mock_with :rr
+  config.include I18nSpecHelper
 end

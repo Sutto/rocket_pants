@@ -22,7 +22,11 @@ module RocketPants
       protected
       
       def version
-        @version ||= request.path_parameters[:version].to_i
+        @version ||= begin
+          Integer(request.path_parameters[:version])
+        rescue ArgumentError
+          nil
+        end
       end
       
       def verify_api_version
