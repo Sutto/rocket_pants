@@ -49,7 +49,7 @@ module RocketPants
     # Gets the context for this error, defaulting to nil.
     # @return [Hash] the context for this param.
     def context
-      @content ||= {}
+      @context ||= {}
     end
     
     error_name :unknown
