@@ -21,10 +21,6 @@ module RocketPants
         include ActionController::Testing if Rails.env.test?
       end
     end
-    
-    initializer "rocket_pants.setup_router" do |app|
-      ActionDispatch::Routing::Mapper.send :include, RocketPants::Routing
-    end
 
   end
 end
