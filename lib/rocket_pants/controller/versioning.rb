@@ -23,7 +23,7 @@ module RocketPants
       
       def version
         @version ||= begin
-          Integer(request.path_parameters[:version])
+          Integer(params[:version])
         rescue ArgumentError
           nil
         end

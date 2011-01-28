@@ -13,4 +13,7 @@ module RocketPants
   require 'rocket_pants/railtie' if defined?(Rails::Railtie)
   autoload :Base, 'rocket_pants/base'
   
+  autoload :TestHelper,    'rocket_pants/test_helper'
+  autoload :RSpecMatchers, 'rocket_pants/rspec_matchers'
+  
 end
