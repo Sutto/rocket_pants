@@ -21,13 +21,13 @@ module RocketPants
     end
     
     # @overload http_status
-    #   Returns the http status code of this error, defaulting to 500.
+    #   Returns the http status code of this error, defaulting to 400 (Bad Request).
     # @overload http_status(value)
     #   Sets the http status code for this error to a given symbol / integer.
     #   @param value [String, Fixnum] value the new status code.
     def self.http_status(value = nil)
       if value.nil?
-        @http_status ||= 500
+        @http_status ||= 400
       else
         @http_status = (value.presence && value)
       end

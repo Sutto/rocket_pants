@@ -17,9 +17,9 @@ describe RocketPants::Error do
   
   describe 'working with the http status codes' do
     
-    it 'should default to 500 for the status code' do
-      RocketPants::Error.http_status.should == 500
-      UnchangedError.http_status.should == 500
+    it 'should default to 400 for the status code' do
+      RocketPants::Error.http_status.should == 400
+      UnchangedError.http_status.should == 400
     end
     
     it 'should let you get the status code for a given class' do
