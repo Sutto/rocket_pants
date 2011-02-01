@@ -32,6 +32,12 @@ module RocketPants
         self.response_body   = json
       end
       
+      # Renders a raw object, without any wrapping etc.
+      # Suitable for nicer object handling.
+      def respond_with(object, options = {})
+        render_json normalise_object(object, options)
+      end
+
       # Renders a single resource.
       def resource(object, options = {})
         render_json({
