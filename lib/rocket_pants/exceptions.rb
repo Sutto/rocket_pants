@@ -95,7 +95,7 @@ module RocketPants
       klass = Class.new(Error)
       klass.error_name(options[:error_name] || name.to_s.underscore)
       klass.http_status(options[:http_status]) if options[:http_status].present?
-      RocketPants.const_set klass_name, klass
+      (options[:under] || RocketPants).const_set klass_name, klass
       add klass
       klass
     end

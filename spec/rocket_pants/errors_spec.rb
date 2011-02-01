@@ -79,6 +79,16 @@ describe RocketPants::Errors do
       RocketPants::Errors[:another_exception_four].should == RocketPants::NumberFour
     end
     
+    it 'should let you register an error under a scope' do
+      my_scope = Class.new
+      my_scope.should_not be_const_defined(:AnotherExceptionFive)
+      RocketPants.should_not be_const_defined(:AnotherExceptionFive)
+      RocketPants::Errors.register! :another_exception_five, :under => my_scope
+      RocketPants.should_not be_const_defined(:AnotherExceptionFive)
+      my_scope.should be_const_defined(:AnotherExceptionFive)
+      RocketPants::Errors[:another_exception_five].should == my_scope::AnotherExceptionFive
+    end
+
   end
   
 end
