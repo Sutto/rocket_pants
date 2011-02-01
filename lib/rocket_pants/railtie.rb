@@ -3,6 +3,8 @@ module RocketPants
     
     config.rocket_pants = ActiveSupport::OrderedOptions.new
     
+    config.i18n.railties_load_path << File.expand_path('../locale/en.yml', __FILE__)
+    
     initializer "rocket_pants.logger" do
       ActiveSupport.on_load(:rocket_pants) { self.logger ||= Rails.logger }
     end
