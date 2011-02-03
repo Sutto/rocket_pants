@@ -16,4 +16,6 @@ module RocketPants
   autoload :TestHelper,    'rocket_pants/test_helper'
   autoload :RSpecMatchers, 'rocket_pants/rspec_matchers'
   
+  autoload :Client,        'rocket_pants/client'
+
 end

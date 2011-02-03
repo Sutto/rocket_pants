@@ -105,6 +105,7 @@ module RocketPants
     register! :unauthenticated, :http_status => :unauthorized
     register! :invalid_version, :http_status => :not_found
     register! :not_implemented, :http_status => :service_unavailable
+    register! :not_found,       :http_status => :not_found
     
   end
   
