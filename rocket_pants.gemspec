@@ -17,6 +17,8 @@ Gem::Specification.new do |s|
   s.add_dependency 'railties',   '~> 3.0.3'
   s.add_dependency 'will_paginate', '>= 2.3'
   s.add_dependency 'hashie',        '~> 1.0'
+  s.add_dependency 'api_smith'
+  s.add_dependency 'will_paginate'
   s.add_development_dependency 'rspec',       '~> 2.4.0'
   s.add_development_dependency 'rspec-rails', '~> 2.4.0'
   s.add_development_dependency 'rr',          '~> 1.0.0'

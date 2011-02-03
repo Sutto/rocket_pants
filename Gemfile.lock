@@ -1,10 +1,20 @@
+GIT
+  remote: git@codebasehq.com:tfg/jammbox/api-smith.git
+  revision: d191b698c5d99a696e331eef89c9b57f25e282b7
+  specs:
+    api_smith (0.0.1)
+      hashie (~> 1.0)
+      httparty
+
 PATH
   remote: .
   specs:
     rocket_pants (0.0.1)
       actionpack (~> 3.0.3)
+      api_smith
       hashie (~> 1.0)
       railties (~> 3.0.3)
+      will_paginate
       will_paginate (>= 2.3)
 
 GEM
@@ -27,10 +37,13 @@ GEM
       i18n (~> 0.4)
     activesupport (3.0.3)
     builder (2.1.2)
+    crack (0.1.8)
     diff-lcs (1.1.2)
     erubis (2.6.6)
       abstract (>= 1.0.0)
     hashie (1.0.0)
+    httparty (0.7.3)
+      crack (= 0.1.8)
     i18n (0.5.0)
     rack (1.2.1)
     rack-mount (0.6.13)
@@ -59,17 +72,15 @@ GEM
       rspec (~> 2.4.0)
     thor (0.14.6)
     tzinfo (0.3.24)
-    will_paginate (2.3.15)
+    will_paginate (3.0.pre2)
 
 PLATFORMS
   ruby
 
 DEPENDENCIES
-  actionpack (~> 3.0.3)
-  hashie (~> 1.0)
-  railties (~> 3.0.3)
+  api_smith!
   rocket_pants!
   rr (~> 1.0.0)
   rspec (~> 2.4.0)
   rspec-rails (~> 2.4.0)
-  will_paginate (>= 2.3)
+  will_paginate (~> 3.0.pre2)
