@@ -2,9 +2,10 @@ require 'rocket_pants/exceptions'
 
 module RocketPants
   
-  autoload :ErrorHandling, 'rocket_pants/controller/error_handling'
-  autoload :Respondable,   'rocket_pants/controller/respondable'
-  autoload :Versioning,    'rocket_pants/controller/versioning'
+  autoload :ErrorHandling,   'rocket_pants/controller/error_handling'
+  autoload :Respondable,     'rocket_pants/controller/respondable'
+  autoload :Versioning,      'rocket_pants/controller/versioning'
+  autoload :Instrumentation, 'rocket_pants/controller/instrumentation'
   
   class Base < ActionController::Metal
     abstract!
@@ -18,6 +19,7 @@ module RocketPants
       ActionController::RecordIdentifier,
       Respondable,
       Versioning,
+      Instrumentation,
       # Include earliest as possible in the request.
       AbstractController::Callbacks,
       ActionController::Rescue,
