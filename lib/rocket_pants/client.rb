@@ -42,7 +42,7 @@ module RocketPants
       objects = unpack inner, options
       # Unpack pagination as a special case.
       if response.has_key?("pagination")
-        paginated_response objects, options
+        paginated_response objects, response
       else
         objects
       end

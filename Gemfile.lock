@@ -14,8 +14,8 @@ PATH
       api_smith
       hashie (~> 1.0)
       railties (~> 3.0.3)
-      will_paginate
       will_paginate (>= 2.3)
+      will_paginate
 
 GEM
   remote: http://rubygems.org/
@@ -36,6 +36,7 @@ GEM
       builder (~> 2.1.2)
       i18n (~> 0.4)
     activesupport (3.0.3)
+    addressable (2.2.4)
     builder (2.1.2)
     crack (0.1.8)
     diff-lcs (1.1.2)
@@ -72,6 +73,9 @@ GEM
       rspec (~> 2.4.0)
     thor (0.14.6)
     tzinfo (0.3.24)
+    webmock (1.6.2)
+      addressable (>= 2.2.2)
+      crack (>= 0.1.7)
     will_paginate (3.0.pre2)
 
 PLATFORMS
@@ -83,4 +87,5 @@ DEPENDENCIES
   rr (~> 1.0.0)
   rspec (~> 2.4.0)
   rspec-rails (~> 2.4.0)
+  webmock
   will_paginate (~> 3.0.pre2)

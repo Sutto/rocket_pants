@@ -1,0 +1,17 @@
+{
+  "count": 4,
+  "pagination": {
+    "next":     2,
+    "current":  1,
+    "previous": null,
+    "per_page": 4,
+    "count":    20,
+    "pages":    5
+  },
+  "response": [
+    {"name": "Name of Doom - 1"},
+    {"name": "Name of Doom - 2"},
+    {"name": "Name of Doom - 3"},
+    {"name": "Name of Doom - 4"}
+  ]
+}

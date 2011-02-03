@@ -22,6 +22,7 @@ Gem::Specification.new do |s|
   s.add_development_dependency 'rspec',       '~> 2.4.0'
   s.add_development_dependency 'rspec-rails', '~> 2.4.0'
   s.add_development_dependency 'rr',          '~> 1.0.0'
+  s.add_development_dependency 'webmock'
   
   s.files        = Dir.glob("{lib}/**/*")
   s.require_path = 'lib'

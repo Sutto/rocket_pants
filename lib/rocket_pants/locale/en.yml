@@ -1,7 +1,7 @@
 en:
   rocket_pants:
     errors:
-      throttled: "You have gone over your alloted amount of requests and have been throttled."
+      throttled: "You have gone over your allotted amount of requests and have been throttled."
       unauthenticated: "This action requires authentication to continue."
       invalid_version: "This action is not available in the given version of the api."
       not_implemented: "The feature you requested has not yet been implemented and hence is currently unavailable."
