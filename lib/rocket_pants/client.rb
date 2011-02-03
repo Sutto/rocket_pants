@@ -64,7 +64,7 @@ module RocketPants
     
     def check_response_errors(response)
       if !response.is_a?(Hash)
-        raise RocketPants::Error, "The response was an unknown type."
+        raise RocketPants::Error, "The response from the server was not in a supported format."
       elsif response.has_key?("error")
         klass = RocketPants::Errors[response["error"]] || RocketPants::Error
         raise klass.new(response["error_description"])
