@@ -9,12 +9,9 @@ module RocketPants
       ActiveSupport.on_load(:rocket_pants) { self.logger ||= Rails.logger }
     end
     
-    initializer "rocket_pants.set_configs" do |app|
-      options = app.config.rocket_pants
-      # Tell it how to load itself.
+    initializer "rocket_pants.url_helpers" do |app|
       ActiveSupport.on_load(:rocket_pants) do
         include app.routes.url_helpers
-        options.each { |k,v| send("#{k}=", v) }
       end
     end
     
