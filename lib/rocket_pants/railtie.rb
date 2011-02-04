@@ -21,5 +21,11 @@ module RocketPants
       end
     end
 
+    initializer "rocket_pants.setup_caching" do |app|
+      if app.config.rocket_pants.use_caching
+        app.middleware.insert 'Rack::Runtime', RocketPants::CacheMiddleware
+      end
+    end
+
   end
 end
