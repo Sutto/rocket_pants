@@ -11,7 +11,7 @@ module RocketPants
         :controller => self.class.name,
         :action     => self.action_name,
         :params     => request.filtered_parameters,
-        :formats    => request.formats.map(&:to_sym),
+        :formats    => [:json],
         :method     => request.method,
         :path       => (request.fullpath rescue "unknown")
       }

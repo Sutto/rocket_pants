@@ -9,6 +9,7 @@ module RocketPants
   autoload :Versioning,      'rocket_pants/controller/versioning'
   
   class Base < ActionController::Metal
+    
     abstract!
     
     MODULES = [
