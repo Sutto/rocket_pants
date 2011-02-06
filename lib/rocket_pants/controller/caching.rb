@@ -97,9 +97,6 @@ module RocketPants
         end
         # Merge in any caching options for other controllers.
         caching_options.merge!(options.delete(:caching_options) || {})
-        # When caching is enabled, Include the resource hook to make sure
-        # we handle the response correctly.
-        include CachingHooks if RocketPants.caching_enabled? && !(self < CachingHooks)
       end
       
     end
@@ -107,7 +104,7 @@ module RocketPants
     module InstanceMethods
       
       def cache_action?(action = params[:action])
-        cached_actions.include? action
+        RocketPants.caching_enabled? && cached_actions.include?(action)
       end
       
       def cache_response(resource, use_etag)
@@ -119,13 +116,9 @@ module RocketPants
           response["ETag"] = Caching.normalise_etag Caching.etag_for(resource)
         # Otherwise, it's a collection and we need to use time based caching.
         else
-          response.cache_control[:max_age] = seconds
+          response.cache_control[:max_age] = caching_timeout
         end
       end
-      
-    end
-    
-    module CachingHooks
       
       # The callback use to automatically cache the current response object, using it's
       # cache key as a guide. For collections, instead of using an etag we'll use the request

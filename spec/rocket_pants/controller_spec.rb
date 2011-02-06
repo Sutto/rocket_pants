@@ -117,11 +117,11 @@ describe RocketPants::Base do
   
   describe 'caching' do
 
-    let!(:controller)    { Class.new TestController }
+    let!(:controller_class)    { Class.new TestController }
 
     it 'should use a set for storing the cached actions' do
-      controller.cached_actions.should be_a Set
-      controller.cached_actions.should == Set.new
+      controller_class.cached_actions.should be_a Set
+      controller_class.cached_actions.should == Set.new
     end
 
     it 'should default the caching timeout' do
@@ -129,22 +129,40 @@ describe RocketPants::Base do
 
     it 'should let you set the caching timeout' do
       expect do
-        controller.caches :test_data, :cache_for => 10.minutes
-        controller.caching_timeout.should == 10.minutes
-      end.to change(controller, :caching_timeout)
+        controller_class.caches :test_data, :cache_for => 10.minutes
+        controller_class.caching_timeout.should == 10.minutes
+      end.to change(controller_class, :caching_timeout)
     end
 
     it 'should let you set which actions should be cached' do
-      controller.cached_actions.should be_empty
-      controller.caches :test_data
-      controller.cached_actions.should == ["test_data"].to_set
+      controller_class.cached_actions.should be_empty
+      controller_class.caches :test_data
+      controller_class.cached_actions.should == ["test_data"].to_set
     end
 
     describe 'when dealing with the controller' do
 
-      it 'should not invoke the caching callback with out caching'
+      it 'should invoke the caching callback with caching enabled' do
+        set_caching_to true do
+          mock.instance_of(controller_class).cache_response.with_any_args
+          get :test_data
+        end
+      end
 
-      it 'should not invoke the caching callback with caching disabled'
+      it 'should not invoke the caching callback with caching disabled' do
+        set_caching_to false do
+          dont_allow.instance_of(controller_class).cache_response.with_any_args
+          get :test_data
+        end
+      end
+
+      before :each do
+        controller_class.caches :test_data
+      end
+
+      around :each do |t|
+        set_caching_to true, &t
+      end
 
       context 'with a singular response' do
 
@@ -153,30 +171,50 @@ describe RocketPants::Base do
         before :each do
           stub(RocketPants::Caching).cache_key_for(cached_object) { "my-object" }
           stub(RocketPants::Caching).etag_for(cached_object)      { "my-object:stored-etag" }
-          stub(controller).test_data { cached_object }
+          stub(controller_class).test_data { cached_object }
         end
 
-        it 'should invoke the caching callback correctly'
+        it 'should invoke the caching callback correctly' do
+          mock.instance_of(controller_class).cache_response cached_object, true
+          get :test_data
+        end
 
-        it 'should not set the expires in time'
+        it 'should not set the expires in time' do
+          get :test_data
+          response['Cache-Control'].to_s.should_not =~ /max-age=(\d+)/
+        end
 
-        it 'should set the response etag'
+        it 'should set the response etag' do
+          get :test_data
+          response['ETag'].should == '"my-object:stored-etag"'
+        end
 
       end
 
       context 'with a collection response' do
 
+        let(:cached_objects) { [Object.new] }
+
         before :each do
-          stub(RocketPants::Caching).cache_key_for(cached_object) { "my-object" }
-          stub(RocketPants::Caching).etag_for(cached_object)      { "my-object:stored-etag" }
-          stub(controller).test_data { cached_object }
+          dont_allow(RocketPants::Caching).cache_key_for.with_any_args
+          dont_allow(RocketPants::Caching).etag_for.with_any_args
+          stub(controller_class).test_data { cached_objects }
         end
 
-        it 'should invoke the caching callback correctly'
+        it 'should invoke the caching callback correctly' do
+          mock.instance_of(controller_class).cache_response cached_objects, false
+          get :test_data
+        end
 
-        it 'should set the expires in time'
+        it 'should set the expires in time' do
+          get :test_data
+          response['Cache-Control'].to_s.should =~ /max-age=(\d+)/
+        end
 
-        it 'should not set the response etag'
+        it 'should not set the response etag' do
+          get :test_data
+          response["ETag"].should be_nil
+        end
 
       end
 
