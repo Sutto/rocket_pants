@@ -83,6 +83,36 @@ describe RocketPants::Base do
       content[:response].should == {'serialised' => true}
     end
     
+    it 'should correctly hook into paginated responses' do
+      pager = WillPaginate::Collection.create(2, 10) { |p| p.replace %w(a b c d e f g h i j); p.total_entries = 200 }
+      mock(TestController).test_data { pager }
+      hooks = []
+      mock.instance_of(TestController).pre_process_exposed_object(pager, :paginated, false) { hooks << :pre }
+      mock.instance_of(TestController).post_process_exposed_object(pager, :paginated, false) { hooks << :post }
+      get :test_data
+      hooks.should == [:pre, :post]
+    end
+
+    it 'should correctly hook into collection responses' do
+      object = %w(a b c d)
+      mock(TestController).test_data { object }
+      hooks = []
+      mock.instance_of(TestController).pre_process_exposed_object(object, :collection, false) { hooks << :pre }
+      mock.instance_of(TestController).post_process_exposed_object(object, :collection, false) { hooks << :post }
+      get :test_data
+      hooks.should == [:pre, :post]
+    end
+
+    it 'should correctly hook into singular responses' do
+      object = {:a => 1, :b => 2}
+      mock(TestController).test_data { object }
+      hooks = []
+      mock.instance_of(TestController).pre_process_exposed_object(object, :resource, true) { hooks << :pre }
+      mock.instance_of(TestController).post_process_exposed_object(object, :resource, true) { hooks << :post }
+      get :test_data
+      hooks.should == [:pre, :post]
+    end
+
   end
   
   describe 'error handling' do

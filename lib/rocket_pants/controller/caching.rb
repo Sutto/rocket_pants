@@ -63,7 +63,7 @@ module RocketPants
         if object.respond_to?(:rp_object_key)
           Digest::MD5.hexdigest object.rp_object_key
         else
-          suffix = (object.respond_to?(:new?) && object.new?) ? "new-#{Time.now}" : object.id
+          suffix = (object.respond_to?(:new?) && object.new?) ? "new" : object.id
           Digest::MD5.hexdigest "#{object.class.name}/#{suffix}"
         end
       end
