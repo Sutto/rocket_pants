@@ -40,21 +40,26 @@ module RocketPants
 
       # Renders a single resource.
       def resource(object, options = {})
+        pre_process_exposed_object object, :resource, true
         render_json({
          :response => normalise_object(object, options) 
         })
+        post_process_exposed_object object, :resource, true
       end
 
       # Renders a normal collection to JSON.
       def collection(collection, options = {})
+        pre_process_exposed_object collection, :collection, false
         render_json({
           :response => normalise_object(collection, options),
           :count    => collection.length
         })
+        post_process_exposed_object collection, :collection, false
       end
       
       # Renders a paginated collecton to JSON.
       def paginated(collection, options = {})
+        pre_process_exposed_object collection, :paginated, false
         render_json({
           :response   => normalise_object(collection, options),
           :count      => collection.length,
@@ -67,6 +72,7 @@ module RocketPants
             :pages    => collection.total_pages
           }
         })
+        post_process_exposed_object collection, :paginated, false
       end
 
       # Exposes an object to the response - Essentiall, it tells the
@@ -83,6 +89,24 @@ module RocketPants
       end
       alias expose exposes
       
+      # Hooks in to allow you to perform pre-processing of objects
+      # when they are exposed. Used for plugins to the controller.
+      #
+      # @param [Object] resource the exposed object.
+      # @param [Symbol] type the type of object exposed, one of :resource, :collection or :paginated
+      # @param [true,false] singular Whether or not the given object is singular (e.g. :resource)
+      def pre_process_exposed_object(resource, type, singular)
+      end
+
+      # Hooks in to allow you to perform post-processing of objects
+      # when they are exposed. Used for plugins to the controller.
+      #
+      # @param [Object] resource the exposed object.
+      # @param [Symbol] type the type of object exposed, one of :resource, :collection or :paginated
+      # @param [true,false] singular Whether or not the given object is singular (e.g. :resource)
+      def post_process_exposed_object(resource, type, singular)
+      end
+
     end
   end
 end

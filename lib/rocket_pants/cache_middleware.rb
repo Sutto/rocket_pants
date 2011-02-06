@@ -23,10 +23,11 @@ module RocketPants
     private
     
     def has_valid_etag?
-      etag = request.etag
-      return false if etag.blank?
-      cache_key, value = extract_cache_key_and_value etag
-      fresh? cache_key, value
+      return false if (etags = request_etags).blank?
+      etags.any? do |etag|
+        cache_key, value = extract_cache_key_and_value etag
+        fresh? cache_key, value
+      end
     end
     
     def extract_cache_key_and_value(etag)
@@ -34,12 +35,12 @@ module RocketPants
     end
     
     def fresh?(key, value)
-      cached_value = RocketPants.cache[key.to_s]
-      cached_value.present? && cached_value == value 
+      RocketPants.cache[key.to_s] == value
     end
     
-    def request
-      @_request ||= ActionDispatch::Request.new(@env)
+    def request_etags
+      stored = @env['HTTP_IF_NONE_MATCH']
+      stored.present? && stored.to_s.scan(/"([^"]+)"/)
     end
     
   end

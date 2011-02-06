@@ -115,4 +115,73 @@ describe RocketPants::Base do
     
   end
   
+  describe 'caching' do
+
+    let!(:controller)    { Class.new TestController }
+
+    it 'should use a set for storing the cached actions' do
+      controller.cached_actions.should be_a Set
+      controller.cached_actions.should == Set.new
+    end
+
+    it 'should default the caching timeout' do
+    end
+
+    it 'should let you set the caching timeout' do
+      expect do
+        controller.caches :test_data, :cache_for => 10.minutes
+        controller.caching_timeout.should == 10.minutes
+      end.to change(controller, :caching_timeout)
+    end
+
+    it 'should let you set which actions should be cached' do
+      controller.cached_actions.should be_empty
+      controller.caches :test_data
+      controller.cached_actions.should == ["test_data"].to_set
+    end
+
+    describe 'when dealing with the controller' do
+
+      it 'should not invoke the caching callback with out caching'
+
+      it 'should not invoke the caching callback with caching disabled'
+
+      context 'with a singular response' do
+
+        let(:cached_object) { Object.new }
+
+        before :each do
+          stub(RocketPants::Caching).cache_key_for(cached_object) { "my-object" }
+          stub(RocketPants::Caching).etag_for(cached_object)      { "my-object:stored-etag" }
+          stub(controller).test_data { cached_object }
+        end
+
+        it 'should invoke the caching callback correctly'
+
+        it 'should not set the expires in time'
+
+        it 'should set the response etag'
+
+      end
+
+      context 'with a collection response' do
+
+        before :each do
+          stub(RocketPants::Caching).cache_key_for(cached_object) { "my-object" }
+          stub(RocketPants::Caching).etag_for(cached_object)      { "my-object:stored-etag" }
+          stub(controller).test_data { cached_object }
+        end
+
+        it 'should invoke the caching callback correctly'
+
+        it 'should set the expires in time'
+
+        it 'should not set the response etag'
+
+      end
+
+    end
+
+  end
+
 end

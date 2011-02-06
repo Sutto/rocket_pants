@@ -24,10 +24,17 @@ module RocketPants
   autoload :TestHelper,      'rocket_pants/test_helper'
   autoload :RSpecMatchers,   'rocket_pants/rspec_matchers'
 
+  mattr_accessor :caching_enabled
+  self.caching_enabled = true
+
   mattr_writer :cache
   
-  def self.cache
-    @cache ||= Moneta::Memory.new
+  class << self
+    alias caching_enabled? caching_enabled
+
+    def cache
+      @@cache ||= Moneta::Memory.new
+    end
   end
 
 end
