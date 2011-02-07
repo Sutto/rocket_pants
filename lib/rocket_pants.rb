@@ -25,7 +25,7 @@ module RocketPants
   autoload :RSpecMatchers,   'rocket_pants/rspec_matchers'
 
   mattr_accessor :caching_enabled
-  self.caching_enabled = true
+  self.caching_enabled = false
 
   mattr_writer :cache
   
