@@ -2,7 +2,7 @@ module RocketPants
   class Railtie < Rails::Railtie
     
     config.rocket_pants = ActiveSupport::OrderedOptions.new
-    config.rocket_pants.use_caching
+    config.rocket_pants.use_caching = nil
     
     config.i18n.railties_load_path << File.expand_path('../locale/en.yml', __FILE__)
     
@@ -25,8 +25,8 @@ module RocketPants
     initializer "rocket_pants.setup_caching" do |app|
       rp_config = app.config.rocket_pants
       rp_config.use_caching = Rails.env.production? if rp_config.use_caching.nil?
-      if app.config.rocket_pants.use_caching
-        RocketPants.caching_enabled = app.config.rocket_pants.use_caching
+      RocketPants.caching_enabled = rp_config.use_caching
+      if RocketPants.caching_enabled?
         app.middleware.insert 'Rack::Runtime', RocketPants::CacheMiddleware
       end
     end
