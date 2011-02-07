@@ -11,6 +11,15 @@ module RocketPants
       self.error_mapping = {}
     end
     
+    module ClassMethods
+
+      def map_error!(from, to)
+        error_mapping[from] = to
+        rescue_from from, :with => :render_error
+      end
+
+    end
+
     module InstanceMethods
       
       # Dynamically looks up and then throws the error given by a symbolic name.
