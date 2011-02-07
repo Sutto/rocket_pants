@@ -185,6 +185,12 @@ describe RocketPants::Base do
         p content
         content['hello'].should == 'There'
       end
+      
+      it 'should let you register an item in the error mapping' do
+        controller_class.error_mapping[StandardError] = RocketPants::Throttled
+        get :test_error
+        content['error'].should == 'throttled'
+      end
 
     end
 
