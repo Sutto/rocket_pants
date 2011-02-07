@@ -36,10 +36,32 @@ module RocketPants
       # @return [String] the found error message.
       def lookup_error_message(exception)
         # TODO: Add in notification hooks for non-standard exceptions.
-        context = exception.respond_to?(:context)    ? exception.context : {}
-        name    = exception.respond_to?(:error_name) ? exception.error_name : :system
+        name    = lookup_error_name(exception)
         message = (exception.message == exception.class.name) ? 'An unknown error has occurred.' : exception.message
-        I18n.t name, context.reverse_merge(:scope => :"rocket_pants.errors", :default => message) 
+        I18n.t name, lookup_error_context(exception).reverse_merge(:scope => :"rocket_pants.errors", :default => message)
+      end
+
+      # Lookup error name will automatically handle translating errors to a
+      # simpler, symbol representation. It's implemented like this to make it
+      # possible to override to a simple format.
+      # @param [StandardError] exception the exception to find the name for
+      # @return [Symbol] the name of the given error
+      def lookup_error_name(exception)
+        exception.respond_to?(:error_name) ? exception.error_name : :system
+      end
+
+      # Returns the error status code for a given exception.
+      # @param [StandardError] exception the exception to find the status for
+      # @return [Symbol] the name of the given error
+      def lookup_error_status(exception)
+        exception.respond_to?(:http_status) ? exception.http_status : 500
+      end
+
+      # Returns the i18n context for a given exception.
+      # @param [StandardError] exception the exception to find the context for
+      # @param [Hash] the i18n translation context.
+      def lookup_error_context(exception)
+        exception.respond_to?(:context) ? exception.context : {}
       end
       
       # Renders an exception as JSON using a nicer version of the error name and
@@ -48,9 +70,9 @@ module RocketPants
       # @param [StandardError] exception the error to render a response for.
       def render_error(exception)
         logger.debug "Rendering error for #{exception.class.name}: #{exception.message}" if logger
-        self.status = (exception.respond_to?(:http_status) ? exception.http_status : 500)
+        self.status = lookup_error_status(exception)
         render_json({
-          :error             => (exception.respond_to?(:error_name) ? exception.error_name : :system).to_s,
+          :error             => lookup_error_name(exception).to_s,
           :error_description => lookup_error_message(exception)
         })
       end
