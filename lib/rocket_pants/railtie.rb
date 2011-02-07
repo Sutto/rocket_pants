@@ -10,6 +10,14 @@ module RocketPants
       ActiveSupport.on_load(:rocket_pants) { self.logger ||= Rails.logger }
     end
     
+    initializer "rocket_pants.configuration" do
+      rp_config = app.config.rocket_pants
+      rp_config.use_caching = Rails.env.production? if rp_config.use_caching.nil?
+      RocketPants.caching_enabled = rp_config.use_caching
+      # Set the rocket pants cache if present.
+      RocketPants.cache = rp_config.cache if rp_config.cache
+    end
+
     initializer "rocket_pants.url_helpers" do |app|
       ActiveSupport.on_load(:rocket_pants) do
         include app.routes.url_helpers
@@ -23,9 +31,6 @@ module RocketPants
     end
 
     initializer "rocket_pants.setup_caching" do |app|
-      rp_config = app.config.rocket_pants
-      rp_config.use_caching = Rails.env.production? if rp_config.use_caching.nil?
-      RocketPants.caching_enabled = rp_config.use_caching
       if RocketPants.caching_enabled?
         app.middleware.insert 'Rack::Runtime', RocketPants::CacheMiddleware
       end
