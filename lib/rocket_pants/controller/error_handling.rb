@@ -4,9 +4,11 @@ module RocketPants
   # something useable in the response.
   module ErrorHandling
     extend ActiveSupport::Concern
-    
+
     included do
       rescue_from RocketPants::Error, :with => :render_error
+      class_inheritable_accessor :error_mapping
+      self.error_mapping = {}
     end
     
     module InstanceMethods
@@ -47,7 +49,11 @@ module RocketPants
       # @param [StandardError] exception the exception to find the name for
       # @return [Symbol] the name of the given error
       def lookup_error_name(exception)
-        exception.respond_to?(:error_name) ? exception.error_name : :system
+        if exception.respond_to?(:error_name)
+          exception.error_name
+        else
+          :system
+        end
       end
 
       # Returns the error status code for a given exception.
@@ -64,17 +70,28 @@ module RocketPants
         exception.respond_to?(:context) ? exception.context : {}
       end
       
+      # Returns extra error details for a given object, making it useable
+      # for hooking in external exceptions.
+      def lookup_error_extras(exception)
+        {}
+      end
+
       # Renders an exception as JSON using a nicer version of the error name and
       # error message, following the typically error standard as laid out in the JSON
       # api design.
       # @param [StandardError] exception the error to render a response for.
       def render_error(exception)
         logger.debug "Rendering error for #{exception.class.name}: #{exception.message}" if logger
+        # When a normalised class is present, make sure we
+        # convert it to a useable error class.
+        if (normalised_class = error_mapping[exception.class])
+          exception = normalised_class.new(exception.message)
+        end
         self.status = lookup_error_status(exception)
         render_json({
           :error             => lookup_error_name(exception).to_s,
           :error_description => lookup_error_message(exception)
-        })
+        }.merge(lookup_error_extras(exception)))
       end
       
     end

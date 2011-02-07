@@ -5,6 +5,7 @@ TestRouter.draw do
   post 'echo', :to => 'test#echo'
   get 'exception', :to => 'test#demo_exception'
   get 'test_data', :to => 'test#test_data'
+  get 'test_error', :to => 'test#test_error'
 end
 TestRouter.finalize!
 
@@ -16,6 +17,10 @@ class TestController < RocketPants::Base
   def self.test_data
   end
   
+  def self.test_error
+    NotImplementedError
+  end
+
   def echo
     expose :echo => params[:echo]
   end
@@ -28,6 +33,10 @@ class TestController < RocketPants::Base
     expose self.class.test_data
   end
   
+  def test_error
+    raise self.class.test_error
+  end
+
   def premature_termination
     error! :throtted
     exposes :finished => true

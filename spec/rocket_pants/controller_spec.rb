@@ -143,6 +143,51 @@ describe RocketPants::Base do
       content['error_description'].should == 'Oh noes, a puddle.'
     end
     
+    describe 'hooking into the process' do
+
+      let(:controller_class) do
+        klass = Class.new(TestController)
+        klass.class_eval do
+          rescue_from StandardError, :with => :render_error
+        end
+        klass
+      end
+
+      let(:error) do
+        StandardError.new("Hello there")
+      end
+
+      before :each do
+        stub(controller_class).test_error { error }
+      end
+
+      it 'should let you hook into the error name lookup' do
+        mock.instance_of(controller_class).lookup_error_name(error).returns(:my_test_error).times(any_times)
+        get :test_error
+        content['error'].should == 'my_test_error'
+      end
+
+      it 'should let you hook into the error message lookup' do
+        mock.instance_of(controller_class).lookup_error_message(error).returns 'Oh look, pie.'
+        get :test_error
+        content['error_description'].should == 'Oh look, pie.'
+      end
+
+      it 'should let you hook into the error status lookup' do
+        mock.instance_of(controller_class).lookup_error_status(error).returns 403
+        get :test_error
+        response.status.should == 403
+      end
+
+      it 'should let you add error items to the response' do
+        mock.instance_of(controller_class).lookup_error_extras(error).returns(:hello => 'There')
+        get :test_error
+        p content
+        content['hello'].should == 'There'
+      end
+
+    end
+
   end
   
   describe 'caching' do
