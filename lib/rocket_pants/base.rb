@@ -7,6 +7,7 @@ module RocketPants
   autoload :Instrumentation, 'rocket_pants/controller/instrumentation'
   autoload :Respondable,     'rocket_pants/controller/respondable'
   autoload :Versioning,      'rocket_pants/controller/versioning'
+  autoload :UrlFor,          'rocket_pants/controller/url_for'
   
   class Base < ActionController::Metal
     
@@ -19,6 +20,7 @@ module RocketPants
       ActionController::ConditionalGet,
       ActionController::RackDelegation,
       ActionController::RecordIdentifier,
+      UrlFor,
       Respondable,
       Versioning,
       Instrumentation,
