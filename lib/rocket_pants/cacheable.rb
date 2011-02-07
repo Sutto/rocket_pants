@@ -3,8 +3,8 @@ module RocketPants
     extend ActiveSupport::Concern
     
     included do
-      after_save    :record_cache!
-      after_destroy :expire_cache!
+      after_save    :record_cache! if respond_to?(:after_save)
+      after_destroy :expire_cache! if respond_to?(:after_destroy)
     end
     
     module InstanceMethods
