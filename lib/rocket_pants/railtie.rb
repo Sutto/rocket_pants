@@ -10,7 +10,7 @@ module RocketPants
       ActiveSupport.on_load(:rocket_pants) { self.logger ||= Rails.logger }
     end
     
-    initializer "rocket_pants.configuration" do
+    initializer "rocket_pants.configuration" do |app|
       rp_config = app.config.rocket_pants
       rp_config.use_caching = Rails.env.production? if rp_config.use_caching.nil?
       RocketPants.caching_enabled = rp_config.use_caching
