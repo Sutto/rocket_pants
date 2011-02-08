@@ -14,6 +14,7 @@ module RocketPants
     def _call(env)
       @env = env
       if has_valid_etag?
+        debug "Cache key is valid, returning not modified response."
         NOT_MODIFIED
       else
         @app.call env
@@ -26,6 +27,7 @@ module RocketPants
       return false if (etags = request_etags).blank?
       etags.any? do |etag|
         cache_key, value = extract_cache_key_and_value etag
+        debug "Checking cache key #{cache_key} matches the value #{value}"
         fresh? cache_key, value
       end
     end
@@ -43,5 +45,9 @@ module RocketPants
       stored.present? && stored.to_s.scan(/"([^"]+)"/)
     end
     
+    def debug(message)
+      Rails.logger.debug message if defined?(Rails.logger)
+    end
+
   end
 end
