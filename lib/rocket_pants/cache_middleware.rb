@@ -25,6 +25,7 @@ module RocketPants
     
     def has_valid_etag?
       return false if (etags = request_etags).blank?
+      debug ""
       etags.any? do |etag|
         cache_key, value = extract_cache_key_and_value etag
         debug "Checking cache key #{cache_key} matches the value #{value}"
