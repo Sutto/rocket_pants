@@ -4,7 +4,7 @@ module RocketPants
     
     included do
       after_save    :record_cache! if respond_to?(:after_save)
-      after_destroy :expire_cache! if respond_to?(:after_destroy)
+      after_destroy :remove_cache! if respond_to?(:after_destroy)
     end
     
     module InstanceMethods
