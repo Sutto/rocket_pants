@@ -3,11 +3,11 @@ require 'will_paginate/collection'
 module RocketPants
   module Respondable
     extend ActiveSupport::Concern
-    
+
     module InstanceMethods
-      
+
       protected
-      
+
       def normalise_object(object, options = {})
         # Convert the object using a standard grape-like lookup chain.
         if object.respond_to?(:serializable_hash)
@@ -20,7 +20,7 @@ module RocketPants
           object
         end
       end
-      
+
       # Given a json object or encoded json, will encode it
       # and set it to be the output of the given page.
       def render_json(json, options = {})
@@ -31,7 +31,7 @@ module RocketPants
         self.content_type    = Mime::JSON
         self.response_body   = json
       end
-      
+
       # Renders a raw object, without any wrapping etc.
       # Suitable for nicer object handling.
       def respond_with(object, options = {})
@@ -42,7 +42,7 @@ module RocketPants
       def resource(object, options = {})
         pre_process_exposed_object object, :resource, true
         render_json({
-         :response => normalise_object(object, options) 
+         :response => normalise_object(object, options)
         })
         post_process_exposed_object object, :resource, true
       end
@@ -50,16 +50,18 @@ module RocketPants
       # Renders a normal collection to JSON.
       def collection(collection, options = {})
         pre_process_exposed_object collection, :collection, false
+        options = options.reverse_merge(:compact => true)
         render_json({
           :response => normalise_object(collection, options),
           :count    => collection.length
         })
         post_process_exposed_object collection, :collection, false
       end
-      
+
       # Renders a paginated collecton to JSON.
       def paginated(collection, options = {})
         pre_process_exposed_object collection, :paginated, false
+        options = options.reverse_merge(:compact => true)
         render_json({
           :response   => normalise_object(collection, options),
           :count      => collection.length,
@@ -88,7 +90,7 @@ module RocketPants
         end
       end
       alias expose exposes
-      
+
       # Hooks in to allow you to perform pre-processing of objects
       # when they are exposed. Used for plugins to the controller.
       #
