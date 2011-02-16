@@ -10,6 +10,15 @@ module RocketPants
       end
     end
 
+    def self.normalise_urls(object)
+      if object.is_a?(Array)
+        object.each { |o| o['url'] = nil }
+      else
+        object['url'] = nil
+      end
+      object
+    end
+
     # Converts it to JSON and back again.
     def self.normalise_as_json(object, options = {})
       if object.is_a?(Array)
@@ -19,6 +28,10 @@ module RocketPants
         j = ActiveSupport::JSON
         j.decode(j.encode({'object' => object}))['object']
       end
+    end
+
+    def self.normalise_response(response)
+      normalise_urls normalise_as_json response
     end
 
     def self.valid_for?(response, allowed, disallowed)
@@ -77,21 +90,16 @@ module RocketPants
     end
 
     matcher :have_exposed do |object|
-      normalised_response = RSpecMatchers.normalise_as_json(object)
-      normalised_response['url'] = nil
+      normalised_response = RSpecMatchers.normalise_response(object)
 
       match do |response|
-        decoded = response.decoded_body.response.dup
-        if decoded.is_a?(Hash)
-          decoded["url"] = nil
-        else
-          decoded.each { |d| d["url"] = nil }
-        end
+        decoded = RSpecMatchers.normalise_urls(response.decoded_body.response)
         normalised_response == decoded
       end
 
       failure_message_for_should do |response|
-        "expected api to have exposed #{normalised_response.inspect}, got #{response.decoded_body.response} instead"
+        decoded = RSpecMatchers.normalise_urls(response.decoded_body.response)
+        "expected api to have exposed #{normalised_response.inspect}, got #{decoded.response} instead"
       end
 
       failure_message_for_should_not do |response|
