@@ -107,12 +107,12 @@ module RocketPants
         RocketPants.caching_enabled? && cached_actions.include?(action)
       end
       
-      def cache_response(resource, use_etag)
+      def cache_response(resource, single_resource)
         # Add in the default options.
         response.cache_control.merge! caching_options
         # We need to set the etag based on the object when it is singular
         # Note that the object is responsible for clearing the etag cache.
-        if use_etag
+        if single_resource
           response["ETag"] = Caching.normalise_etag Caching.etag_for(resource)
         # Otherwise, it's a collection and we need to use time based caching.
         else
