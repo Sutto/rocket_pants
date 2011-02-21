@@ -25,6 +25,7 @@ module RocketPants
       Versioning,
       Instrumentation,
       Caching,
+      ActionController::MimeResponds,
       # Include earliest as possible in the request.
       AbstractController::Callbacks,
       ActionController::Rescue,
@@ -34,6 +35,8 @@ module RocketPants
     MODULES.each do |mixin|
       include mixin
     end
+
+    respond_to :json
 
     # Bug fix for rails - include compatibility.
     config_accessor :protected_instance_variables
