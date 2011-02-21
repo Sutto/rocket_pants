@@ -99,7 +99,7 @@ module RocketPants
 
       failure_message_for_should do |response|
         decoded = RSpecMatchers.normalise_urls(response.decoded_body.response)
-        "expected api to have exposed #{normalised_response.inspect}, got #{decoded} instead"
+        "expected api to have exposed #{normalised_response.inspect}, got #{decoded.inspect} instead"
       end
 
       failure_message_for_should_not do |response|
