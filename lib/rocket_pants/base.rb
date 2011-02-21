@@ -35,8 +35,6 @@ module RocketPants
       include mixin
     end
 
-    respond_to :json
-
     # Bug fix for rails - include compatibility.
     config_accessor :protected_instance_variables
     self.protected_instance_variables = %w(@assigns @performed_redirect @performed_render
