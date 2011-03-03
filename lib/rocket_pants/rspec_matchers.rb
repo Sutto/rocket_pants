@@ -21,13 +21,14 @@ module RocketPants
 
     # Converts it to JSON and back again.
     def self.normalise_as_json(object, options = {})
+      options = options.reverse_merge(:compact => true) if object.is_a?(Array)
       object = RocketPants::Respondable.normalise_object(object, options)
       j = ActiveSupport::JSON
       j.decode(j.encode({'response' => object}))['response']
     end
 
-    def self.normalise_response(response)
-      normalise_urls normalise_as_json response
+    def self.normalise_response(response, options = {})
+      normalise_urls normalise_as_json response, options
     end
 
     def self.valid_for?(response, allowed, disallowed)
@@ -83,8 +84,8 @@ module RocketPants
 
     end
 
-    matcher :have_exposed do |object|
-      normalised_response = RSpecMatchers.normalise_response(object)
+    matcher :have_exposed do |*args|
+      normalised_response = RSpecMatchers.normalise_response(*args)
 
       match do |response|
         @decoded = RSpecMatchers.normalise_urls(response.parsed_body["response"])
