@@ -39,6 +39,8 @@ GEM
     activesupport (3.0.3)
     addressable (2.2.4)
     builder (2.1.2)
+    ci_reporter (1.6.4)
+      builder (>= 2.1.2)
     crack (0.1.8)
     diff-lcs (1.1.2)
     erubis (2.6.6)
@@ -86,6 +88,7 @@ PLATFORMS
 
 DEPENDENCIES
   api_smith!
+  ci_reporter (~> 1.6.3)
   rcov
   rocket_pants!
   rr (~> 1.0.0)

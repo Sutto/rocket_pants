@@ -21,13 +21,9 @@ module RocketPants
 
     # Converts it to JSON and back again.
     def self.normalise_as_json(object, options = {})
-      if object.is_a?(Array)
-        object.map { |o| normalise_as_json o, options.reverse_merge(:compact => true) }
-      else
-        object = object.serializable_hash options if object.respond_to?(:serializable_hash)
-        j = ActiveSupport::JSON
-        j.decode(j.encode({'object' => object}))['object']
-      end
+      object = RocketPants::Respondable.normalise_object(object, options)
+      j = ActiveSupport::JSON
+      j.decode(j.encode({'response' => object}))['response']
     end
 
     def self.normalise_response(response)
@@ -45,22 +41,20 @@ module RocketPants
     matcher :_be_api_error do |error_type|
 
       match do |response|
-        error = response.decoded_body.error
-        error.present? && (error_type.blank? || RSpecMatchers.normalised_error(error) == error_type)
+        @error = response.decoded_body.error
+        @error.present? && (error_type.blank? || RSpecMatchers.normalised_error(@error) == error_type)
       end
 
       failure_message_for_should do |response|
-        error = response.decoded_body.error
-        if error.blank?
+        if @error.blank?
           "expected #{error_type || "any error"} on response, got no error"
-        else error_type.present? && (normalised = RSpecMatchers.normalised_error(error)) != error_type
+        else error_type.present? && (normalised = RSpecMatchers.normalised_error(@error)) != error_type
           "expected #{error_type || "any error"} but got #{normalised} instead"
         end
       end
 
       failure_message_for_should_not do |response|
-        error = RSpecMatchers.normalised_error(response.decoded_body.error)
-        "expected response to not have an #{error_type || "error"}, but it did (#{error})"
+        "expected response to not have an #{error_type || "error"}, but it did (#{@error})"
       end
 
     end
@@ -93,13 +87,12 @@ module RocketPants
       normalised_response = RSpecMatchers.normalise_response(object)
 
       match do |response|
-        decoded = RSpecMatchers.normalise_urls(response.decoded_body.response)
-        normalised_response == decoded
+        @decoded = RSpecMatchers.normalise_urls(response.parsed_body["response"])
+        normalised_response == @decoded
       end
 
       failure_message_for_should do |response|
-        decoded = RSpecMatchers.normalise_urls(response.decoded_body.response)
-        "expected api to have exposed #{normalised_response.inspect}, got #{decoded.inspect} instead"
+        "expected api to have exposed #{normalised_response.inspect}, got #{@decoded.inspect} instead"
       end
 
       failure_message_for_should_not do |response|

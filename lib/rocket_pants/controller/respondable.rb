@@ -4,21 +4,25 @@ module RocketPants
   module Respondable
     extend ActiveSupport::Concern
 
+    def self.normalise_object(object, options = {})
+      # Convert the object using a standard grape-like lookup chain.
+      if object.respond_to?(:serializable_hash)
+        object.serializable_hash options
+      elsif object.respond_to?(:as_json)
+        object.as_json options
+      elsif object.is_a?(Array) || object.is_a?(Set)
+        object.map { |o| normalise_object o, options }
+      else
+        object
+      end
+    end
+
     module InstanceMethods
 
-      protected
+      private
 
       def normalise_object(object, options = {})
-        # Convert the object using a standard grape-like lookup chain.
-        if object.respond_to?(:serializable_hash)
-          object.serializable_hash options
-        elsif object.respond_to?(:as_json)
-          object.as_json options
-        elsif object.is_a?(Array) || object.is_a?(Set)
-          object.map { |o| normalise_object o, options }
-        else
-          object
-        end
+        Respondable.normalise_object object, options
       end
 
       # Given a json object or encoded json, will encode it

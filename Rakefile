@@ -5,6 +5,11 @@ require 'rspec/core/rake_task'
 
 task :default => :spec
 
+begin
+  require 'ci/reporter/rake/rspec'
+rescue LoadError
+end
+
 desc "Run all specs in spec directory (excluding plugin specs)"
 RSpec::Core::RakeTask.new(:spec)
 
