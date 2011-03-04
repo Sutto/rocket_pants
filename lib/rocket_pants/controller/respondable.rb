@@ -86,11 +86,11 @@ module RocketPants
       def exposes(object, options = {})
         case object
         when WillPaginate::Collection
-          paginated object
+          paginated object, options
         when Array
-          collection object
+          collection object, options
         else
-          resource object
+          resource object, options
         end
       end
       alias expose exposes
