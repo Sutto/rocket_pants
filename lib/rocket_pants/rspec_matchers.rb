@@ -39,6 +39,10 @@ module RocketPants
       allowed.all? { |f| body.has_key?(f) } && !disallowed.any? { |f| body.has_key?(f) }
     end
 
+    def self.differ
+      @_differ ||= RSpec::Expectations::Differ.new
+    end
+
     matcher :_be_api_error do |error_type|
 
       match do |response|
@@ -93,7 +97,9 @@ module RocketPants
       end
 
       failure_message_for_should do |response|
-        "expected api to have exposed #{normalised_response.inspect}, got #{@decoded.inspect} instead"
+        message = "expected api to have exposed #{normalised_response.inspect}, got #{@decoded.inspect} instead."
+        message << "\n\nDiff: #{RSpecMatchers.differ.diff_as_object(@decoded, normalised_response)}"
+        message
       end
 
       failure_message_for_should_not do |response|
