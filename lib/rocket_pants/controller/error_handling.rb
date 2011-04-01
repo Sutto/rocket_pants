@@ -93,7 +93,6 @@ module RocketPants
         logger.debug "Rendering error for #{exception.class.name}: #{exception.message}" if logger
         # When a normalised class is present, make sure we
         # convert it to a useable error class.
-        p exception.class
         normalised_class = exception.class.ancestors.detect do |klass|
           klass < StandardError and error_mapping.has_key?(klass)
         end
