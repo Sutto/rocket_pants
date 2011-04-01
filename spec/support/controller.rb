@@ -12,6 +12,9 @@ TestRouter.finalize!
 class TestController < RocketPants::Base
   include TestRouter.url_helpers
   
+  ErrorOfDoom = Class.new(StandardError)
+  YetAnotherError = Class.new(ErrorOfDoom)
+  
   version 1..2
   
   def self.test_data

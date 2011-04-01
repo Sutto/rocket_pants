@@ -154,7 +154,7 @@ describe RocketPants::Base do
       end
 
       let(:error) do
-        StandardError.new("Hello there")
+        TestController::ErrorOfDoom.new("Hello there")
       end
 
       before :each do
@@ -186,7 +186,14 @@ describe RocketPants::Base do
       end
 
       it 'should let you register an item in the error mapping' do
-        controller_class.error_mapping[StandardError] = RocketPants::Throttled
+        controller_class.error_mapping[TestController::ErrorOfDoom] = RocketPants::Throttled
+        get :test_error
+        content['error'].should == 'throttled'
+      end
+
+      it 'should include parents when checking the mapping' do
+        stub(controller_class).test_error { TestController::YetAnotherError }
+        controller_class.error_mapping[TestController::ErrorOfDoom] = RocketPants::Throttled
         get :test_error
         content['error'].should == 'throttled'
       end

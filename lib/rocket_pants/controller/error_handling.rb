@@ -10,7 +10,7 @@ module RocketPants
       class_inheritable_accessor :error_mapping
       self.error_mapping = {}
     end
-    
+
     module ClassMethods
 
       def map_error!(from, to)
@@ -21,7 +21,7 @@ module RocketPants
     end
 
     module InstanceMethods
-      
+
       # Dynamically looks up and then throws the error given by a symbolic name.
       # Optionally takes a string message argument and a hash of 'context'.
       # @overload error!(name, context = {})
@@ -38,7 +38,7 @@ module RocketPants
         exception = klass.new(*args).tap { |e| e.context = context }
         raise exception
       end
-      
+
       # From a given exception, gets the corresponding error message using I18n.
       # It will use context (if defined) on the exception for the I18n context base and
       # will use either the result of Error#error_name (if present) or :system for
@@ -78,7 +78,7 @@ module RocketPants
       def lookup_error_context(exception)
         exception.respond_to?(:context) ? exception.context : {}
       end
-      
+
       # Returns extra error details for a given object, making it useable
       # for hooking in external exceptions.
       def lookup_error_extras(exception)
@@ -93,8 +93,12 @@ module RocketPants
         logger.debug "Rendering error for #{exception.class.name}: #{exception.message}" if logger
         # When a normalised class is present, make sure we
         # convert it to a useable error class.
-        if (normalised_class = error_mapping[exception.class])
-          exception = normalised_class.new(exception.message)
+        p exception.class
+        normalised_class = exception.class.ancestors.detect do |klass|
+          klass < StandardError and error_mapping.has_key?(klass)
+        end
+        if normalised_class
+          exception = error_mapping[normalised_class].new(exception.message)
         end
         self.status = lookup_error_status(exception)
         render_json({
@@ -102,8 +106,8 @@ module RocketPants
           :error_description => lookup_error_message(exception)
         }.merge(lookup_error_extras(exception)))
       end
-      
+
     end
-    
+
   end
 end

@@ -8,13 +8,13 @@ require 'moneta/memory'
 
 module RocketPants
   require 'rocket_pants/exceptions'
-  
+
   # Set up the routing in advance.
   require 'rocket_pants/routing'
   ActionDispatch::Routing::Mapper.send :include, RocketPants::Routing
-  
+
   require 'rocket_pants/railtie' if defined?(Rails::Railtie)
-  
+
   # Extra parts of RocketPants.
   autoload :Base,            'rocket_pants/base'
   autoload :Client,          'rocket_pants/client'
@@ -29,7 +29,7 @@ module RocketPants
   self.caching_enabled = false
 
   mattr_writer :cache
-  
+
   class << self
     alias caching_enabled? caching_enabled
 
