@@ -70,12 +70,12 @@ module RocketPants
           :response   => normalise_object(collection, options),
           :count      => collection.length,
           :pagination => {
-            :previous => collection.previous_page,
-            :next     => collection.next_page,
-            :current  => collection.current_page,
-            :per_page => collection.per_page,
-            :count    => collection.total_entries,
-            :pages    => collection.total_pages
+            :previous => collection.previous_page.try(:to_i),
+            :next     => collection.next_page.try(:to_i),
+            :current  => collection.current_page.try(:to_i),
+            :per_page => collection.per_page.try(:to_i),
+            :count    => collection.total_entries.try(:to_i),
+            :pages    => collection.total_pages.try(:to_i)
           }
         })
         post_process_exposed_object collection, :paginated, false
