@@ -4,7 +4,7 @@ module RocketPants
     extend ActiveSupport::Concern
     
     included do
-      class_inheritable_accessor :_version_range
+      class_attribute :_version_range
     end
     
     module ClassMethods

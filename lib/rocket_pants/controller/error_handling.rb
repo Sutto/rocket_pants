@@ -7,7 +7,7 @@ module RocketPants
 
     included do
       rescue_from RocketPants::Error, :with => :render_error
-      class_inheritable_accessor :error_mapping
+      class_attribute :error_mapping
       self.error_mapping = {}
     end
 
