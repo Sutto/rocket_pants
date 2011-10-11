@@ -1,7 +1,7 @@
 module RocketPants
   class CacheMiddleware
     
-    NOT_MODIFIED = [304, {}, []].freeze
+    NOT_MODIFIED = [304, {}, []]
     
     def initialize(app)
       @app = app
@@ -15,7 +15,7 @@ module RocketPants
       @env = env
       if has_valid_etag?
         debug "Cache key is valid, returning not modified response."
-        NOT_MODIFIED
+        NOT_MODIFIED.dup
       else
         @app.call env
       end
