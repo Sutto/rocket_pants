@@ -14,7 +14,7 @@ module RocketPants
     NAMED_NOTIFIER_CALLBACKS = {
       :airbrake => lambda { |c, e, r|
         unless c.send(:airbrake_local_request?)
-          controller.error_identifier = Airbrake.notify_or_ignore(exception, c.send(:airbrake_request_data))
+          controller.error_identifier = Airbrake.notify(exception, c.send(:airbrake_request_data))
         end
       }
     }
