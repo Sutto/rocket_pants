@@ -36,6 +36,7 @@ module RocketPants
 
     # If possible, include the Rails controller methods in Airbrake to make it useful.
     begin
+      require 'airbrake'
       require 'airbrake/rails/controller_methods'
       MODULES << Airbrake::Rails::ControllerMethods
     rescue LoadError => e
