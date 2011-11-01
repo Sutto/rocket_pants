@@ -5,6 +5,7 @@ module RocketPants
   autoload :Caching,         'rocket_pants/controller/caching'
   autoload :ErrorHandling,   'rocket_pants/controller/error_handling'
   autoload :Instrumentation, 'rocket_pants/controller/instrumentation'
+  autoload :Rescuable,       'rocket_pants/controller/rescuable'
   autoload :Respondable,     'rocket_pants/controller/respondable'
   autoload :Versioning,      'rocket_pants/controller/versioning'
   autoload :UrlFor,          'rocket_pants/controller/url_for'
@@ -29,7 +30,8 @@ module RocketPants
       # Include earliest as possible in the request.
       AbstractController::Callbacks,
       ActionController::Rescue,
-      ErrorHandling
+      ErrorHandling,
+      Rescuable
     ]
 
     MODULES.each do |mixin|

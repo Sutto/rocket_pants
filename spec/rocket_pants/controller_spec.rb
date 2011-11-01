@@ -1,11 +1,9 @@
 require 'spec_helper'
+require 'logger'
+require 'stringio'
 
 describe RocketPants::Base do
   include ControllerHelpers
-
-  def self.controller_class
-    TestController
-  end
 
   describe 'versioning' do
 
@@ -305,6 +303,41 @@ describe RocketPants::Base do
 
       end
 
+    end
+
+  end
+
+  describe 'error handling' do
+
+    let!(:controller_class) { Class.new(TestController) }
+    let!(:logger)           { ::Logger.new(StringIO.new) }
+
+    before :each do
+      controller_class.logger = logger
+    end
+
+    it 'should allow you to override the error handler' do
+      get :test_error
+      content.should have_key "error"
+      content.should have_key "error_description"
+      content[:error].should == "system"
+    end
+
+    it 'should allow you to set the error handle from a named type' do
+      controller_class.exception_notifier_callback.should == controller_class::DEFAULT_NOTIFIER_CALLBACK
+      controller_class.use_named_exception_notifier :airbrake
+      controller_class.exception_notifier_callback.should_not == controller_class::DEFAULT_NOTIFIER_CALLBACK
+      controller_class.exception_notifier_callback.should == controller_class::NAMED_NOTIFIER_CALLBACKS[:airbrake]
+      controller_class.use_named_exception_notifier :nonexistant
+      controller_class.exception_notifier_callback.should == controller_class::DEFAULT_NOTIFIER_CALLBACK
+    end
+
+    it 'should include the error identifier in the response if set' do
+      controller_class.exception_notifier_callback = lambda do |controller, exception, req|
+        controller.error_identifier = 'my-test-identifier'
+      end
+      get :test_error
+      content[:error_identifier].should == 'my-test-identifier'
     end
 
   end
