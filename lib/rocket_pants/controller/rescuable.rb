@@ -10,11 +10,11 @@ module RocketPants
     DEFAULT_NOTIFIER_CALLBACK = lambda do |controller, exception, req|
       # Do nothing by default...
     end
-
+    
     NAMED_NOTIFIER_CALLBACKS = {
       :airbrake => lambda { |c, e, r|
         unless c.send(:airbrake_local_request?)
-          controller.error_identifier = Airbrake.notify(exception, c.send(:airbrake_request_data))
+          c.error_identifier = Airbrake.notify(e, c.send(:airbrake_request_data))
         end
       }
     }
