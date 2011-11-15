@@ -111,6 +111,43 @@ describe RocketPants::Base do
       hooks.should == [:pre, :post]
     end
 
+    it 'should accept status options when rendering json' do
+      stub(TestController).test_data    { {:hello => "World"} }
+      stub(TestController).test_options { {:status => :created} }
+      get :test_render_json
+      response.status.should == 201
+    end
+
+    it 'should accept status options when responding with data' do
+      stub(TestController).test_data    { {:hello => "World"} }
+      stub(TestController).test_options { {:status => :created} }
+      get :test_responds
+      response.status.should == 201
+    end
+
+    it 'should accept status options when responding with a single object' do
+      stub(TestController).test_data    { {:hello => "World"} }
+      stub(TestController).test_options { {:status => :created} }
+      get :test_data
+      response.status.should == 201
+    end
+
+    it 'should accept status options when responding with a paginated collection' do
+      stub(TestController).test_data do
+        WillPaginate::Collection.create(1, 1) {|c| c.replace([{:hello => "World"}]); c.total_entries = 1 }
+      end
+      stub(TestController).test_options { {:status => :created} }
+      get :test_data
+      response.status.should == 201
+    end
+
+    it 'should accept status options when responding with collection' do
+      stub(TestController).test_data    { [{:hello => "World"}] }
+      stub(TestController).test_options { {:status => :created} }
+      get :test_data
+      response.status.should == 201
+    end
+
   end
 
   describe 'error handling' do

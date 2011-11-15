@@ -19,27 +19,33 @@ module RocketPants
 
     module InstanceMethods
 
+      RENDERING_OPTIONS = [:status, :content_type]
+
       private
 
       def normalise_object(object, options = {})
-        Respondable.normalise_object object, options
+        Respondable.normalise_object object, options.except(*RENDERING_OPTIONS)
       end
 
       # Given a json object or encoded json, will encode it
       # and set it to be the output of the given page.
       def render_json(json, options = {})
+        # Setup data from options
+        self.status       = options[:status] if options[:status]
+        self.content_type = options[:content_type] if options[:content_type]
+        options = options.slice(*RENDERING_OPTIONS)
         # Don't convert raw strings to JSON.
         json = ActiveSupport::JSON.encode(json) unless json.respond_to?(:to_str)
         # Encode the object to json.
         self.status        ||= :ok
-        self.content_type    = Mime::JSON
+        self.content_type  ||= Mime::JSON
         self.response_body   = json
       end
 
       # Renders a raw object, without any wrapping etc.
       # Suitable for nicer object handling.
-      def respond_with(object, options = {})
-        render_json normalise_object(object, options)
+      def responds(object, options = {})
+        render_json normalise_object(object, options), options
       end
 
       # Renders a single resource.
@@ -47,7 +53,7 @@ module RocketPants
         pre_process_exposed_object object, :resource, true
         render_json({
          :response => normalise_object(object, options)
-        })
+        }, options)
         post_process_exposed_object object, :resource, true
       end
 
@@ -58,7 +64,7 @@ module RocketPants
         render_json({
           :response => normalise_object(collection, options),
           :count    => collection.length
-        })
+        }, options)
         post_process_exposed_object collection, :collection, false
       end
 
@@ -77,7 +83,7 @@ module RocketPants
             :count    => collection.total_entries.try(:to_i),
             :pages    => collection.total_pages.try(:to_i)
           }
-        })
+        }, options)
         post_process_exposed_object collection, :paginated, false
       end
 
