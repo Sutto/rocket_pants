@@ -148,6 +148,13 @@ describe RocketPants::Base do
       response.status.should == 201
     end
 
+    it 'should let you override the content type' do
+      stub(TestController).test_data    { {:hello => "World"} }
+      stub(TestController).test_options { {:content_type => Mime::HTML} }
+      get :test_data
+      response.headers['Content-Type'].should =~ /text\/html/
+    end
+
   end
 
   describe 'error handling' do
