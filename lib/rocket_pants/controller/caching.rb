@@ -38,7 +38,10 @@ module RocketPants
       #
       # @param [#cache_key] object what to record in the cache
       def record(object, cache_key = cache_key_for(object))
-        default_etag = object.respond_to?(:cache_key) ? object.cache_key : object.inspect
+        default_etag = object.inspect
+        if object.respond_to?(:cache_key).presence && (ck = object.cache_key).present?
+          default_etag = ck
+        end
         generated_etag = Digest::MD5.hexdigest(default_etag)
         RocketPants.cache[cache_key] = generated_etag
       end
@@ -60,8 +63,8 @@ module RocketPants
       #
       # @param [Object, #rp_object_key] the object to find the cache key for.
       def cache_key_for(object)
-        if object.respond_to?(:rp_object_key)
-          Digest::MD5.hexdigest object.rp_object_key
+        if object.respond_to?(:rp_object_key) && (ok = object.rp_object_key).present?
+          Digest::MD5.hexdigest ok
         else
           suffix = (object.respond_to?(:new?) && object.new?) ? "new" : object.id
           Digest::MD5.hexdigest "#{object.class.name}/#{suffix}"

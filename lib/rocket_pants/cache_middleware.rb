@@ -23,11 +23,16 @@ module RocketPants
     
     private
     
+    def request_path
+      @env['SCRIPT_NAME'].to_s + @env['PATH_INFO'].to_s
+    end
+
     def has_valid_etag?
       return false if (etags = request_etags).blank?
       debug ""
       etags.any? do |etag|
         cache_key, value = extract_cache_key_and_value etag
+        debug "Processing cache key for path #{request_path}"
         debug "Checking cache key #{cache_key} matches the value #{value}"
         fresh? cache_key, value
       end
