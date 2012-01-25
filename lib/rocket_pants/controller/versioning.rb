@@ -17,23 +17,19 @@ module RocketPants
       
     end
     
-    module InstanceMethods
-      
-      protected
-      
-      def version
-        @version ||= begin
-          Integer(params[:version])
-        rescue ArgumentError
-          nil
-        end
+    protected
+    
+    def version
+      @version ||= begin
+        Integer(params[:version])
+      rescue ArgumentError
+        nil
       end
-      
-      def verify_api_version
-        error! :invalid_version unless version.present? && _version_range.include?(version)
-      end
-      
     end
     
+    def verify_api_version
+      error! :invalid_version unless version.present? && _version_range.include?(version)
+    end
+      
   end
 end

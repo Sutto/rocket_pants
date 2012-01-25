@@ -104,36 +104,32 @@ module RocketPants
       
     end
     
-    module InstanceMethods
-      
-      def cache_action?(action = params[:action])
-        RocketPants.caching_enabled? && cached_actions.include?(action)
-      end
-      
-      def cache_response(resource, single_resource)
-        # Add in the default options.
-        response.cache_control.merge! caching_options
-        # We need to set the etag based on the object when it is singular
-        # Note that the object is responsible for clearing the etag cache.
-        if single_resource
-          response["ETag"] = Caching.normalise_etag Caching.etag_for(resource)
-        # Otherwise, it's a collection and we need to use time based caching.
-        else
-          response.cache_control[:max_age] = caching_timeout
-        end
-      end
-      
-      # The callback use to automatically cache the current response object, using it's
-      # cache key as a guide. For collections, instead of using an etag we'll use the request
-      # path as a cache key and instead use a timeout.
-      def post_process_exposed_object(resource, type, singular)
-        super # Make sure we invoke the old hook.
-        if cache_action?
-          cache_response resource, singular
-        end
-      end
-      
+    def cache_action?(action = params[:action])
+      RocketPants.caching_enabled? && cached_actions.include?(action)
     end
     
+    def cache_response(resource, single_resource)
+      # Add in the default options.
+      response.cache_control.merge! caching_options
+      # We need to set the etag based on the object when it is singular
+      # Note that the object is responsible for clearing the etag cache.
+      if single_resource
+        response["ETag"] = Caching.normalise_etag Caching.etag_for(resource)
+      # Otherwise, it's a collection and we need to use time based caching.
+      else
+        response.cache_control[:max_age] = caching_timeout
+      end
+    end
+    
+    # The callback use to automatically cache the current response object, using it's
+    # cache key as a guide. For collections, instead of using an etag we'll use the request
+    # path as a cache key and instead use a timeout.
+    def post_process_exposed_object(resource, type, singular)
+      super # Make sure we invoke the old hook.
+      if cache_action?
+        cache_response resource, singular
+      end
+    end
+      
   end
 end

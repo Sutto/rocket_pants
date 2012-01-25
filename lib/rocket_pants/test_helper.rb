@@ -43,55 +43,51 @@ module RocketPants
 
     end
 
-    module InstanceMethods
+    def decoded_response
+      value = response.decoded_body.try(:response)
+    end
 
-      def decoded_response
-        value = response.decoded_body.try(:response)
+    def decoded_pagination
+      response.decoded_body.try :pagination
+    end
+
+    def decoded_count
+      response.decoded_body.try :count
+    end
+
+    def decoded_error_class
+      error = response.decoded_body.try :error
+      error.presence && RocketPants::Errors[error]
+    end
+
+    # RSpec matcher foo.
+
+    def have_decoded_response(value)
+      response = normalise_value(value)
+    end
+
+    protected
+
+    # Like process, but automatically adds the api version.
+    def process(action, parameters = nil, session = nil, flash = nil, http_method = 'GET')
+      parameters ||= {}
+      if _default_version.present? && parameters[:version].blank? && parameters['version'].blank?
+        parameters[:version] = _default_version
       end
+      super
+    end
 
-      def decoded_pagination
-        response.decoded_body.try :pagination
-      end
-
-      def decoded_count
-        response.decoded_body.try :count
-      end
-
-      def decoded_error_class
-        error = response.decoded_body.try :error
-        error.presence && RocketPants::Errors[error]
-      end
-
-      # RSpec matcher foo.
-
-      def have_decoded_response(value)
-        response = normalise_value(value)
-      end
-
-      protected
-
-      # Like process, but automatically adds the api version.
-      def process(action, parameters = nil, session = nil, flash = nil, http_method = 'GET')
-        parameters ||= {}
-        if _default_version.present? && parameters[:version].blank? && parameters['version'].blank?
-          parameters[:version] = _default_version
+    def normalise_value(value)
+      if value.is_a?(Hash)
+        value.inject({}) do |acc, (k, v)|
+          acc[k.to_s] = normalise_value(v)
+          acc
         end
-        super
+      elsif value.is_a?(Array)
+        value.map { |v| normalise_value v }
+      else
+        value
       end
-
-      def normalise_value(value)
-        if value.is_a?(Hash)
-          value.inject({}) do |acc, (k, v)|
-            acc[k.to_s] = normalise_value(v)
-            acc
-          end
-        elsif value.is_a?(Array)
-          value.map { |v| normalise_value v }
-        else
-          value
-        end
-      end
-
     end
 
   end

@@ -37,33 +37,29 @@ module RocketPants
 
     end
 
-    module InstanceMethods
+    # Overrides the lookup_error_extras method to also include an error_identifier field
+    # to be sent back to the client.
+    def lookup_error_extras(exception)
+      extras = super
+      extras = extras.merge(:error_identifier => error_identifier) if error_identifier
+      extras
+    end
 
-      # Overrides the lookup_error_extras method to also include an error_identifier field
-      # to be sent back to the client.
-      def lookup_error_extras(exception)
-        extras = super
-        extras = extras.merge(:error_identifier => error_identifier) if error_identifier
-        extras
+    private
+
+    # Overrides the processing internals to rescue any exceptions and handle them with the
+    # registered exception rescue handler.
+    def process_action(*args)
+      super
+    rescue Exception => exception
+      # Otherwise, use the default built in handler.
+      logger.error "Exception occured: #{exception.class.name} - #{exception.message}"
+      logger.error "Exception backtrace:"
+      exception.backtrace[0, 10].each do |backtrace_line|
+        logger.error "=> #{backtrace_line}"
       end
-
-      private
-
-      # Overrides the processing internals to rescue any exceptions and handle them with the
-      # registered exception rescue handler.
-      def process_action(*args)
-        super
-      rescue Exception => exception
-        # Otherwise, use the default built in handler.
-        logger.error "Exception occured: #{exception.class.name} - #{exception.message}"
-        logger.error "Exception backtrace:"
-        exception.backtrace[0, 10].each do |backtrace_line|
-          logger.error "=> #{backtrace_line}"
-        end
-        exception_notifier_callback.call(self, exception, request)
-        render_error exception
-      end
-
+      exception_notifier_callback.call(self, exception, request)
+      render_error exception
     end
 
   end

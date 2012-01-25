@@ -7,16 +7,12 @@ module RocketPants
       after_destroy :remove_cache! if respond_to?(:after_destroy)
     end
     
-    module InstanceMethods
-      
-      def record_cache!
-        RocketPants::Caching.record self
-      end
-      
-      def remove_cache!
-        RocketPants::Caching.remove self
-      end
-      
+    def record_cache!
+      RocketPants::Caching.record self
+    end
+    
+    def remove_cache!
+      RocketPants::Caching.remove self
     end
     
   end
