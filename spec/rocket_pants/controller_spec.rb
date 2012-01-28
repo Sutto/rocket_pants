@@ -5,6 +5,10 @@ require 'stringio'
 describe RocketPants::Base do
   include ControllerHelpers
 
+  before :all do
+    controller_class.logger = Logger.new(StringIO.new)
+  end
+
   describe 'versioning' do
 
     it 'should ok with a valid version' do

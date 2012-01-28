@@ -20,11 +20,15 @@ module RocketPants
     protected
     
     def version
-      @version ||= begin
-        Integer(params[:version])
-      rescue ArgumentError
-        nil
+      if !instance_variable_defined?(:@version)
+        @version = begin
+          version = params[:version]
+          version.presence && Integer(version)
+        rescue ArgumentError
+          nil
+        end
       end
+      @version
     end
     
     def verify_api_version
