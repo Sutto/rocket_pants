@@ -10,12 +10,11 @@ Why use Rocket Pants over alternatives like Grape or normal Rails? The reasons w
 simple things:
 
 1. **It's opinionated** (like Grape) - In this case, we dictate a certain JSON structure we've found nice to work with (after having worked with and investigated a large number of other apis), it makes it simple to add metadata along side requests and the like.
-2. **Simple and Often Automatic Response Metadata** - Rocket Pants automatically takes care of sending metadata about paginated responses and arrays where possible. This means as a user, you only need to worry about writing `expose object\_or\_presenter` in your controller and Rocket Pants will do it's best to send as much information back to the user.
+2. **Simple and Often Automatic Response Metadata** - Rocket Pants automatically takes care of sending metadata about paginated responses and arrays where possible. This means as a user, you only need to worry about writing `expose object_or_presenter` in your controller and Rocket Pants will do it's best to send as much information back to the user.
 3. **Extended Error Support** - Rocket Pants has a build in framework to manage errors it knows how to handle (in the forms of mapping exceptions to a well defined JSON structure) as well as tools to make it simple to hook up to Airbrake and do things such as including an error identifier in the response.
 4. **It's build on ActionPack** - One of the key differentiators to Graphe is that Rocket Pants embraces ActionPack and uses the modular components included from Rails 3.0 onwards to provide things you're familiar with already such as filters.
 5. **Semi-efficient Caching Support** - Thanks to a combination of Rails middleware and collection vs. resource distinctions, Rocket Pants makes it relatively easy to implement "Efficient Validation" (See 'http://rtomayko.github.com/rack-cache/faq' [here](http://rtomayko.github.com/rack-cache/faq)). As a developer, this means you get even more benefits of http caching where possible, without the need to generate full requests when
 etags are present.
-6. **Simple Compact Response** - Want to have your index and search actions return a cut down version of the object whilst the show action returns the full thing? Rocket Pants makes it easy by defaulting to passing in a ` -compact` option when it calls `to_json`. 
 
 ## General Structure
 
