@@ -68,11 +68,23 @@ TODO: Link to the transperth client here.
 
 RocketPants includes a set of helpers to make testing controllers built on `RocketPants::Base` simpler. 
 
-* `be_singular_resource` - 
-* `be_collection_resource` - 
-* `be_paginated_response` - 
-* `be_api_error(type = any)` -
-* `have_exposed(data)` - 
+* `be_singular_resource` - Checks the response is a single resource - e.g. `response.should be_siingular_resource`.
+* `be_collection_resource` - Checks the response is collection of resources - e.g. `response.should be_collection_resource`.
+* `be_paginated_response` - Checks the response is paginated - e.g. `response.should be_paginated_response`.
+* `be_api_error(type = any)` - Checks it returned an error for the specified exception (or check the response is an error without any argument) - e.g. `response.should be_api_error RocketPants::NotFound`.
+* `have_exposed(data, options = {})` - Given an object and conversion options, lets you check the output exposed the same object. e.g: `response.should have_exposed user`
+
+Likewise, it adds the following helper methods:
+
+- `parsed_body` - A parsed-JSON representation of the response.
+- `decoded_body` - A `Hashie::Mash` of the response body.
+
+To set up the integration, in your `spec/spec_helper.rb` add:
+
+    config.include RocketPants::TestHelper,    :type => :controller
+    cconfig.include RocketPants::RSpecMatchers, :type => :controller
+
+Inside the `RSpec.configure do |config|` block.
 
 ## Contributing
 
