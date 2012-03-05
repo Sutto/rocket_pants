@@ -113,7 +113,34 @@ The final type, similar to paginated objects but it includes details about the p
 
 ## Registering / Dealing with Errors
 
-TODO: Explain how to register and invoke errors.
+One of the built in features of rocketpants is the ability to handle rescuing / controlling exceptions and more importantly to handle mapping
+exceptions to names, messages and error codes.
+
+This comes in useful when you wish to automatically convert exceptions such as `ActiveRecord::RecordNotFound` to a structured bit of data in
+the response. Namely, it makes it trivial to generate objects that follow the JSON structure of:
+
+    {
+      "error":             "standard_error_name",
+      "error_description": "A translated error message describing what happened."
+    }
+
+It also adds a facilities to make it easy to add extra information to the response.
+
+RocketPants will also attempt to convert all errors in the controller, defaulting to the `"system"` exception name and message as the error description. We also provide a registry to allow throwing exception from their symbolic name like so:
+
+    error! :not_found
+
+In the controller.
+
+Out of the box, the following exceptions come pre-registered and setup:
+
+- `:throttled` - The user has hit an api throttled error.
+- `:unauthenticated` - The user doesn't have valid authentication details.
+- `:invalid_version` - An invalid API version was specified.
+- `:not_implemented` - The specified endpoint is not yet implemented.
+- `:not_found` - The given resource could not be found.
+
+
 
 ## Implementing Efficient Validation
 
