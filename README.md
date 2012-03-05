@@ -50,7 +50,66 @@ Likewise, in Rails applications RocketPants also adds `RocketPants::CacheMiddlew
 
 ## Working with data
 
-TODO: explain how exposing data works.
+When using RocketPants, you write your controllers the same as how you would with normal ActionController, the only thing that
+changes is how yoy handle data. `head` and `redirect_to` still work exactly the same as in Rails, but instead of using `respond_with` and
+`render` you instead use RocketPant's `exposes` methods (and it's kind). Namely:
+
+- `expose` / `exposes` - The core of all type conversion, will check the type of data and automatically convert it to the correct time (for either a singular, collection or paginated resource).
+- `paginated` - Render an object as a paginated collection of data.
+- `collection` - Renders a collection of objects - e.g. an array of users.
+- `resource` - Renders a single object.
+
+Along side the above that wrap data, it also provides:
+
+- `responds` - Renders JSON, normalizing the object first (unwrapped).
+- `render_json` - Renders an object as JSON.
+
+### Singular Resources
+
+Singular resources will be converted to json via `serializable_hash`, passing through any objects
+and then wrapped in an object as the `response` key:
+
+    {
+      "response": {
+        "your": "serialized-object"
+      }
+    }
+
+### Collections
+
+Similar to singular resources, but also include extra data about the count of items.
+
+    {
+      "response": [{
+        "name": "object-one"
+      }, {
+        "name": "object-two"
+      }],
+      "count": 2
+    }
+
+### Paginated Collections
+
+The final type, similar to paginated objects but it includes details about the paginated data:
+
+    {
+      "response": [
+        {"name": "object-one"},
+        {"name": "object-two"},
+        {"name": "object-three"},
+        {"name": "object-four"},
+        {"name": "object-five"}
+      ],
+      "count": 5,
+      "pagination": {
+        "previous": 1,
+        "next":     3,
+        "current":  2,
+        "per_page": 5,
+        "count":    23
+        "pages":    5
+      }
+    }    
 
 ## Registering / Dealing with Errors
 
