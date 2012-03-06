@@ -1,25 +1,22 @@
-# Rocket Pants!
+# RocketPants!
 
-First thing's first, you're probably asking yourself - "Why the ridiculous name?". It's simple, really - Rocket Pants is memorable, and sounds completely bad ass. Everything a library needs.
+First thing's first, you're probably asking yourself - "Why the ridiculous name?". It's simple, really - RocketPants is memorable, and sounds completely bad ass. - everything a library needs.
 
-At it's core, RocketPants is a set of tools (built around existing toolsets such as ActionPack) to make it easier to build well-designed API's in Ruby and, more importantly, along side Rails. You can think of it like [Grape](https://github.com/intridea/grape), a fantastic library which RocketPants was original inspired by but with deeper Rails and ActionPack integration.
+At its core, RocketPants is a set of tools (built around existing toolsets such as ActionPack) to make it easier to build well-designed APIs in Ruby and more importantly, along side Rails. You can think of it like [Grape](https://github.com/intridea/grape), a fantastic library which RocketPants was original inspired by but with deeper Rails and ActionPack integration.
 
 ## Key Features
 
-Why use Rocket Pants over alternatives like Grape or normal Rails? The reasons we built it come down to a couple of
-simple things:
+Why use RocketPants over alternatives like Grape or normal Rails? The reasons we built it come down to a couple of simple things:
 
 1. **It's opinionated** (like Grape) - In this case, we dictate a certain JSON structure we've found nice to work with (after having worked with and investigated a large number of other apis), it makes it simple to add metadata along side requests and the like.
-2. **Simple and Often Automatic Response Metadata** - Rocket Pants automatically takes care of sending metadata about paginated responses and arrays where possible. This means as a user, you only need to worry about writing `expose object_or_presenter` in your controller and Rocket Pants will do it's best to send as much information back to the user.
-3. **Extended Error Support** - Rocket Pants has a build in framework to manage errors it knows how to handle (in the forms of mapping exceptions to a well defined JSON structure) as well as tools to make it simple to hook up to Airbrake and do things such as including an error identifier in the response.
-4. **It's build on ActionPack** - One of the key differentiators to Grape is that Rocket Pants embraces ActionPack and uses the modular components included from Rails 3.0 onwards to provide things you're familiar with already such as filters.
-5. **Semi-efficient Caching Support** - Thanks to a combination of Rails middleware and collection vs. resource distinctions, Rocket Pants makes it relatively easy to implement "Efficient Validation" (See 'http://rtomayko.github.com/rack-cache/faq' [here](http://rtomayko.github.com/rack-cache/faq)). As a developer, this means you get even more benefits of http caching where possible, without the need to generate full requests when
-etags are present.
+2. **Simple and Often Automatic Response Metadata** - RocketPants automatically takes care of sending metadata about paginated responses and arrays where possible. This means as a user, you only need to worry about writing `expose object_or_presenter` in your controller and RocketPants will do it's best to send as much information back to the user.
+3. **Extended Error Support** - RocketPants has a built in framework to manage errors it knows how to handle (in the forms of mapping exceptions to a well defined JSON structure) as well as tools to make it simple to hook up to Airbrake and do things such as including an error identifier in the response.
+4. **It's built on ActionPack** - One of the key differentiators to Grape is that RocketPants embraces ActionPack and uses the modular components included from Rails 3.0 onwards to provide things you're familiar with already such as filters.
+5. **Semi-efficient Caching Support** - Thanks to a combination of Rails middleware and collection vs. resource distinctions, RocketPants makes it relatively easy to implement "Efficient Validation" (See [here](http://rtomayko.github.com/rack-cache/faq)). As a developer, this means you get even more benefits of http caching where possible, without the need to generate full requests when etags are present.
 
 ## Example App
 
-Learn better by reading code? There is also have an example app mixing models and api clients over at [Sutto/transperth-api](https://github.com/Sutto/transperth-api) that is
-built using RocketPants.
+Learn better by reading code? There is also have an example app mixing models and api clients over at [Sutto/transperth-api](https://github.com/Sutto/transperth-api) that is built using RocketPants.
 
 ## General Structure
 
@@ -37,7 +34,7 @@ Out of the box, we use the following ActionController components:
 * `AbstractController::Callbacks` - Adds support for callbacks / filters.
 * `ActionController::Rescue` - Lets you use `rescue_from`.
 
-And add our own:
+And added our own:
 
 * `RocketPants::UrlFor` - Automatically includes the current version when generating URLs from the controller.
 * `RocketPants::Respondable` - The core of RocketPants, the code that handles converting objects to the different container types.
@@ -49,8 +46,7 @@ And add our own:
 
 To use RocketPants, instead of inheriting from `ActionController::Base`, just inherit from `RocketPants::Base`.
 
-Likewise, in Rails applications RocketPants also adds `RocketPants::CacheMiddleware` before the controller endpoints to implement
-["Efficient Validation"](http://rtomayko.github.com/rack-cache/faq).
+Likewise, in Rails applications RocketPants also adds `RocketPants::CacheMiddleware` before the controller endpoints to implement ["Efficient Validation"](http://rtomayko.github.com/rack-cache/faq).
 
 ## Installing RocketPants
 
@@ -58,53 +54,50 @@ Installing RocketPants is a simple matter of adding:
 
     gem 'rocket_pants', '~> 1.0'
 
-To your `Gemfile` and running `bundle install`. Next, instead of inherited from `ActionController::Base`, simply
-inherit from `RocketPants::Base` instead. If you're working with an API-only application, I typically change this
-in `ApplicationController` and inherit from `ApplicationController` as usual. Otherwise, I generate a new `ApiController`
-base controller along side `ApplicationController` which instead inherits from `RocketPants::Base` and place all my logic
-there.
+To your `Gemfile` and running `bundle install`. Next, instead of inherited from `ActionController::Base`, simply inherit from `RocketPants::Base` instead. If you're working with an API-only application, I typically change this in `ApplicationController` and inherit from `ApplicationController` as usual. Otherwise, I generate a new `ApiController` base controller along side `ApplicationController` which instead inherits from `RocketPants::Base` and place all my logic there.
 
 ## Configuration
 
-Setting up RocketPants in your rails application is pretty simple and requires a minimal amount of effort. Inside your environment configuration, RocketPants offers the
-following options to control how it's configured (and their expanded alternatives):
+Setting up RocketPants in your rails application is pretty simple and requires a minimal amount of effort. Inside your environment configuration, RocketPants offers the following options to control how it's configured (and their expanded alternatives):
 
 - `config.rocket_pants.use_caching` - Defaulting to true for production environments and false elsewhere, defines whether RocketPants caching setup as described below is used.
-- `config.rocket_pants.cache` - A `Moneta::Store` instance used as the rocket pants cache, defaulting to a moneta memory instance. Change for proper caching. (See [here](https://github.com/wycats/moneta) for more information on Moneta.)
+- `config.rocket_pants.cache` - A `Moneta::Store` instance used as the RocketPants cache, defaulting to a moneta memory instance. Change for proper caching. (See [here](https://github.com/wycats/moneta) for more information on Moneta.)
 
 ## Version Controllers / Routes
 
-The current preferred way of dealing with version APIs in RocketPants is to do it using routes in the form of `/:version/:endpoint` - e.g. `GET /1/users/324`.
-RocketPants has support in the router and controller level for enforcing and controlling this. In the controller, it's a matter of specifying the required API versions:
+The current preferred way of dealing with version APIs in RocketPants is to do it using routes in the form of `/:version/:endpoint` - e.g. `GET /1/users/324`. RocketPants has support in the router and controller level for enforcing and controlling this. In the controller, it's a matter of specifying the required API versions:
 
-    class UsersController < RocketPants::Base
-      version 1 # A single version
-      # or...
-      version 2..3 # 2-3 support this controller
-    end
+```ruby
+class UsersController < RocketPants::Base
+  version 1 # A single version
+  # or...
+  version 2..3 # 2-3 support this controller
+end
+```
 
-And in the case of multiple versions, I strongly encourage namespaces the controllers inside modules. If the version param (as specified) by the URL does not match, then the specified
-controllre will return an `:invalid_version` error as shown below.
+And in the case of multiple versions, I strongly encourage namespaces the controllers inside modules. If the version param (as specified) by the URL does not match, then the specified controller will return an `:invalid_version` error as shown below.
 
 Next, in your `config/routes.rb` file, you can also declare versions using the following syntax and it will automatically set up the routes for you:
 
-    api :version => 1 do
-      get 'x', :to => 'test#item'
-    end
+```ruby
+api :version => 1 do
+  get 'x', :to => 'test#item'
+end
+```
 
 Which will route `GET /1/x` to `TestController#item`.
 
 Likewise, you can specify a route for multiple versions by:
 
-    api :versions => 1..3 do
-      get 'x', :to => 'test#item'
-    end
+```ruby
+api :versions => 1..3 do
+  get 'x', :to => 'test#item'
+end
+```
 
 ## Working with data
 
-When using RocketPants, you write your controllers the same as how you would with normal ActionController, the only thing that
-changes is how yoy handle data. `head` and `redirect_to` still work exactly the same as in Rails, but instead of using `respond_with` and
-`render` you instead use RocketPant's `exposes` methods (and it's kind). Namely:
+When using RocketPants, you write your controllers the same as how you would with normal ActionController, the only thing that changes is how you handle data. `head` and `redirect_to` still work exactly the same as in Rails, but instead of using `respond_with` and `render` you instead use RocketPant's `exposes` methods (and it's kind). Namely:
 
 - `expose` / `exposes` - The core of all type conversion, will check the type of data and automatically convert it to the correct time (for either a singular, collection or paginated resource).
 - `paginated` - Render an object as a paginated collection of data.
@@ -118,69 +111,77 @@ Along side the above that wrap data, it also provides:
 
 ### Singular Resources
 
-Singular resources will be converted to json via `serializable_hash`, passing through any objects
+Singular resources will be converted to JSON via `serializable_hash`, passing through any objects
 and then wrapped in an object as the `response` key:
 
-    {
-      "response": {
-        "your": "serialized-object"
-      }
-    }
+```json
+{
+  "response": {
+    "your": "serialized-object"
+  }
+}
+```
 
 ### Collections
 
 Similar to singular resources, but also include extra data about the count of items.
 
-    {
-      "response": [{
-        "name": "object-one"
-      }, {
-        "name": "object-two"
-      }],
-      "count": 2
-    }
+```json
+{
+  "response": [{
+    "name": "object-one"
+  }, {
+    "name": "object-two"
+  }],
+  "count": 2
+}
+```
 
 ### Paginated Collections
 
 The final type, similar to paginated objects but it includes details about the paginated data:
 
-    {
-      "response": [
-        {"name": "object-one"},
-        {"name": "object-two"},
-        {"name": "object-three"},
-        {"name": "object-four"},
-        {"name": "object-five"}
-      ],
-      "count": 5,
-      "pagination": {
-        "previous": 1,
-        "next":     3,
-        "current":  2,
-        "per_page": 5,
-        "count":    23
-        "pages":    5
-      }
-    }    
+```json
+{
+  "response": [
+    {"name": "object-one"},
+    {"name": "object-two"},
+    {"name": "object-three"},
+    {"name": "object-four"},
+    {"name": "object-five"}
+  ],
+  "count": 5,
+  "pagination": {
+    "previous": 1,
+    "next":     3,
+    "current":  2,
+    "per_page": 5,
+    "count":    23
+    "pages":    5
+  }
+}
+```
 
 ## Registering / Dealing with Errors
 
-One of the built in features of rocketpants is the ability to handle rescuing / controlling exceptions and more importantly to handle mapping
-exceptions to names, messages and error codes.
+One of the built in features of RocketPants is the ability to handle rescuing / controlling exceptions and more importantly to handle mapping exceptions to names, messages and error codes.
 
-This comes in useful when you wish to automatically convert exceptions such as `ActiveRecord::RecordNotFound` to a structured bit of data in
-the response. Namely, it makes it trivial to generate objects that follow the JSON structure of:
+This comes in useful when you wish to automatically convert exceptions such as `ActiveRecord::RecordNotFound` to a structured bit of data in the response. Namely, it makes it trivial to generate objects that follow the JSON structure of:
 
-    {
-      "error":             "standard_error_name",
-      "error_description": "A translated error message describing what happened."
-    }
+```json
+{
+  "error":             "standard_error_name",
+  "error_description": "A translated error message describing what happened."
+}
+```
 
 It also adds a facilities to make it easy to add extra information to the response.
 
 RocketPants will also attempt to convert all errors in the controller, defaulting to the `"system"` exception name and message as the error description. We also provide a registry to allow throwing exception from their symbolic name like so:
 
-    error! :not_found
+```ruby
+error! :not_found
+```
 
 In the controller.
 
@@ -194,46 +195,43 @@ Out of the box, the following exceptions come pre-registered and setup:
 
 ## Implementing Efficient Validation
 
-One of the core design principles built into RocketPants is simple support for "Efficient Validation" as described in the
-[Rack::Cache FAQ](http://rtomayko.github.com/rack-cache/faq) - Namely, it adds simple support for object-level caching using
-etags with fast verification thanks to the `RocketPants::CacheMiddleware` cache middleware.
+One of the core design principles built into RocketPants is simple support for "Efficient Validation" as described in the [Rack::Cache FAQ](http://rtomayko.github.com/rack-cache/faq) - Namely, it adds simple support for object-level caching using etags with fast verification thanks to the `RocketPants::CacheMiddleware` cache middleware.
 
-To do this, it uses `RocketPants.cache`, by default any Moneta-based store, to keep a mapping of object -> current cache key.
-Rocket Pants will then generate the etag when caching is enabled in the controller for singular-responses, generating an etag that can be quickly validated.
+To do this, it uses `RocketPants.cache`, by default any Moneta-based store, to keep a mapping of object -> current cache key. RocketPants will then generate the etag when caching is enabled in the controller for singular-responses, generating an etag that can be quickly validated.
 
 For example, you'd add the following to your model:
 
-    class User < ActiveRecord::Base
-      include RocketPants::Cacheable
-    end
+```ruby
+class User < ActiveRecord::Base
+  include RocketPants::Cacheable
+end
+```
 
 And then in your controller, you'd have something like:
 
-    class UsersController < RocketPants::Base
+```ruby
+class UsersController < RocketPants::Base
 
-      version 1
+  version 1
 
-      # Time based, e.g. collections, will be cached for 5 minutes - whilst singular
-      # items e.g. show will use etag-based caching:
-      caches :show, :index, :caches_for => 5.minutes
+  # Time based, e.g. collections, will be cached for 5 minutes - whilst singular
+  # items e.g. show will use etag-based caching:
+  caches :show, :index, :caches_for => 5.minutes
 
-      def index
-        expose User.all
-      end
+  def index
+    expose User.all
+  end
 
-      def show
-        expose User.find(params[:id])
-      end
+  def show
+    expose User.find(params[:id])
+  end
 
-    end
+end
+```
 
-When the user hits the index endpoint, it will generate an expiry-based caching header that caches the result for up to 5 minutes.
-When the user instead hits the show endpoint, it will generate a special etag that contains and object identifier portion and an
-object cache key. Inside `RocketPants.cache`, we store the mapping and then inside `RocketPants::CacheMiddleware`, we simply check
-if the given cache key matches the specified object identifier. If it does, we return a not modified response otherwise we pass
-it through to controller - giving the advantage of efficent caching without having to hit the full database on every request.
+When the user hits the index endpoint, it will generate an expiry-based caching header that caches the result for up to 5 minutes. When the user instead hits the show endpoint, it will generate a special etag that contains and object identifier portion and an object cache key. Inside `RocketPants.cache`, we store the mapping and then inside `RocketPants::CacheMiddleware`, we simply check if the given cache key matches the specified object identifier. If it does, we return a not modified response otherwise we pass it through to controller - giving the advantage of efficient caching without having to hit the full database on every request.
 
-## Using with Rspec
+## Using with RSpec
 
 RocketPants includes a set of helpers to make testing controllers built on `RocketPants::Base` simpler. 
 
@@ -250,8 +248,10 @@ Likewise, it adds the following helper methods:
 
 To set up the integration, in your `spec/spec_helper.rb` add:
 
-    config.include RocketPants::TestHelper,    :type => :controller
-    cconfig.include RocketPants::RSpecMatchers, :type => :controller
+```ruby
+config.include RocketPants::TestHelper,    :type => :controller
+config.include RocketPants::RSpecMatchers, :type => :controller
+```
 
 Inside the `RSpec.configure do |config|` block.
 
@@ -271,5 +271,4 @@ Other than that, our guidelines very closely match the GemCutter guidelines [her
 
 ## License
 
-Rocket Pants is released under the MIT License (see the [license file](https://github.com/filtersquad/rocket_pants/blob/master/LICENSE)) and is
-copyright Filter Squad, 2012.
+RocketPants is released under the MIT License (see the [license file](https://github.com/filtersquad/rocket_pants/blob/master/LICENSE)) and is copyright Filter Squad, 2012.
