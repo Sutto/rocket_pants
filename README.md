@@ -139,8 +139,6 @@ Out of the box, the following exceptions come pre-registered and setup:
 - `:not_implemented` - The specified endpoint is not yet implemented.
 - `:not_found` - The given resource could not be found.
 
-
-
 ## Implementing Efficient Validation
 
 TODO: Describe how to implement efficient validation.
