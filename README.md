@@ -16,6 +16,11 @@ simple things:
 5. **Semi-efficient Caching Support** - Thanks to a combination of Rails middleware and collection vs. resource distinctions, Rocket Pants makes it relatively easy to implement "Efficient Validation" (See 'http://rtomayko.github.com/rack-cache/faq' [here](http://rtomayko.github.com/rack-cache/faq)). As a developer, this means you get even more benefits of http caching where possible, without the need to generate full requests when
 etags are present.
 
+## Example App
+
+Learn better by reading code? We also have an example app mixing models and api clients over at [Sutto/transperth-api](https://github.com/Sutto/transperth-api) that is
+build using RocketPants.
+
 ## General Structure
 
 RocketPants builds upon the mixin-based approach to ActionController-based rails applications that Rails 3 made possible. Instead of including everything like Rails does in `ActionController::Base`, RocketPants only includes the bare minimum to make apis. In the near future, it may be modified to work with `ActionController::Base` for the purposes of better compatibility with other gems.
@@ -227,10 +232,6 @@ When the user instead hits the show endpoint, it will generate a special etag th
 object cache key. Inside `RocketPants.cache`, we store the mapping and then inside `RocketPants::CacheMiddleware`, we simply check
 if the given cache key matches the specified object identifier. If it does, we return a not modified response otherwise we pass
 it through to controller - giving the advantage of efficent caching without having to hit the full database on every request.
-
-## An Example Controller / App
-
-TODO: Link to the transperth client here.
 
 ## Using with Rspec
 
