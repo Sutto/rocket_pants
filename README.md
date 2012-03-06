@@ -255,6 +255,13 @@ config.include RocketPants::RSpecMatchers, :type => :controller
 
 Inside the `RSpec.configure do |config|` block.
 
+## Contributors
+
+- [Darcy Laycock](https://github.com/Sutto) - Main developer, current maintainer.
+- [Steve Webb](https://github.com/swebb) - Helped with original work at [The Frontier Group](https://github.com/thefrontiergroup), inc. original design.
+- [Fred Wu](https://github.com/fredwu) - README fixes.
+- [Levi Buzolic](https://github.com/levibuzolic) - README fixes.
+
 ## Contributing
 
 We encourage all community contributions. Keeping this in mind, please follow these general guidelines when contributing:
