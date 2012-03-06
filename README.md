@@ -18,7 +18,7 @@ etags are present.
 
 ## Example App
 
-Learn better by reading code? We also have an example app mixing models and api clients over at [Sutto/transperth-api](https://github.com/Sutto/transperth-api) that is
+Learn better by reading code? There is also have an example app mixing models and api clients over at [Sutto/transperth-api](https://github.com/Sutto/transperth-api) that is
 built using RocketPants.
 
 ## General Structure
@@ -271,5 +271,5 @@ Other than that, our guidelines very closely match the GemCutter guidelines [her
 
 ## License
 
-Rocket Pants is released under the MIT License (see the [license file](./LICENSE)) and is
+Rocket Pants is released under the MIT License (see the [license file](https://github.com/filtersquad/rocket_pants/blob/master/LICENSE)) and is
 copyright Filter Squad, 2012.
