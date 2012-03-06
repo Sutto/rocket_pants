@@ -47,6 +47,54 @@ To use RocketPants, instead of inheriting from `ActionController::Base`, just in
 Likewise, in Rails applications RocketPants also adds `RocketPants::CacheMiddleware` before the controller endpoints to implement
 ["Efficient Validation"](http://rtomayko.github.com/rack-cache/faq).
 
+## Installing RocketPants
+
+Installing RocketPants is a simple matter of adding:
+
+    gem 'rocket_pants', '~> 1.0'
+
+To your `Gemfile` and running `bundle install`. Next, instead of inherited from `ActionController::Base`, simply
+inherit from `RocketPants::Base` instead. If you're working with an API-only application, I typically change this
+in `ApplicationController` and inherit from `ApplicationController` as usual. Otherwise, I generate a new `ApiController`
+base controller along side `ApplicationController` which instead inherits from `RocketPants::Base` and place all my logic
+there.
+
+## Configuration
+
+Setting up RocketPants in your rails application is pretty simple and requires a minimal amount of effort. Inside your environment configuration, RocketPants offers the
+following options to control how it's configured (and their expanded alternatives):
+
+- `config.rocket_pants.use_caching` - Defaulting to true for production environments and false elsewhere, defines whether RocketPants caching setup as described below is used.
+- `config.rocket_pants.cache` - A `Moneta::Store` instance used as the rocket pants cache, defaulting to a moneta memory instance. Change for proper caching. (See [here](https://github.com/wycats/moneta) for more information on Moneta.)
+
+## Version Controllers / Routes
+
+The current preferred way of dealing with version APIs in RocketPants is to do it using routes in the form of `/:version/:endpoint` - e.g. `GET /1/users/324`.
+RocketPants has support in the router and controller level for enforcing and controlling this. In the controller, it's a matter of specifying the required API versions:
+
+    class UsersController < RocketPants::Base
+      version 1 # A single version
+      # or...
+      version 2..3 # 2-3 support this controller
+    end
+
+And in the case of multiple versions, I strongly encourage namespaces the controllers inside modules. If the version param (as specified) by the URL does not match, then the specified
+controllre will return an `:invalid_version` error as shown below.
+
+Next, in your `config/routes.rb` file, you can also declare versions using the following syntax and it will automatically set up the routes for you:
+
+    api :version => 1 do
+      get 'x', :to => 'test#item'
+    end
+
+Which will route `GET /1/x` to `TestController#item`.
+
+Likewise, you can specify a route for multiple versions by:
+
+    api :versions => 1..3 do
+      get 'x', :to => 'test#item'
+    end
+
 ## Working with data
 
 When using RocketPants, you write your controllers the same as how you would with normal ActionController, the only thing that
@@ -141,7 +189,44 @@ Out of the box, the following exceptions come pre-registered and setup:
 
 ## Implementing Efficient Validation
 
-TODO: Describe how to implement efficient validation.
+One of the core design principles built into RocketPants is simple support for "Efficient Validation" as described in the
+[Rack::Cache FAQ](http://rtomayko.github.com/rack-cache/faq) - Namely, it adds simple support for object-level caching using
+etags with fast verification thanks to the `RocketPants::CacheMiddleware` cache middleware.
+
+To do this, it uses `RocketPants.cache`, by default any Moneta-based store, to keep a mapping of object -> current cache key.
+Rocket Pants will then generate the etag when caching is enabled in the controller for singular-responses, generating an etag that can be quickly validated.
+
+For example, you'd add the following to your model:
+
+    class User < ActiveRecord::Base
+      include RocketPants::Cacheable
+    end
+
+And then in your controller, you'd have something like:
+
+    class UsersController < RocketPants::Base
+
+      version 1
+
+      # Time based, e.g. collections, will be cached for 5 minutes - whilst singular
+      # items e.g. show will use etag-based caching:
+      caches :show, :index, :caches_for => 5.minutes
+
+      def index
+        expose User.all
+      end
+
+      def show
+        expose User.find(params[:id])
+      end
+
+    end
+
+When the user hits the index endpoint, it will generate an expiry-based caching header that caches the result for up to 5 minutes.
+When the user instead hits the show endpoint, it will generate a special etag that contains and object identifier portion and an
+object cache key. Inside `RocketPants.cache`, we store the mapping and then inside `RocketPants::CacheMiddleware`, we simply check
+if the given cache key matches the specified object identifier. If it does, we return a not modified response otherwise we pass
+it through to controller - giving the advantage of efficent caching without having to hit the full database on every request.
 
 ## An Example Controller / App
 
