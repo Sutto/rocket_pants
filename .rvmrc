@@ -1,1 +1,1 @@
-rvm use ree@rocket_pants_lib --create
+rvm use 1.9.3@rocketpants --create
