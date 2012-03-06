@@ -271,5 +271,5 @@ Other than that, our guidelines very closely match the GemCutter guidelines [her
 
 ## License
 
-API Smith is released under the MIT License (see the [license file](LICENSE)) and is
+Rocket Pants is released under the MIT License (see the [license file](LICENSE)) and is
 copyright Filter Squad, 2012.
