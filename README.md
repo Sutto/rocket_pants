@@ -19,7 +19,7 @@ etags are present.
 ## Example App
 
 Learn better by reading code? We also have an example app mixing models and api clients over at [Sutto/transperth-api](https://github.com/Sutto/transperth-api) that is
-build using RocketPants.
+built using RocketPants.
 
 ## General Structure
 
