@@ -156,7 +156,7 @@ The final type, similar to paginated objects but it includes details about the p
     "next":     3,
     "current":  2,
     "per_page": 5,
-    "count":    23
+    "count":    23,
     "pages":    5
   }
 }
