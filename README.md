@@ -1,5 +1,9 @@
 # RocketPants!
 
+[TOC]
+
+## Introduction
+
 First thing's first, you're probably asking yourself - "Why the ridiculous name?". It's simple, really - RocketPants is memorable, and sounds completely bad ass. - everything a library needs.
 
 At its core, RocketPants is a set of tools (built around existing toolsets such as ActionPack) to make it easier to build well-designed APIs in Ruby and more importantly, along side Rails. You can think of it like [Grape](https://github.com/intridea/grape), a fantastic library which RocketPants was originally inspired by but with deeper Rails and ActionPack integration.
@@ -14,9 +18,38 @@ Why use RocketPants over alternatives like Grape or normal Rails? The reasons we
 4. **It's built on ActionPack** - One of the key differentiators to Grape is that RocketPants embraces ActionPack and uses the modular components included from Rails 3.0 onwards to provide things you're familiar with already such as filters.
 5. **Semi-efficient Caching Support** - Thanks to a combination of Rails middleware and collection vs. resource distinctions, RocketPants makes it relatively easy to implement "Efficient Validation" (See [here](http://rtomayko.github.com/rack-cache/faq)). As a developer, this means you get even more benefits of http caching where possible, without the need to generate full requests when etags are present.
 
-## Example App
+## Examples
+
+### A full example application
 
 Learn better by reading code? There is also have an example app mixing models and api clients over at [Sutto/transperth-api](https://github.com/Sutto/transperth-api) that is built using RocketPants.
+
+### Example controllers
+
+Say, for example, you want to implement a random number endpoint that lets the user get a single random number between 1 and 100
+or a collection of 5 random numbers. The controller in this case would look like:
+
+```ruby
+class RandomNumbersController < RocketPants::Base
+
+  def index
+    numbers = (1..10).map { rand(100) + 1 }
+    expose numbers
+  end
+
+  def show
+    number = rand(100) + 1
+    expose number
+  end
+
+end
+```
+
+And in the router we'd just use the normal REST-like routes in Rails:
+
+```ruby
+resources :random_numbers, :only => [:index, :show]
+```
 
 ## General Structure
 
