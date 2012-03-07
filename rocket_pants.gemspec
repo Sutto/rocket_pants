@@ -19,9 +19,9 @@ Gem::Specification.new do |s|
   s.add_dependency 'hashie',        '~> 1.0'
   s.add_dependency 'api_smith'
   s.add_dependency 'moneta'
-  s.add_development_dependency 'rspec',       '~> 2.4.0'
-  s.add_development_dependency 'rspec-rails', '~> 2.4.0'
-  s.add_development_dependency 'rr',          '~> 1.0.0'
+  s.add_development_dependency 'rspec',       '~> 2.4'
+  s.add_development_dependency 'rspec-rails', '~> 2.4'
+  s.add_development_dependency 'rr',          '~> 1.0'
   s.add_development_dependency 'webmock'
   
   s.files        = Dir.glob("{lib}/**/*")

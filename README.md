@@ -1,6 +1,5 @@
 # RocketPants! [![Build Status](https://secure.travis-ci.org/filtersquad/rocket_pants.png?branch=master)](http://travis-ci.org/filtersquad/rocket_pants) [![Dependency Status](https://gemnasium.com/filtersquad/rocket_pants.png)](https://gemnasium.com/filtersquad/rocket_pants)
 
-
 ## Introduction
 
 First thing's first, you're probably asking yourself - "Why the ridiculous name?". It's simple, really - RocketPants is memorable, and sounds completely bad ass. - everything a library needs.
@@ -25,20 +24,29 @@ Learn better by reading code? There is also have an example app mixing models an
 
 ### Example controllers
 
-Say, for example, you want to implement a random number endpoint that lets the user get a single random number between 1 and 100
-or a collection of 5 random numbers. The controller in this case would look like:
+Say, for example, you have a basic Food model:
 
 ```ruby
-class RandomNumbersController < RocketPants::Base
+class Food < ActiveRecord::Base
+  include RocketPants::Cacheable
+end
+```
+
+```ruby
+class FoodsController < RocketPants::Base
+
+  version 1
+
+  # The list of foods is paginated for 5 minutes, the food itself is cached
+  # until it's modified (using Efficient Validation)
+  caches :index, :show, :caches_for => 5.minutes
 
   def index
-    numbers = (1..10).map { rand(100) + 1 }
-    expose numbers
+    expose Food.paginate(:page => params[:page])
   end
 
   def show
-    number = rand(100) + 1
-    expose number
+    expose Food.find(params[:id])
   end
 
 end
@@ -47,8 +55,46 @@ end
 And in the router we'd just use the normal REST-like routes in Rails:
 
 ```ruby
-resources :random_numbers, :only => [:index, :show]
+api :version => 1 do
+  resources :foods, :only => [:index, :show]
+end
 ```
+
+And then, using this example, hitting `GET http://localhost:3000/foods` would result in:
+
+```json
+{
+  "response": [{
+    "id":    1,
+    "name": "Delicious Food"
+  }, {
+    "id":   2,
+    "name": "More Delicious Food"
+  }],
+  "count": 2,
+  "pagination": {
+    "previous": nil,
+    "next":     nil,
+    "current":  1,
+    "per_page": 10,
+    "count":    2,
+    "pages":    1
+  }
+}
+```
+
+with the `Cache-Control` header set whilst hitting `GET http://localhost:3000/foods/1` would return:
+
+```json
+{
+  "response": {
+    "id":    1,
+    "name": "Delicious Food"
+  }
+}
+```
+
+with the `Etag` header set.
 
 ## General Structure
 
