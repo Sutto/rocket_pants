@@ -1,4 +1,4 @@
-# RocketPants!
+# RocketPants! [![Build Status](https://secure.travis-ci.org/filtersquad/rocket_pants.png?branch=master)](http://travis-ci.org/filtersquad/rocket_pants) 
 
 ## Introduction
 
