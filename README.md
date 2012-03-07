@@ -60,7 +60,7 @@ api :version => 1 do
 end
 ```
 
-And then, using this example, hitting `GET http://localhost:3000/foods` would result in:
+And then, using this example, hitting `GET http://localhost:3000/1/foods` would result in:
 
 ```json
 {
@@ -83,7 +83,7 @@ And then, using this example, hitting `GET http://localhost:3000/foods` would re
 }
 ```
 
-with the `Cache-Control` header set whilst hitting `GET http://localhost:3000/foods/1` would return:
+with the `Cache-Control` header set whilst hitting `GET http://localhost:3000/1/foods/1` would return:
 
 ```json
 {
