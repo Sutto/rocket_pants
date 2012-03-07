@@ -1,7 +1,5 @@
 # RocketPants!
 
-[TOC]
-
 ## Introduction
 
 First thing's first, you're probably asking yourself - "Why the ridiculous name?". It's simple, really - RocketPants is memorable, and sounds completely bad ass. - everything a library needs.
