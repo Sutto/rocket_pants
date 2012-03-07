@@ -22,7 +22,7 @@ Why use RocketPants over alternatives like Grape or normal Rails? The reasons we
 
 Learn better by reading code? There is also have an example app mixing models and api clients over at [Sutto/transperth-api](https://github.com/Sutto/transperth-api) that is built using RocketPants.
 
-### Example controllers
+### Example Code
 
 Say, for example, you have a basic Food model:
 

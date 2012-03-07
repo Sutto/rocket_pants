@@ -4,13 +4,13 @@ $:.unshift lib unless $:.include?(lib)
  
 Gem::Specification.new do |s|
   s.name        = "rocket_pants"
-  s.version     = "1.0.0.rc.1"
+  s.version     = "1.0.0"
   s.platform    = Gem::Platform::RUBY
   s.authors     = ["Darcy Laycock"]
   s.email       = ["sutto@sutto.net"]
   s.homepage    = "http://github.com/filtersquad"
   s.summary     = "JSON API love for Rails and ActionController"
-  s.description = "Rocket Pants adds JSON API love to Rails and ActionController, making it simpler to build resource-oriented controllers."
+  s.description = "Rocket Pants adds JSON API love to Rails and ActionController, making it simpler to build API-oriented controllers."
   s.required_rubygems_version = ">= 1.3.6"
   
   s.add_dependency 'actionpack', '~> 3.0'
