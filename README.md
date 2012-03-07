@@ -1,4 +1,5 @@
-# RocketPants! [![Build Status](https://secure.travis-ci.org/filtersquad/rocket_pants.png?branch=master)](http://travis-ci.org/filtersquad/rocket_pants) 
+# RocketPants! [![Build Status](https://secure.travis-ci.org/filtersquad/rocket_pants.png?branch=master)](http://travis-ci.org/filtersquad/rocket_pants) [![Dependency Status](https://gemnasium.com/filtersquad/rocket_pants.png)](https://gemnasium.com/filtersquad/rocket_pants)
+
 
 ## Introduction
 
