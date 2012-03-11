@@ -1,6 +1,8 @@
 source :rubygems
 
-gem 'rcov', :require => nil, :platform => :mri_18
+# Allow testing multiple versions with Travis.
+gem 'rails', ENV['RAILS_VERSION'] if ENV['RAILS_VERSION']
+
 gem 'ci_reporter', '~> 1.6', :require => nil
 
 gemspec
