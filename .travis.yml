@@ -12,6 +12,7 @@ rvm:
   - jruby-head
   - ree
 env:
+  - RAILS_VERSION=
   - RAILS_VERSION=~>3.0
   - RAILS_VERSION=~>3.2.0
   - RAILS_VERSION=~>3.1.0
