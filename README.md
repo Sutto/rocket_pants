@@ -15,6 +15,7 @@ Why use RocketPants over alternatives like Grape or normal Rails? The reasons we
 3. **Extended Error Support** - RocketPants has a built in framework to manage errors it knows how to handle (in the forms of mapping exceptions to a well defined JSON structure) as well as tools to make it simple to hook up to Airbrake and do things such as including an error identifier in the response.
 4. **It's built on ActionPack** - One of the key differentiators to Grape is that RocketPants embraces ActionPack and uses the modular components included from Rails 3.0 onwards to provide things you're familiar with already such as filters.
 5. **Semi-efficient Caching Support** - Thanks to a combination of Rails middleware and collection vs. resource distinctions, RocketPants makes it relatively easy to implement "Efficient Validation" (See [here](http://rtomayko.github.com/rack-cache/faq)). As a developer, this means you get even more benefits of http caching where possible, without the need to generate full requests when etags are present.
+6. **Simple tools to consume RocketPants apis** - RocketPants includes the `RocketPants::Client` class which builds upon [APISmith](https://github.com/filtersquad/api_smith) to make it easier to build clients e.g. automatically converting paginated responses back.
 
 ## Examples
 
@@ -22,7 +23,7 @@ Why use RocketPants over alternatives like Grape or normal Rails? The reasons we
 
 Learn better by reading code? There is also have an example app mixing models and api clients over at [Sutto/transperth-api](https://github.com/Sutto/transperth-api) that is built using RocketPants.
 
-### Example Code
+### Example Server Code
 
 Say, for example, you have a basic Food model:
 
@@ -95,6 +96,32 @@ with the `Cache-Control` header set whilst hitting `GET http://localhost:3000/1/
 ```
 
 with the `Etag` header set.
+
+### Example Client Code
+
+Using the example above, we could then use the following to write a client:
+
+```ruby
+class FoodsClient < RocketPants::Client
+  
+  version  1
+  base_uri 'http://localhost:3000'
+
+  class Food < APISmith::Smash
+    property :id
+    property :name
+  end
+
+  def foods
+    get 'foods', :transformer => Food
+  end
+
+  def food(id)
+    get "foods/#{id}", :transformer => Food
+  end
+
+end
+```
 
 ## General Structure
 
