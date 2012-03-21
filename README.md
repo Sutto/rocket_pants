@@ -338,6 +338,16 @@ When the user hits the index endpoint, it will generate an expiry-based caching 
 
 ## Using with RSpec
 
+When testing controllers written using RocketPants, your normal rails approach should work.
+The only difference one needs to take into the account is the need to specify the `:version`
+parameter on any http requests, e.g:
+
+```ruby
+get :index, :version => 1
+```
+
+Otherwise it will raise an exception.
+
 RocketPants includes a set of helpers to make testing controllers built on `RocketPants::Base` simpler. 
 
 * `be_singular_resource` - Checks the response is a single resource - e.g. `response.should be_siingular_resource`.
