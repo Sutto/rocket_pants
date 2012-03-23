@@ -34,6 +34,11 @@ describe RocketPants::Base do
 
   describe 'respondable' do
 
+    pending 'should return unprocessible entity for invalid formats' do
+      get :test_data, :format => :xml
+      response.status.should == 422
+    end
+
     it 'should correctly convert a will paginate collection' do
       pager = WillPaginate::Collection.create(2, 10) { |p| p.replace %w(a b c d e f g h i j); p.total_entries = 200 }
       mock(TestController).test_data { pager }
