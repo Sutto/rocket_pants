@@ -243,7 +243,7 @@ Similar to singular resources, but also include extra data about the count of it
 
 ### Paginated Collections
 
-The final type, similar to paginated objects but it includes details about the paginated data:
+The final type, similar to collection objects but it includes details about the paginated data:
 
 ```json
 {
