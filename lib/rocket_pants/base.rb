@@ -22,6 +22,7 @@ module RocketPants
       ActionController::ConditionalGet,
       ActionController::RackDelegation,
       ActionController::RecordIdentifier,
+      (ActionController::HttpAuthentication if defined?(ActionController::HttpAuthentication)),
       UrlFor,
       Respondable,
       Versioning,
@@ -33,7 +34,7 @@ module RocketPants
       ErrorHandling,
       Rescuable
       # FormatVerification # TODO: Implement Format Verification
-    ]
+    ].compact
 
     # If possible, include the Rails controller methods in Airbrake to make it useful.
     begin
