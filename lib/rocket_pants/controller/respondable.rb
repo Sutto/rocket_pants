@@ -1,8 +1,32 @@
-require 'will_paginate/collection'
-
 module RocketPants
   module Respondable
     extend ActiveSupport::Concern
+
+    def self.pagination_type(object)
+      if defined?(WillPaginate::Collection) && object.is_a?(WillPaginate::Collection)
+        :will_paginate
+      else
+        nil
+      end
+    end
+
+    def self.paginated?(object)
+      !pagination_type(object).nil?
+    end
+
+    def self.extract_pagination(collection)
+      case pagination_type(collection)
+      when :will_paginate
+        {
+          :previous => collection.previous_page.try(:to_i),
+          :next     => collection.next_page.try(:to_i),
+          :current  => collection.current_page.try(:to_i),
+          :per_page => collection.per_page.try(:to_i),
+          :count    => collection.total_entries.try(:to_i),
+          :pages    => collection.total_pages.try(:to_i)
+        }
+      end
+    end
 
     def self.normalise_object(object, options = {})
       # Convert the object using a standard grape-like lookup chain.
@@ -74,14 +98,7 @@ module RocketPants
       render_json({
         :response   => normalise_object(collection, options),
         :count      => collection.length,
-        :pagination => {
-          :previous => collection.previous_page.try(:to_i),
-          :next     => collection.next_page.try(:to_i),
-          :current  => collection.current_page.try(:to_i),
-          :per_page => collection.per_page.try(:to_i),
-          :count    => collection.total_entries.try(:to_i),
-          :pages    => collection.total_pages.try(:to_i)
-        }
+        :pagination => Respondable.extract_pagination(collection)
       }, options)
       post_process_exposed_object collection, :paginated, false
     end
@@ -89,10 +106,9 @@ module RocketPants
     # Exposes an object to the response - Essentiall, it tells the
     # controller that this is what we need to render.
     def exposes(object, options = {})
-      case object
-      when WillPaginate::Collection
+      if Respondable.paginated?(object)
         paginated object, options
-      when Array
+      elsif object.is_a?(Array)
         collection object, options
       else
         resource object, options

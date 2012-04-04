@@ -2,6 +2,8 @@ require 'spec_helper'
 require 'logger'
 require 'stringio'
 
+require 'will_paginate/collection'
+
 describe RocketPants::Base do
   include ControllerHelpers
 
