@@ -9,6 +9,10 @@ if rails_version && rails_version.length > 0
   gem 'actionpack', rails_version
 end
 
+group :integration do
+  gem 'kaminari', :require => nil
+end
+
 gem 'ci_reporter', '~> 1.6', :require => nil
 
 gemspec

@@ -3,6 +3,13 @@ require 'logger'
 require 'stringio'
 
 require 'will_paginate/collection'
+# Replace stderr because kaminari complains about not having a framework.
+begin
+  stderr, $stderr = $stderr, StringIO.new
+  require 'kaminari'
+ensure
+  $stderr = stderr
+end
 
 describe RocketPants::Base do
   include ControllerHelpers
@@ -39,6 +46,24 @@ describe RocketPants::Base do
     pending 'should return unprocessible entity for invalid formats' do
       get :test_data, :format => :xml
       response.status.should == 422
+    end
+
+    it 'should correctly convert a kaminari array' do
+      pager = Kaminari::PaginatableArray.new((1..200).to_a, :limit => 10, :offset => 10)
+      mock(TestController).test_data { pager }
+      get :test_data
+      content.should have_key(:pagination)
+      content[:pagination].should == {
+        :next => 3,
+        :current => 2,
+        :previous => 1,
+        :pages => 20,
+        :count => 200,
+        :per_page => 10,
+        :count => 200
+      }.stringify_keys
+      content.should have_key(:count)
+      content.should have_key(:pagination)
     end
 
     it 'should correctly convert a will paginate collection' do
