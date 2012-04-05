@@ -27,6 +27,44 @@ describe RocketPants::Base do
       instance.should respond_to :authenticate_or_request_with_http_token
     end
 
+    context 'with a model' do
+
+      let(:table_manager) { ReversibleData.manager_for(:users) }
+
+      before(:each) { table_manager.up! }
+      after(:each)  { table_manager.down! }
+
+      it 'should let you expose a single item' do
+        user = User.create :age => 21
+        mock(TestController).test_data { user }
+        get :test_data
+        content[:response].should == user.serializable_hash
+      end
+
+      it 'should let you expose a collection' do
+        1.upto(5) do |offset|
+          User.create :age => (18 + offset)
+        end
+        mock(TestController).test_data { User.all }
+        get :test_data
+        content[:response].should == User.all.map(&:serializable_hash)
+        content[:count].should == 5
+      end
+
+      it 'should let you expose a kaminari-paginated collection' do
+        1.upto(5) do |offset|
+          User.create :age => (18 + offset)
+        end
+        mock(TestController).test_data { User.page(1).per(2) }
+        get :test_data
+        content[:response].should be_present
+        content[:count].should == 2
+        content[:pagination].should be_present
+        content[:pagination][:count].should == 5
+      end
+
+    end
+
   end
 
   describe 'versioning' do
