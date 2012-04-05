@@ -135,6 +135,7 @@ Out of the box, we use the following ActionController components:
 * `ActionController::ConditionalGet` - Adds support for Rails caching controls, e.g. `fresh_when` and `expires_in`.
 * `ActionController::RackDelegation` - Lets you reset the session and set the response body.
 * `ActionController::RecordIdentifier` - Gives `dom_class` and `dom_id` methods, used for polymorphic routing.
+* `ActionController::HttpAuthentication` Mixins - Gives Token, Digest and Basic authentication.
 * `AbstractController::Callbacks` - Adds support for callbacks / filters.
 * `ActionController::Rescue` - Lets you use `rescue_from`.
 
