@@ -18,6 +18,17 @@ describe RocketPants::Base do
     controller_class.logger = Logger.new(StringIO.new)
   end
 
+  describe 'integration' do
+
+    it 'should have the authorization helper methods' do
+      instance = controller_class.new
+      instance.should respond_to :authenticate_or_request_with_http_basic
+      instance.should respond_to :authenticate_or_request_with_http_digest
+      instance.should respond_to :authenticate_or_request_with_http_token
+    end
+
+  end
+
   describe 'versioning' do
 
     it 'should ok with a valid version' do
