@@ -2,15 +2,6 @@ require 'rocket_pants/exceptions'
 
 module RocketPants
 
-  autoload :Caching,            'rocket_pants/controller/caching'
-  autoload :ErrorHandling,      'rocket_pants/controller/error_handling'
-  autoload :Instrumentation,    'rocket_pants/controller/instrumentation'
-  autoload :Rescuable,          'rocket_pants/controller/rescuable'
-  autoload :Respondable,        'rocket_pants/controller/respondable'
-  autoload :Versioning,         'rocket_pants/controller/versioning'
-  autoload :FormatVerification, 'rocket_pants/controller/format_verification'
-  autoload :UrlFor,             'rocket_pants/controller/url_for'
-
   class Base < ActionController::Metal
 
     abstract!

@@ -25,6 +25,16 @@ module RocketPants
   autoload :TestHelper,      'rocket_pants/test_helper'
   autoload :RSpecMatchers,   'rocket_pants/rspec_matchers'
 
+  # Each of the controller mixins etc.
+  autoload :Caching,            'rocket_pants/controller/caching'
+  autoload :ErrorHandling,      'rocket_pants/controller/error_handling'
+  autoload :Instrumentation,    'rocket_pants/controller/instrumentation'
+  autoload :Rescuable,          'rocket_pants/controller/rescuable'
+  autoload :Respondable,        'rocket_pants/controller/respondable'
+  autoload :Versioning,         'rocket_pants/controller/versioning'
+  autoload :FormatVerification, 'rocket_pants/controller/format_verification'
+  autoload :UrlFor,             'rocket_pants/controller/url_for'
+
   mattr_accessor :caching_enabled
   self.caching_enabled = false
 
