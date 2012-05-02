@@ -50,5 +50,8 @@ module RocketPants
 
     ActiveSupport.run_load_hooks(:rocket_pants, self)
 
+    # Methods for integration purposes.
+    def self.helper_method(*); end
+
   end
 end

@@ -476,16 +476,24 @@ describe RocketPants::Base do
     let!(:first_controller) { Class.new(TestController)   }
     let!(:controller_class) { Class.new(first_controller) }
 
-    it 'should let you specify requests as having jsonp'
+    it 'should let you specify requests as having jsonp' do
+      controller_class.jsonp
+      get :echo, :echo => "Hello World"
+      response.content_type.should include 'application/json'
+      response.body.should == %({"response":{"echo":"Hello World"}})
+      get :echo, :echo => "Hello World", :callback => "test"
+      response.content_type.should include 'application/javascript'
+      response.body.should == %|test({"response":{"echo":"Hello World"}});|
+    end
 
     it 'should automatically inherit it' do
       first_controller.jsonp :enable => true
       get :echo, :echo => "Hello World", :callback => "test"
       response.content_type.should include 'application/javascript'
-      response.body.should == %q|test({"response":{"echo":"Hello World"}});|
+      response.body.should == %|test({"response":{"echo":"Hello World"}});|
       get :echo, :echo => "Hello World", :other_callback => "test"
       response.content_type.should include 'application/json'
-      response.body.should == %q({"response":{"echo":"Hello World"}})
+      response.body.should == %({"response":{"echo":"Hello World"}})
     end
 
     it 'should allow you to disable at a lower level' do
@@ -493,22 +501,36 @@ describe RocketPants::Base do
       controller_class.jsonp :enable => false
       get :echo, :echo => "Hello World", :callback => "test"
       response.content_type.should include 'application/json'
-      response.body.should == %q({"response":{"echo":"Hello World"}})
+      response.body.should == %({"response":{"echo":"Hello World"}})
     end
 
     it 'should let you specify options to it' do
       controller_class.jsonp :parameter => 'cb'
       get :echo, :echo => "Hello World", :cb => "test"
       response.content_type.should include 'application/javascript'
-      response.body.should == %q|test({"response":{"echo":"Hello World"}});|
+      response.body.should == %|test({"response":{"echo":"Hello World"}});|
       get :echo, :echo => "Hello World", :callback => "test"
       response.content_type.should include 'application/json'
-      response.body.should == %q({"response":{"echo":"Hello World"}})
+      response.body.should == %({"response":{"echo":"Hello World"}})
     end
 
-    it 'should let you specify it on a per action level'
+    it 'should let you specify it on a per action level' do
+      controller_class.jsonp :only => [:test_data]
+      get :echo, :echo => "Hello World", :callback => "test"
+      response.content_type.should include 'application/json'
+      response.body.should == %({"response":{"echo":"Hello World"}})
+      stub(controller_class).test_data { {"other" => true} }
+      get :test_data, :callback => "test"
+      response.content_type.should include 'application/javascript'
+      response.body.should == %|test({"response":{"other":true}});|
+    end
 
-    it 'should not wrap non-get actions'
+    it 'should not wrap non-get actions' do
+      controller_class.jsonp
+      post :echo, :echo => "Hello World", :callback => "test"
+      response.content_type.should include 'application/json'
+      response.body.should == %({"response":{"echo":"Hello World"}})
+    end
 
   end
 

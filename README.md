@@ -373,7 +373,7 @@ RocketPants includes a set of helpers to make testing controllers built on `Rock
 
 * `be_singular_resource` - Checks the response is a single resource - e.g. `response.should be_siingular_resource`.
 * `be_collection_resource` - Checks the response is collection of resources - e.g. `response.should be_collection_resource`.
-* `be_paginated_response` - Checks the response is paginated - e.g. `response.should be_paginated_response`.
+* `be_paginated_resource` - Checks the response is paginated - e.g. `response.should be_paginated_resource`.
 * `be_api_error(type = any)` - Checks it returned an error for the specified exception (or check the response is an error without any argument) - e.g. `response.should be_api_error RocketPants::NotFound`.
 * `have_exposed(data, options = {})` - Given an object and conversion options, lets you check the output exposed the same object. e.g: `response.should have_exposed user`
 

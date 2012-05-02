@@ -5,7 +5,7 @@ module ControllerHelpers
   end
   
   def request(action = :echo)
-    @request ||= Rack::MockRequest.new(controller_class.action(action))
+    @request = Rack::MockRequest.new(controller_class.action(action))
   end
   
   def response
