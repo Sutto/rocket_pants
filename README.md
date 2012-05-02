@@ -97,6 +97,27 @@ with the `Cache-Control` header set whilst hitting `GET http://localhost:3000/1/
 
 with the `Etag` header set.
 
+#### JSONP
+
+If you want to enable JSONP support, it's as simple as calling `jsonp` in your class method:
+
+```ruby
+class MyController < RocketPants::Base
+  jsonp
+end
+```
+
+By default this will use the `callback` parameter, e.g. `GET /1/my?callback=console.log`.
+To change this parameter, specify the `parameter` option like so:
+
+```ruby
+class MyController < RocketPants::Base
+  jsonp :parameter => :jsonp
+end
+```
+
+Finally, to disable it in a subclass, simple call `jsonp` in the child and pass `:enable => false` as an option.
+
 ### Example Client Code
 
 Using the example above, we could then use the following to write a client:
