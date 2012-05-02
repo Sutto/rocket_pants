@@ -29,6 +29,7 @@ module RocketPants
   autoload :Caching,            'rocket_pants/controller/caching'
   autoload :ErrorHandling,      'rocket_pants/controller/error_handling'
   autoload :Instrumentation,    'rocket_pants/controller/instrumentation'
+  autoload :JSONP,              'rocket_pants/controller/jsonp'
   autoload :Rescuable,          'rocket_pants/controller/rescuable'
   autoload :Respondable,        'rocket_pants/controller/respondable'
   autoload :Versioning,         'rocket_pants/controller/versioning'

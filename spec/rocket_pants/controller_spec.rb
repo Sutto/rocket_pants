@@ -471,4 +471,45 @@ describe RocketPants::Base do
 
   end
 
+  describe 'jsonp support' do
+
+    let!(:first_controller) { Class.new(TestController)   }
+    let!(:controller_class) { Class.new(first_controller) }
+
+    it 'should let you specify requests as having jsonp'
+
+    it 'should automatically inherit it' do
+      first_controller.jsonp :enable => true
+      get :echo, :echo => "Hello World", :callback => "test"
+      response.content_type.should include 'application/javascript'
+      response.body.should == %q|test({"response":{"echo":"Hello World"}});|
+      get :echo, :echo => "Hello World", :other_callback => "test"
+      response.content_type.should include 'application/json'
+      response.body.should == %q({"response":{"echo":"Hello World"}})
+    end
+
+    it 'should allow you to disable at a lower level' do
+      first_controller.jsonp :enable => true
+      controller_class.jsonp :enable => false
+      get :echo, :echo => "Hello World", :callback => "test"
+      response.content_type.should include 'application/json'
+      response.body.should == %q({"response":{"echo":"Hello World"}})
+    end
+
+    it 'should let you specify options to it' do
+      controller_class.jsonp :parameter => 'cb'
+      get :echo, :echo => "Hello World", :cb => "test"
+      response.content_type.should include 'application/javascript'
+      response.body.should == %q|test({"response":{"echo":"Hello World"}});|
+      get :echo, :echo => "Hello World", :callback => "test"
+      response.content_type.should include 'application/json'
+      response.body.should == %q({"response":{"echo":"Hello World"}})
+    end
+
+    it 'should let you specify it on a per action level'
+
+    it 'should not wrap non-get actions'
+
+  end
+
 end
