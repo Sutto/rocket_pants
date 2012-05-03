@@ -532,6 +532,14 @@ describe RocketPants::Base do
       response.body.should == %({"response":{"echo":"Hello World"}})
     end
 
+    it 'should have the correct content length' do
+      controller_class.jsonp
+      get :echo, :echo => "Hello World", :callback => "test"
+      response.content_type.should include 'application/javascript'
+      response.body.should == %|test({"response":{"echo":"Hello World"}});|
+      response.headers['Content-Length'].to_i.should == Rack::Utils.bytesize(response.body)
+    end
+
   end
 
 end
