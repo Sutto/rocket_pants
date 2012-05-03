@@ -1,8 +1,9 @@
 module RocketPants
   class Railtie < Rails::Railtie
 
-    config.rocket_pants = ActiveSupport::OrderedOptions.new
-    config.rocket_pants.use_caching = nil
+    config.rocket_pants                 = ActiveSupport::OrderedOptions.new
+    config.rocket_pants.use_caching     = nil
+    config.rocket_pants.header_metadata = nil
 
     config.i18n.railties_load_path << File.expand_path('../locale/en.yml', __FILE__)
 
@@ -14,6 +15,7 @@ module RocketPants
       rp_config = app.config.rocket_pants
       rp_config.use_caching = Rails.env.production? if rp_config.use_caching.nil?
       RocketPants.caching_enabled = rp_config.use_caching
+      RocketPants.header_metadata = rp_config.header_metadata unless rp_config.header_metadata.nil?
       # Set the rocket pants cache if present.
       RocketPants.cache = rp_config.cache if rp_config.cache
     end

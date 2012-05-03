@@ -36,13 +36,15 @@ module RocketPants
   autoload :FormatVerification, 'rocket_pants/controller/format_verification'
   autoload :UrlFor,             'rocket_pants/controller/url_for'
 
-  mattr_accessor :caching_enabled
+  mattr_accessor :caching_enabled, :header_metadata
   self.caching_enabled = false
+  self.header_metadata = false
 
   mattr_writer :cache
 
   class << self
     alias caching_enabled? caching_enabled
+    alias header_metadata? header_metadata
 
     def cache
       @@cache ||= Moneta::Memory.new

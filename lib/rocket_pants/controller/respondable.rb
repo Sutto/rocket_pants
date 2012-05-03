@@ -96,10 +96,11 @@ module RocketPants
     def collection(collection, options = {})
       pre_process_exposed_object collection, :collection, false
       options = options.reverse_merge(:compact => true)
+      meta = expose_metadata(:count => collection.length)
       render_json({
         :response => normalise_object(collection, options),
         :count    => collection.length
-      }, options)
+      }.merge(meta), options)
       post_process_exposed_object collection, :collection, false
     end
 
@@ -107,11 +108,13 @@ module RocketPants
     def paginated(collection, options = {})
       pre_process_exposed_object collection, :paginated, false
       options = options.reverse_merge(:compact => true)
-      render_json({
-        :response   => normalise_object(collection, options),
+      meta = expose_metadata({
         :count      => collection.length,
         :pagination => Respondable.extract_pagination(collection)
-      }, options)
+      })
+      render_json({
+        :response   => normalise_object(collection, options),
+      }.merge(meta), options)
       post_process_exposed_object collection, :paginated, false
     end
 
@@ -144,6 +147,27 @@ module RocketPants
     # @param [Symbol] type the type of object exposed, one of :resource, :collection or :paginated
     # @param [true,false] singular Whether or not the given object is singular (e.g. :resource)
     def post_process_exposed_object(resource, type, singular)
+    end
+
+    def expose_metadata(metadata)
+      if RocketPants.header_metadata?
+        headers.merge! build_header_hash(metadata)
+      end
+      metadata
+    end
+
+    def build_header_hash(options, hash = {}, prefix = 'X-API')
+      options.each_pair do |k, v|
+        p k
+        current = "#{prefix}-#{k.to_s.titleize.tr(" ", "-")}"
+        if v.is_a?(Hash)
+          build_header_hash v, hash, current
+        else
+          value = Array(v).join(", ")
+          hash[current] = value if value.present?
+        end
+      end
+      hash
     end
 
   end
