@@ -149,14 +149,26 @@ module RocketPants
     def post_process_exposed_object(resource, type, singular)
     end
 
+    # Given a hash of request metadata, will:
+    # 1. Write out the headers for the current metadata
+    # 2. Return the hash, suitable for merging into the response hash
+    # 3. Start a dance party.
+    #
+    # @param  [Hash{Symbol => Object}] metadata the hash of the request metadata.
+    # @return [Hash{Symbol => Object}] the passed in metadata
     def expose_metadata(metadata)
-      if RocketPants.header_metadata?
-        headers.merge! build_header_hash(metadata)
-      end
+      metadata_headers { build_header_hash(metadata) }
       metadata
     end
 
-    def build_header_hash(options, hash = {}, prefix = 'X-API')
+    # Given a block which returns a Hash, will call and merge the block iff header metadata
+    # is enabled. This is to avoid the overhead of generating headers on every request when
+    # it's disabled.
+    def metadata_headers(&blk)
+      headers.merge! blk.call if RocketPants.header_metadata?
+    end
+
+    def build_header_hash(options, hash = {}, prefix = 'X-Api')
       options.each_pair do |k, v|
         p k
         current = "#{prefix}-#{k.to_s.titleize.tr(" ", "-")}"
