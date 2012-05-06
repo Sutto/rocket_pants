@@ -118,6 +118,33 @@ end
 
 Finally, to disable it in a subclass, simple call `jsonp` in the child and pass `:enable => false` as an option.
 
+#### Header Metadata
+
+When `RocketPants.header_metadata` or `config.rocket_pants.header_metadata` are set to true, RocketPants can automatically
+expose metadata via `X-Api-` headers. Likewise, for paginated responses, if you implement `page_url(page_number)` in your controller
+with header metadata enabled, RocketPants will automatically add HTTP Link Headers for the next, prev, first and last to your
+response.
+
+Likewise, you can manually add link headers using the `link(rel, href, attributes = {})` method like so:
+
+```ruby
+def index
+  # Not an actual rel, just an example...
+  link :profile, user_profile_path(current_user)
+  expose current_user
+end
+```
+
+For batch adding links, you can use the `links` method:
+
+```ruby
+def index
+  # Probably not the best example...
+  links :next => random_wallpaper_path, :prev => random_wallpaper_path
+  expose Wallpaper.random
+end
+```
+
 ### Example Client Code
 
 Using the example above, we could then use the following to write a client:
