@@ -10,8 +10,6 @@ if rails_version && rails_version.length > 0
   gem 'activerecord', rails_version
 end
 
-gem 'ci_reporter', '~> 1.6', :require => nil
-
 # 2.10 for the moment changes some exceptions.
 gem 'rspec', '~> 2.9.0'
 
