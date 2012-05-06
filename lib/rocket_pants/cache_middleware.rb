@@ -2,6 +2,7 @@ module RocketPants
   class CacheMiddleware
     
     NOT_MODIFIED = [304, {}, []]
+    DIVIDER      = ":"
     
     def initialize(app)
       @app = app
@@ -29,7 +30,6 @@ module RocketPants
 
     def has_valid_etag?
       return false if (etags = request_etags).blank?
-      debug ""
       etags.any? do |etag|
         cache_key, value = extract_cache_key_and_value etag
         debug "Processing cache key for path #{request_path}"
@@ -39,7 +39,7 @@ module RocketPants
     end
     
     def extract_cache_key_and_value(etag)
-      etag.to_s.split(":", 2)
+      etag.to_s.split(DIVIDER, 2)
     end
     
     def fresh?(key, value)
@@ -48,7 +48,7 @@ module RocketPants
     
     def request_etags
       stored = @env['HTTP_IF_NONE_MATCH']
-      stored.present? && stored.to_s.scan(/"([^"]+)"/)
+      stored.present? && stored.to_s.scan(/"([^"]+)"/).flatten.select { |i| i.include?(DIVIDER) }
     end
     
     def debug(message)

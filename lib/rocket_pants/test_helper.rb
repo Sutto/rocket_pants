@@ -52,7 +52,7 @@ module RocketPants
     end
 
     def decoded_count
-      response.decoded_body.try :count
+      response.decoded_body[:count]
     end
 
     def decoded_error_class
