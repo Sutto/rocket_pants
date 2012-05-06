@@ -19,6 +19,7 @@ module RocketPants
       UrlFor,
       Respondable,
       HeaderMetadata,
+      Linking,
       Versioning,
       Instrumentation,
       Caching,
