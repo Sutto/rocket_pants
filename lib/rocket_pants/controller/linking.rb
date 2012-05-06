@@ -6,11 +6,11 @@ module RocketPants
     # @param [String] uri the full uri to the specified link resource
     # @param [Hash] attributes any other attributes for the link
     def link(rel, uri, attributes = {})
-      links = (headers['Link'] ||= [])
+      headers['Link'] ||= []
       attributes = {:rel => rel}.merge(attributes)
       link = "<#{uri}>"
       attributes.each_pair { |k, v| link << "; #{k}=\"#{v}\"" }
-      links << link
+      headers['Link'] << link
     end
 
     # Lets you add a series of links for the current resource.
@@ -30,9 +30,9 @@ module RocketPants
       super.tap do |meta|
         if RocketPants.header_metadata? && (pagination = meta[:pagination])
           links :next  => (pagination[:next] && page_url(pagination[:next])),
-                :prev  => (pagination[:previous] && page_url(pagination[:previous])),
-                :first => page_url(1),
-                :last  => (pagination[:pages] && page_url(pagination[:pages]))
+                :prev  => (pagination[:previous] && page_url(pagination[:previous])),                
+                :last  => (pagination[:pages] && page_url(pagination[:pages])),
+                :first => page_url(1)
         end
       end
     end

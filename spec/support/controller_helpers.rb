@@ -8,13 +8,9 @@ module ControllerHelpers
   def controller_class
     TestController
   end
-
-  def request_cache
-    @request_cache ||= {}
-  end
   
   def request(action = :echo)
-    request_cache[action] ||= Rack::MockRequest.new(controller_class.action(action))
+    @request = Rack::MockRequest.new(controller_class.action(action))
   end
   
   def response
