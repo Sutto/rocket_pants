@@ -18,6 +18,7 @@ module RocketPants
       ActionController::HttpAuthentication::Token::ControllerMethods,
       UrlFor,
       Respondable,
+      HeaderMetadata,
       Versioning,
       Instrumentation,
       Caching,

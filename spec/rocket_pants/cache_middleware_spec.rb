@@ -1,12 +1,7 @@
 require 'spec_helper'
 
 describe RocketPants::CacheMiddleware do
-
   include ControllerHelpers
-
-  before :all do
-    controller_class.logger = Logger.new(StringIO.new)
-  end
 
   # Wrap the normal request in cache middleware.
   def request(action = :echo)

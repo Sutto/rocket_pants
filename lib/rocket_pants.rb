@@ -32,6 +32,7 @@ module RocketPants
   autoload :JSONP,              'rocket_pants/controller/jsonp'
   autoload :Rescuable,          'rocket_pants/controller/rescuable'
   autoload :Respondable,        'rocket_pants/controller/respondable'
+  autoload :HeaderMetadata,     'rocket_pants/controller/header_metadata'
   autoload :Versioning,         'rocket_pants/controller/versioning'
   autoload :FormatVerification, 'rocket_pants/controller/format_verification'
   autoload :UrlFor,             'rocket_pants/controller/url_for'

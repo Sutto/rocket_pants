@@ -5,6 +5,7 @@ module ConfigHelper
   def with_config(name, value)
     original_value = RocketPants.send name
     RocketPants.send "#{name}=", value
+    yield if block_given?
   ensure
     RocketPants.send "#{name}=", original_value
   end
