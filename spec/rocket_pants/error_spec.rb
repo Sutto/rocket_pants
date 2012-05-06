@@ -1,14 +1,39 @@
 require 'spec_helper'
 
 describe RocketPants::Error do
-  
-  UnchangedError = Class.new(RocketPants::Error)
-  AttackedByNinjas = Class.new(RocketPants::Error) do
-    http_status 422
+
+  def temporary_constant(items)
+    items.each_pair do |k, v|
+      Object.const_set k, v
+    end
+    yield if block_given?
+  ensure
+    items.each_key do |name|
+      Object.send :remove_const, name
+    end
   end
-  AnotherError = Class.new(AttackedByNinjas) do
-    http_status 404
-    error_name :oh_look_a_panda
+
+  let!(:unchanged_error) do
+    Class.new(RocketPants::Error)
+  end
+
+  let!(:attacked_by_ninjas) do
+    Class.new(RocketPants::Error) do
+      http_status 422
+    end
+  end
+
+  let!(:another_error) do
+    Class.new(attacked_by_ninjas) do
+      http_status 404
+      error_name :oh_look_a_panda
+    end
+  end
+
+  around :each do |test|
+    temporary_constant :AnotherError => another_error, :UnchangedError => unchanged_error, :AttackedByNinjas => attacked_by_ninjas do
+      test.call
+    end
   end
   
   it 'should be an exception' do
@@ -19,24 +44,24 @@ describe RocketPants::Error do
     
     it 'should default to 400 for the status code' do
       RocketPants::Error.http_status.should == 400
-      UnchangedError.http_status.should == 400
+      unchanged_error.http_status.should == 400
     end
     
     it 'should let you get the status code for a given class' do
-      AttackedByNinjas.http_status.should == 422
-      AnotherError.http_status.should == 404
+      attacked_by_ninjas.http_status.should == 422
+      another_error.http_status.should == 404
     end
     
     it 'should let you set the status code for a given class' do
-      AttackedByNinjas.http_status.should == 422
-      AnotherError.http_status 403
-      AnotherError.http_status.should == 403
-      AttackedByNinjas.http_status.should == 422
+      attacked_by_ninjas.http_status.should == 422
+      another_error.http_status 403
+      another_error.http_status.should == 403
+      attacked_by_ninjas.http_status.should == 422
     end
     
     it 'should let you get the status code from an instance' do
-      instance = AnotherError.new
-      instance.http_status.should == AnotherError.http_status
+      instance = another_error.new
+      instance.http_status.should == another_error.http_status
     end
     
   end
@@ -44,23 +69,23 @@ describe RocketPants::Error do
   describe 'working with the error name' do
     
     it 'should have a sane default value' do
-      UnchangedError.error_name.should == :unchanged
+      unchanged_error.error_name.should == :unchanged
       RocketPants::Error.error_name.should == :unknown
-      AttackedByNinjas.error_name.should == :attacked_by_ninjas
+      attacked_by_ninjas.error_name.should == :attacked_by_ninjas
     end
     
     it 'should let you get the error name for a given class' do
-      AnotherError.error_name.should == :oh_look_a_panda
+      another_error.error_name.should == :oh_look_a_panda
     end
     
     it 'should let you set the error name for a given class' do
-      AnotherError.error_name :oh_look_a_pingu
-      AnotherError.error_name.should == :oh_look_a_pingu
+      another_error.error_name :oh_look_a_pingu
+      another_error.error_name.should == :oh_look_a_pingu
     end
     
     it 'should let you get it on an instance' do
-      instance = AttackedByNinjas.new
-      instance.error_name.should == AttackedByNinjas.error_name
+      instance = attacked_by_ninjas.new
+      instance.error_name.should == attacked_by_ninjas.error_name
     end
     
   end

@@ -2,7 +2,7 @@ module ControllerHelpers
 
   def self.included(parent)
     super
-    parent.send(:before, :all) { controller_class.logger = Logger.new(StringIO.new) }
+    parent.send(:before, :each) { controller_class.logger = Logger.new(StringIO.new) }
   end
   
   def controller_class

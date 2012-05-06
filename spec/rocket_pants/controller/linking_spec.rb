@@ -10,9 +10,7 @@ describe RocketPants::Linking do
     end
   end
 
-  let(:controller_class) do
-    Class.new(TestController)
-  end
+  let(:controller_class) { Class.new TestController }
 
   def link_portion(&blk)
     controller_class.send :define_method, :test_data, &blk
@@ -21,13 +19,8 @@ describe RocketPants::Linking do
 
   describe 'automatic pagination links'  do
 
-    def current_page
-      @current_page ||= 2
-    end
-
-    def pagination
-      WillPaginate::Collection.create(current_page, 10) { |p| p.replace %w(a b c d e f g h i j); p.total_entries = 200 }
-    end
+    let(:current_page) { @current_page ||= 2 }
+    let(:pagination)   { WillPaginate::Collection.create(current_page, 10) { |p| p.replace %w(a b c d e f g h i j); p.total_entries = 200 } }
 
     before :each do
       stub(controller_class).test_data { pagination }
