@@ -414,4 +414,13 @@ describe RocketPants::Base do
 
   end
 
+  describe 'custom metadata' do
+
+    it 'should allow custom metadata' do
+      get :test_metadata, :metadata => {:awesome => "1"}
+      response.body.should == %|{"response":{"test":true},"awesome":"1"}|
+    end
+
+  end
+
 end

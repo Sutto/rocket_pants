@@ -9,6 +9,7 @@ TestRouter.draw do
   get 'test_error',       :to => 'test#test_error'
   get 'test_render_json', :to => 'test#test_render_json'
   get 'test_responds',    :to => 'test#test_responds'
+  get 'test_metadata',    :to => 'test#test_metadata'
 end
 TestRouter.finalize!
 
@@ -53,6 +54,10 @@ class TestController < RocketPants::Base
   
   def test_error
     raise self.class.test_error
+  end
+
+  def test_metadata
+    expose({:test => true}, :metadata => params[:metadata])
   end
 
   def premature_termination

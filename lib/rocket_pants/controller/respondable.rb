@@ -83,39 +83,27 @@ module RocketPants
       render_json normalise_object(object, options), options
     end
 
+    def respond_with_object_and_type(object, options, type, singular)
+      pre_process_exposed_object object, type, singular
+      options = options.reverse_merge(:compact => true) unless singular
+      meta = expose_metadata metadata_for(object, options, type, singular)
+      render_json({:response => normalise_object(object, options)}.merge(meta), options)
+      post_process_exposed_object object, type, singular
+    end
+
     # Renders a single resource.
     def resource(object, options = {})
-      pre_process_exposed_object object, :resource, true
-      render_json({
-       :response => normalise_object(object, options)
-      }, options)
-      post_process_exposed_object object, :resource, true
+      respond_with_object_and_type object, options, :resource, true
     end
 
     # Renders a normal collection to JSON.
     def collection(collection, options = {})
-      pre_process_exposed_object collection, :collection, false
-      options = options.reverse_merge(:compact => true)
-      meta = expose_metadata(:count => collection.length)
-      render_json({
-        :response => normalise_object(collection, options),
-        :count    => collection.length
-      }.merge(meta), options)
-      post_process_exposed_object collection, :collection, false
+      respond_with_object_and_type collection, options, :collection, false
     end
 
     # Renders a paginated collecton to JSON.
     def paginated(collection, options = {})
-      pre_process_exposed_object collection, :paginated, false
-      options = options.reverse_merge(:compact => true)
-      meta = expose_metadata({
-        :count      => collection.length,
-        :pagination => Respondable.extract_pagination(collection)
-      })
-      render_json({
-        :response   => normalise_object(collection, options),
-      }.merge(meta), options)
-      post_process_exposed_object collection, :paginated, false
+      respond_with_object_and_type collection, options, :paginated, false
     end
 
     # Exposes an object to the response - Essentiall, it tells the
@@ -158,6 +146,21 @@ module RocketPants
     # @return [Hash{Symbol => Object}] the passed in metadata
     def expose_metadata(metadata)
       metadata
+    end
+
+    # Extracts the metadata for the current response, merging in options etc.
+    # Implements a simple hook to allow adding extra metadata to your api.
+    #
+    # @param [Object] object the data being exposed
+    # @param [Hash{Symbol => Object}] options expose options optionally including new metadata.
+    # @param [Symbol] type the type of the current object
+    # @param [true,false] singular true iff the current object is a singular resource
+    def metadata_for(object, options, type, singular)
+      {}.tap do |metadata|
+        metadata[:count]      = object.length unless singular
+        metadata[:pagination] = Respondable.extract_pagination(object) if type == :paginated
+        metadata.merge! options[:metadata] if options[:metadata]
+      end
     end
 
   end
