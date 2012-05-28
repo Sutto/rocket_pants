@@ -418,7 +418,8 @@ describe RocketPants::Base do
 
     it 'should allow custom metadata' do
       get :test_metadata, :metadata => {:awesome => "1"}
-      response.body.should == %|{"response":{"test":true},"awesome":"1"}|
+      decoded = ActiveSupport::JSON.decode(response.body)
+      decoded["awesome"].should == "1"
     end
 
   end
