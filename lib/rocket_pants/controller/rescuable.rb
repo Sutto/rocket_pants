@@ -8,7 +8,8 @@ module RocketPants
     include ActiveSupport::Rescuable
 
     DEFAULT_NOTIFIER_CALLBACK = lambda do |controller, exception, req|
-      # Do nothing by default...
+      # Iff pass_through_error is true, continue by raising the error.
+      raise if RocketPants.pass_through_errors?
     end
     
     NAMED_NOTIFIER_CALLBACKS = {

@@ -5,13 +5,6 @@ describe RocketPants::ErrorHandling do
 
   let!(:controller_class) { Class.new(TestController) }
 
-  it 'should allow you to override the error handler' do
-    get :test_error
-    content.should have_key "error"
-    content.should have_key "error_description"
-    content[:error].should == "system"
-  end
-
   it 'should allow you to set the error handle from a named type' do
     controller_class.exception_notifier_callback.should == controller_class::DEFAULT_NOTIFIER_CALLBACK
     controller_class.use_named_exception_notifier :airbrake
@@ -125,6 +118,34 @@ describe RocketPants::ErrorHandling do
       controller_class.error_mapping[TestController::ErrorOfDoom] = RocketPants::Throttled
       get :test_error
       content['error'].should == 'throttled'
+    end
+
+  end
+
+  describe 'the default exception handler' do
+
+    let!(:error_mapping) { Hash.new }
+
+    before :each do
+      # Replace it with a new error mapping.
+      stub(controller_class).error_mapping { error_mapping }
+      stub.instance_of(controller_class).error_mapping { error_mapping }
+      controller_class.use_named_exception_notifier :default
+    end
+
+    it 'should pass through the exception if pass through is enabled' do
+      with_config :pass_through_errors, true do
+        expect { get :test_error }.to raise_error NotImplementedError
+      end
+    end
+
+    it 'should catch through the exception if pass through is disabled' do
+      with_config :pass_through_errors, false do
+        get :test_error
+        content.should have_key "error"
+        content.should have_key "error_description"
+        content[:error].should == "system"
+      end
     end
 
   end
