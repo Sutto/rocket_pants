@@ -13,8 +13,16 @@ module RocketPants
 
     module ClassMethods
 
-      def map_error!(from, to)
-        error_mapping[from] = to
+      # Declares that a given error class (e.g. ActiveRecord::RecordNotFound)
+      # should map to a second value - either an Exception class Or, more usefully,
+      # a callable object.
+      # @param [Class] from the exception class to map from.
+      # @param [Class, #call] to the callable to map to, or a callback block.
+      def map_error!(from, to, &blk)
+        to = (to || blk)
+        p to
+        raise ArgumentError, "Either an option must be provided or a block given." unless to
+        error_mapping[from] = (to || blk)
         rescue_from from, :with => :render_error
       end
 
@@ -96,7 +104,12 @@ module RocketPants
         klass < StandardError and error_mapping.has_key?(klass)
       end
       if normalised_class
-        exception = error_mapping[normalised_class].new(exception.message)
+        mapped = error_mapping[normalised_class]
+        if mapped.respond_to?(:call)
+          exception = mapped.call(exception)
+        else
+          exception = mapped.new exception.message
+        end
       end
       self.status = lookup_error_status(exception)
       render_json({

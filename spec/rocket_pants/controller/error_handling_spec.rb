@@ -5,51 +5,55 @@ describe RocketPants::ErrorHandling do
 
   let!(:controller_class) { Class.new(TestController) }
 
-  around :each do |test|
-    with_config :pass_through_errors, false, &test
-  end
+  context 'error handler functions' do
 
-  it 'should allow you to set the error handle from a named type' do
-    controller_class.exception_notifier_callback.should == controller_class::DEFAULT_NOTIFIER_CALLBACK
-    controller_class.use_named_exception_notifier :airbrake
-    controller_class.exception_notifier_callback.should_not == controller_class::DEFAULT_NOTIFIER_CALLBACK
-    controller_class.exception_notifier_callback.should == controller_class::NAMED_NOTIFIER_CALLBACKS[:airbrake]
-    controller_class.use_named_exception_notifier :nonexistant
-    controller_class.exception_notifier_callback.should == controller_class::DEFAULT_NOTIFIER_CALLBACK
-  end
-
-  it 'should include the error identifier in the response if set' do
-    controller_class.exception_notifier_callback = lambda do |controller, exception, req|
-      controller.error_identifier = 'my-test-identifier'
+    around :each do |test|
+      with_config :pass_through_errors, false, &test
     end
-    get :test_error
-    content[:error_identifier].should == 'my-test-identifier'
-  end
 
-  it 'should throw the correct error for invalid api versions' do
-    get :echo, {}, :version => '3'
-    content['error'].should == 'invalid_version'
-  end
+    it 'should allow you to set the error handle from a named type' do
+      controller_class.exception_notifier_callback.should == controller_class::DEFAULT_NOTIFIER_CALLBACK
+      controller_class.use_named_exception_notifier :airbrake
+      controller_class.exception_notifier_callback.should_not == controller_class::DEFAULT_NOTIFIER_CALLBACK
+      controller_class.exception_notifier_callback.should == controller_class::NAMED_NOTIFIER_CALLBACKS[:airbrake]
+      controller_class.use_named_exception_notifier :nonexistant
+      controller_class.exception_notifier_callback.should == controller_class::DEFAULT_NOTIFIER_CALLBACK
+    end
 
-  it 'should return the correct output for a manually thrown error' do
-    get :demo_exception
-    content['error'].should == 'throttled'
-    content['error_description'].should be_present
-  end
+    it 'should include the error identifier in the response if set' do
+      controller_class.exception_notifier_callback = lambda do |controller, exception, req|
+        controller.error_identifier = 'my-test-identifier'
+      end
+      get :test_error
+      content[:error_identifier].should == 'my-test-identifier'
+    end
 
-  it 'should stop the flow if you raise an exception' do
-    get :premature_termination
-    content['error'].should be_present
-    content['error_description'].should be_present
-    content['response'].should be_nil
-  end
+    it 'should throw the correct error for invalid api versions' do
+      get :echo, {}, :version => '3'
+      content['error'].should == 'invalid_version'
+    end
 
-  it 'should use i18n for error messages' do
-    with_translations :rocket_pants => {:errors => {:throttled => 'Oh noes, a puddle.'}} do
+    it 'should return the correct output for a manually thrown error' do
       get :demo_exception
+      content['error'].should == 'throttled'
+      content['error_description'].should be_present
     end
-    content['error'].should == 'throttled'
-    content['error_description'].should == 'Oh noes, a puddle.'
+
+    it 'should stop the flow if you raise an exception' do
+      get :premature_termination
+      content['error'].should be_present
+      content['error_description'].should be_present
+      content['response'].should be_nil
+    end
+
+    it 'should use i18n for error messages' do
+      with_translations :rocket_pants => {:errors => {:throttled => 'Oh noes, a puddle.'}} do
+        get :demo_exception
+      end
+      content['error'].should == 'throttled'
+      content['error_description'].should == 'Oh noes, a puddle.'
+    end
+
   end
 
   describe 'hooking into the built in error handling' do
@@ -115,6 +119,25 @@ describe RocketPants::ErrorHandling do
       controller_class.error_mapping[TestController::ErrorOfDoom] = RocketPants::Throttled
       get :test_error
       content['error'].should == 'throttled'
+    end
+
+    it 'should let you register a custom error mapping' do
+      controller_class.error_mapping[TestController::ErrorOfDoom] = ->(exception) do
+        RocketPants::Throttled.new(exception)
+      end
+      get :test_error
+      content['error'].should == 'throttled'
+    end
+
+    it 'should let you register a custom error mapping with extras' do
+      controller_class.error_mapping[TestController::ErrorOfDoom] = ->(exception) do
+        RocketPants::Throttled.new(exception).tap do |e|
+          e.context = {:extras => {:test => true}}
+        end
+      end
+      get :test_error
+      content['error'].should == 'throttled'
+      content['test'].should == true
     end
 
     it 'should include parents when checking the mapping' do
