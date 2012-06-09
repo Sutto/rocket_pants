@@ -385,6 +385,10 @@ as appropriate.
 - `ActiveRecord::RecordNotSaved` into `RocketPants::InvalidResource (with no validation messages).`
 - `ActiveRecord::RecordInvalid` into `RocketPants::InvalidResource (with messages in the "messages" key of the JSON).`
 
+**Please Note:** The default RecordInvalid mapper can potentially leak information about your structure - If there is data
+in the default error messages you don't wish to expose, we suggest implementing it on a per-action basis (using normal
+rescues / `.save` instead of `.save!`) OR remapping the handler for `ActiveRecord::RecordInvalid`.
+
 For Invalid Resource messages, the response looks roughly akin to:
 
 ```json
