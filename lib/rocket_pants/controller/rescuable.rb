@@ -8,8 +8,7 @@ module RocketPants
     include ActiveSupport::Rescuable
 
     DEFAULT_NOTIFIER_CALLBACK = lambda do |controller, exception, req|
-      # Iff pass_through_error is true, continue by raising the error.
-      raise if RocketPants.pass_through_errors?
+      # Does nothing
     end
     
     NAMED_NOTIFIER_CALLBACKS = {
@@ -53,6 +52,7 @@ module RocketPants
     def process_action(*args)
       super
     rescue Exception => exception
+      raise if RocketPants.pass_through_errors?
       # Otherwise, use the default built in handler.
       logger.error "Exception occured: #{exception.class.name} - #{exception.message}"
       logger.error "Exception backtrace:"

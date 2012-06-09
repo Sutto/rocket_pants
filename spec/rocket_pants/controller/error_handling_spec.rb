@@ -5,6 +5,10 @@ describe RocketPants::ErrorHandling do
 
   let!(:controller_class) { Class.new(TestController) }
 
+  around :each do |test|
+    with_config :pass_through_errors, false, &test
+  end
+
   it 'should allow you to set the error handle from a named type' do
     controller_class.exception_notifier_callback.should == controller_class::DEFAULT_NOTIFIER_CALLBACK
     controller_class.use_named_exception_notifier :airbrake
