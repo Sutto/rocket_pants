@@ -4,25 +4,23 @@ require 'rspec/core'
 require 'rspec/core/rake_task'
 require 'bundler/gem_tasks'
 
-task :default => :spec
-
 desc "Run all specs in spec directory (excluding plugin specs)"
 RSpec::Core::RakeTask.new(:spec)
+
+INTEGRATION_LIBS = %w(will_paginate kaminari active_record)
 
 namespace :spec do
 
   namespace :integration do
 
-    desc "Run the will_paginate integrate specs"
-    RSpec::Core::RakeTask.new(:will_paginate) do |t|
-      t.rspec_opts = "--tag integration"
-      t.pattern = "./spec/integration/will_paginate_spec.rb"
-    end
+    INTEGRATION_LIBS.each do |lib|
 
-    desc "Run the will_paginate integrate specs"
-    RSpec::Core::RakeTask.new(:kaminari) do |t|
-      t.rspec_opts = "--tag integration"
-      t.pattern = "./spec/integration/kaminari_spec.rb"
+      desc "Run the #{lib} integrate specs"
+      RSpec::Core::RakeTask.new(lib.to_sym) do |t|
+        t.rspec_opts = "--tag integration"
+        t.pattern = "./spec/integration/#{lib}_spec.rb"
+      end
+
     end
 
   end
@@ -35,4 +33,4 @@ namespace :spec do
   end
 end
 
-task :default => ["spec:integration:will_paginate", "spec:integration:kaminari"]
+task :default => ([:spec] + INTEGRATION_LIBS.map { |l| "spec:integration:#{l}" })

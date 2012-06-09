@@ -1,0 +1,55 @@
+require 'spec_helper'
+
+require 'active_record'
+require 'rocket_pants/active_record'
+
+describe RocketPants::Base, 'active record integration', :integration => true, :target => 'active_record' do
+  include ControllerHelpers
+
+  let(:table_manager) { ReversibleData.manager_for(:fish) }
+
+  before :each do
+    table_manager.up!
+  end
+
+  after(:each) { table_manager.down! }
+
+  let(:controller_class) do
+    Class.new(TestController)
+  end
+
+  def action_is(&blk)
+    controller_class.send :define_method, :test_data, &blk
+  end
+
+  it 'should automatically map ActiveRecord::RecordNotFound' do
+    action_is { Fish.find(1000) }
+    get :test_data
+    content['error'].should == 'not_found'
+  end
+
+  it 'should automatically map ActiveRecord::RecordNotSaved' do
+    action_is { raise ActiveRecord::RecordNotSaved }
+    @action_body = lambda { Fish.new.save }
+    get :test_data
+    content['error'].should == 'invalid_resource'
+    content['messages'].should == nil
+  end
+
+  it 'should automatically map ActiveRecord::RecordInvalid' do
+    action_is { Fish.new.save! }
+    get :test_data
+    content['error'].should == 'invalid_resource'
+    messages = content['messages']
+    messages.should be_present
+    messages.keys.should =~ %w(name child_number latin_name)
+    messages.each_pair do |name, value|
+      value.should be_present
+      value.should be_a Array
+      value.should be_all { |v| v.is_a?(String) }
+      expected = (name == 'name' ? 1 : 2)
+      value.length.should == expected
+    end
+  end
+
+end

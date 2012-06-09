@@ -321,7 +321,7 @@ The final type, similar to collection objects but it includes details about the 
 
 One of the built in features of RocketPants is the ability to handle rescuing / controlling exceptions and more importantly to handle mapping exceptions to names, messages and error codes.
 
-This comes in useful when you wish to automatically convert exceptions such as `ActiveRecord::RecordNotFound` to a structured bit of data in the response. Namely, it makes it trivial to generate objects that follow the JSON structure of:
+This comes in useful when you wish to automatically convert exceptions such as `ActiveRecord::RecordNotFound` (Note: This case is handled already) to a structured bit of data in the response. Namely, it makes it trivial to generate objects that follow the JSON structure of:
 
 ```json
 {
@@ -347,6 +347,8 @@ Out of the box, the following exceptions come pre-registered and setup:
 - `:invalid_version` - An invalid API version was specified.
 - `:not_implemented` - The specified endpoint is not yet implemented.
 - `:not_found` - The given resource could not be found.
+- `:invalid_resource` - The given resource was invalid.
+- `:bad_request` - The given request was not as expected.
 
 Note that error also excepts a Hash of contextual options, many which will be passed through to the Rails I18N subsystem. E.g:
 
@@ -371,6 +373,19 @@ Will return something similar to:
   "code":              123
 }
 ```
+
+### Build in ActiveRecord Errors
+
+Out of the box, Rocket Pants will automatically map the following to built in errors and rescue them
+as appropriate.
+
+- `ActiveRecord::RecordNotFound` into `RocketPants::NotFound`
+- `ActiveRecord::RecordNotSaved` into `RocketPants::InvalidResource (with no validation messages).`
+- `ActiveRecord::RecordInvalid` into `RocketPants::InvalidResource (with messages in the "messages" key of the JSON).`
+
+For Invalid Resource messages, the response looks roughly akin to:
+
+
 
 ## Implementing Efficient Validation
 
