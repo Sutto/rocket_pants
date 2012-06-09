@@ -93,6 +93,7 @@ module RocketPants
     def self.register!(name, options = {})
       klass_name = (options[:class_name] || name.to_s.classify).to_sym
       base_klass = options[:base] || Error
+      raise ArgumentError, ":base must be a subclass of RocketPants::Error" unless base_klass <= Error
       klass = Class.new(base_klass)
       klass.error_name(options[:error_name] || name.to_s.underscore)
       klass.http_status(options[:http_status]) if options[:http_status].present?

@@ -68,6 +68,14 @@ describe RocketPants::Errors do
       RocketPants.should be_const_defined(:TestChildException)
       RocketPants::TestChildException.should be < RocketPants::TestBaseException
     end
+
+    it 'should let you set the parent object' do
+      expect do
+        RocketPants::Errors.register! :test_child_exception_bad_base, base: StandardError
+      end.to raise_error ArgumentError
+      RocketPants.should be_const_defined(:TestBaseException)
+      RocketPants.should_not be_const_defined(:TestChildExceptionBadBase)
+    end
     
     it 'should let you set the http status' do
       RocketPants::Errors.register! :another_exception_two, :http_status => :forbidden
