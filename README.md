@@ -16,6 +16,8 @@ Why use RocketPants over alternatives like Grape or normal Rails? The reasons we
 4. **It's built on ActionPack** - One of the key differentiators to Grape is that RocketPants embraces ActionPack and uses the modular components included from Rails 3.0 onwards to provide things you're familiar with already such as filters.
 5. **Semi-efficient Caching Support** - Thanks to a combination of Rails middleware and collection vs. resource distinctions, RocketPants makes it relatively easy to implement "Efficient Validation" (See [here](http://rtomayko.github.com/rack-cache/faq)). As a developer, this means you get even more benefits of http caching where possible, without the need to generate full requests when etags are present.
 6. **Simple tools to consume RocketPants apis** - RocketPants includes the `RocketPants::Client` class which builds upon [APISmith](https://github.com/filtersquad/api_smith) to make it easier to build clients e.g. automatically converting paginated responses back.
+7. **Build in Header Metadata Support** - APIs can easily expose `Link:` headers (it's even partly built in for paginated data - see below) and request metadata (e.g. Object count etc) can easily be embedded in the headers of the response, making useful `HEAD` requests.
+8. **Out of the Box ActiveRecord mapping** - We'll automatically take care of mapping `ActiveRecord::RecordNotFound`, `ActiveRecord::RecordNotSaved` and `ActiveRecord::RecordInvalid` for you, even including validation messages where possible.
 
 ## Examples
 
@@ -385,7 +387,17 @@ as appropriate.
 
 For Invalid Resource messages, the response looks roughly akin to:
 
-
+```json
+{
+  "error": "invalid_resource",
+  "error_description": "The current resource was deemed invalid.",
+  "messages": {
+    "name":        ["can't be blank"],
+    "child_number":["can't be blank", "is not a number"],
+    "latin_name":  ["is too short (minimum is 5 characters)", "is invalid"]
+  }
+}
+```
 
 ## Implementing Efficient Validation
 
