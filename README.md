@@ -1,4 +1,4 @@
-# RocketPants! [![Build Status](https://secure.travis-ci.org/filtersquad/rocket_pants.png?branch=master)](http://travis-ci.org/filtersquad/rocket_pants) [![Dependency Status](https://gemnasium.com/filtersquad/rocket_pants.png)](https://gemnasium.com/filtersquad/rocket_pants)
+# Rocket Pants! [![Build Status](https://secure.travis-ci.org/filtersquad/rocket_pants.png?branch=master)](http://travis-ci.org/filtersquad/rocket_pants) [![Dependency Status](https://gemnasium.com/filtersquad/rocket_pants.png)](https://gemnasium.com/filtersquad/rocket_pants)
 
 ## Introduction
 
@@ -10,14 +10,14 @@ At its core, RocketPants is a set of tools (built around existing toolsets such 
 
 Why use RocketPants over alternatives like Grape or normal Rails? The reasons we built it come down to a couple of simple things:
 
-1. **It's opinionated** (like Grape) - In this case, we dictate a certain JSON structure we've found nice to work with (after having worked with and investigated a large number of other apis), it makes it simple to add metadata along side requests and the like.
-2. **Simple and Often Automatic Response Metadata** - RocketPants automatically takes care of sending metadata about paginated responses and arrays where possible. This means as a user, you only need to worry about writing `expose object_or_presenter` in your controller and RocketPants will do it's best to send as much information back to the user.
-3. **Extended Error Support** - RocketPants has a built in framework to manage errors it knows how to handle (in the forms of mapping exceptions to a well defined JSON structure) as well as tools to make it simple to hook up to Airbrake and do things such as including an error identifier in the response.
-4. **It's built on ActionPack** - One of the key differentiators to Grape is that RocketPants embraces ActionPack and uses the modular components included from Rails 3.0 onwards to provide things you're familiar with already such as filters.
-5. **Semi-efficient Caching Support** - Thanks to a combination of Rails middleware and collection vs. resource distinctions, RocketPants makes it relatively easy to implement "Efficient Validation" (See [here](http://rtomayko.github.com/rack-cache/faq)). As a developer, this means you get even more benefits of http caching where possible, without the need to generate full requests when etags are present.
-6. **Simple tools to consume RocketPants apis** - RocketPants includes the `RocketPants::Client` class which builds upon [APISmith](https://github.com/filtersquad/api_smith) to make it easier to build clients e.g. automatically converting paginated responses back.
-7. **Build in Header Metadata Support** - APIs can easily expose `Link:` headers (it's even partly built in for paginated data - see below) and request metadata (e.g. Object count etc) can easily be embedded in the headers of the response, making useful `HEAD` requests.
-8. **Out of the Box ActiveRecord mapping** - We'll automatically take care of mapping `ActiveRecord::RecordNotFound`, `ActiveRecord::RecordNotSaved` and `ActiveRecord::RecordInvalid` for you, even including validation messages where possible.
+1. **[It's opinionated](#version-controllers--routes)** (like Grape) - In this case, we dictate a certain JSON structure we've found nice to work with (after having worked with and investigated a large number of other apis), it makes it simple to add metadata along side requests and the like.
+2. **[Simple and Often Automatic Response Metadata](#working-with-data)** - RocketPants automatically takes care of sending metadata about paginated responses and arrays where possible. This means as a user, you only need to worry about writing `expose object_or_presenter` in your controller and RocketPants will do it's best to send as much information back to the user.
+3. **[Extended Error Support](#registering--dealing-with-errors)** - RocketPants has a built in framework to manage errors it knows how to handle (in the forms of mapping exceptions to a well defined JSON structure) as well as tools to make it simple to hook up to Airbrake and do things such as including an error identifier in the response.
+4. **[It's built on ActionPack](#general-structure)** - One of the key differentiators to Grape is that RocketPants embraces ActionPack and uses the modular components included from Rails 3.0 onwards to provide things you're familiar with already such as filters.
+5. **[Semi-efficient Caching Support](#implementing-efficient-validation)** - Thanks to a combination of Rails middleware and collection vs. resource distinctions, RocketPants makes it relatively easy to implement "Efficient Validation" (See [here](#implementing-efficient-validation)). As a developer, this means you get even more benefits of http caching where possible, without the need to generate full requests when etags are present.
+6. **[Simple tools to consume RocketPants apis](#example-client-code)** - RocketPants includes the `RocketPants::Client` class which builds upon [APISmith](https://github.com/filtersquad/api_smith) to make it easier to build clients e.g. automatically converting paginated responses back.
+7. **[Build in Header Metadata Support](#header-metadata)** - APIs can easily expose `Link:` headers (it's even partly built in for paginated data - see below) and request metadata (e.g. Object count etc) can easily be embedded in the headers of the response, making useful `HEAD` requests.
+8. **[Out of the Box ActiveRecord mapping](#built-in-activerecord-errors)** - We'll automatically take care of mapping `ActiveRecord::RecordNotFound`, `ActiveRecord::RecordNotSaved` and `ActiveRecord::RecordInvalid` for you, even including validation messages where possible.
 
 ## Examples
 
@@ -376,7 +376,7 @@ Will return something similar to:
 }
 ```
 
-### Build in ActiveRecord Errors
+### Built in ActiveRecord Errors
 
 Out of the box, Rocket Pants will automatically map the following to built in errors and rescue them
 as appropriate.
