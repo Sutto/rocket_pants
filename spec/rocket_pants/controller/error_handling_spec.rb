@@ -103,14 +103,14 @@ describe RocketPants::ErrorHandling do
       content['hello'].should == 'There'
     end
 
-    it 'should default to extracting extras from the context' do
-      def error.context;  {:extras => {:hello => 'There'}} ; end
+    it 'should default to extracting metadata from the context' do
+      def error.context;  {:metadata => {:hello => 'There'}} ; end
       get :test_error
       content['hello'].should == 'There'
     end
 
     it 'should let you pass through data via the context in the controller' do
-      controller_class.send(:define_method, :demo_exception) { error! :throttled, :extras => {:hello => "There"}}
+      controller_class.send(:define_method, :demo_exception) { error! :throttled, :metadata => {:hello => "There"}}
       get :demo_exception
       content['hello'].should == 'There'
     end
@@ -129,10 +129,10 @@ describe RocketPants::ErrorHandling do
       content['error'].should == 'throttled'
     end
 
-    it 'should let you register a custom error mapping with extras' do
+    it 'should let you register a custom error mapping with metadata' do
       controller_class.error_mapping[TestController::ErrorOfDoom] = lambda do |exception|
         RocketPants::Throttled.new(exception).tap do |e|
-          e.context = {:extras => {:test => true}}
+          e.context = {:metadata => {:test => true}}
         end
       end
       get :test_error

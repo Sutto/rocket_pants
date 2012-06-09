@@ -55,7 +55,7 @@ module RocketPants
       name    = lookup_error_name(exception)
       message = (exception.message == exception.class.name) ? 'An unknown error has occurred.' : exception.message
       context = lookup_error_context(exception).reverse_merge(:scope => :"rocket_pants.errors", :default => message)
-      I18n.t name, context.except(:extra)
+      I18n.t name, context.except(:metadata)
     end
 
     # Lookup error name will automatically handle translating errors to a
@@ -85,11 +85,15 @@ module RocketPants
       exception.respond_to?(:context) ? exception.context : {}
     end
 
+    def lookup_error_extras(exception)
+      {}
+    end
+
     # Returns extra error details for a given object, making it useable
     # for hooking in external exceptions.
-    def lookup_error_extras(exception)
+    def lookup_error_metadata(exception)
       context = lookup_error_context exception
-      context.fetch :extras, {} 
+      context.fetch(:metadata, {}).merge lookup_error_extras(exception)
     end
 
     # Renders an exception as JSON using a nicer version of the error name and
@@ -115,7 +119,7 @@ module RocketPants
       render_json({
         :error             => lookup_error_name(exception).to_s,
         :error_description => lookup_error_message(exception)
-      }.merge(lookup_error_extras(exception)))
+      }.merge(lookup_error_metadata(exception)))
     end
 
   end

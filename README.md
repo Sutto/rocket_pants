@@ -363,7 +363,7 @@ Will look up the translation `rocket_pants.errors.throttled` in your I18N files,
 Finally, You can use this to also pass custom values to include in the response, e.g:
 
 ```ruby
-error! :throttled, :extras => {:code => 123}
+error! :throttled, :metadata => {:code => 123}
 ```
 
 Will return something similar to:

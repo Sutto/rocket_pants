@@ -2,6 +2,21 @@
 
 **Please Note**: This change log only covers v1.3 forwards - apologies for anything missing prior to that.
 
+## Version 1.5
+
+* Add in a built in `:invalid_resource` error, with support for passing through error messages.
+* Support for ActiveRecord exceptions out of the box (See the README).
+* Don't hide errors by default in `development` and `test`, respect `config.rocket_pants.pass_through_errors` and `RocketPants.pass_through_errors`.
+* Allow specifying `:metadata` in context on errors / expose and add it directly to the response.
+* Allow specifying `:metadata` in expose on objects.
+* `RocketPants::Base.map_error!` now accepts lambdas as the target value / convertor.
+
+## Version 1.4
+
+* Add in a built in `:bad_request` error.
+* Provide `:base` on `RocketPants::Errors.register!` will set the base class.
+* Fixed integration with `will_paginate` and expanded our integration specs to be better.
+
 ## Version 1.3
 
 * Fixed a bug where any request with an etag would return `304 Not Modified` when the caching middleware was enabled.

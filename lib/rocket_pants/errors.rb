@@ -72,7 +72,7 @@ module RocketPants
 
     def context
       super.tap do |ctx|
-        extras            = (ctx[:extras] ||= {})
+        extras            = (ctx[:metadata] ||= {})
         extras[:messages] = errors.to_hash if errors
       end
     end

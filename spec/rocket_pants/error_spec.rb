@@ -114,13 +114,13 @@ describe RocketPants::Error do
       o = Object.new
       mock(o).to_hash { error_messages }
       error = RocketPants::InvalidResource.new(o)
-      error.context.should == {:extras => {:messages => error_messages}}
+      error.context.should == {:metadata => {:messages => error_messages}}
     end
 
     it 'should not override messages' do
       error = RocketPants::InvalidResource.new(error_messages)
-      error.context = {:other => true, :extras => {:test => true}}
-      error.context.should == {:extras => {:messages => error_messages, :test => true}, :other => true}
+      error.context = {:other => true, :metadata => {:test => true}}
+      error.context.should == {:metadata => {:messages => error_messages, :test => true}, :other => true}
     end
 
   end
