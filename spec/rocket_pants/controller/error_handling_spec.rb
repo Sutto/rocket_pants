@@ -122,7 +122,7 @@ describe RocketPants::ErrorHandling do
     end
 
     it 'should let you register a custom error mapping' do
-      controller_class.error_mapping[TestController::ErrorOfDoom] = ->(exception) do
+      controller_class.error_mapping[TestController::ErrorOfDoom] = lambda do |exception|
         RocketPants::Throttled.new(exception)
       end
       get :test_error
@@ -130,7 +130,7 @@ describe RocketPants::ErrorHandling do
     end
 
     it 'should let you register a custom error mapping with extras' do
-      controller_class.error_mapping[TestController::ErrorOfDoom] = ->(exception) do
+      controller_class.error_mapping[TestController::ErrorOfDoom] = lambda do |exception|
         RocketPants::Throttled.new(exception).tap do |e|
           e.context = {:extras => {:test => true}}
         end

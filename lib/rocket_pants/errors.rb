@@ -57,5 +57,26 @@ module RocketPants
     register! :bad_request,     :http_status => :bad_request
     
   end
+
+  class InvalidObject < RocketPants::Error
+    http_status :unprocessible_entity
+    error_name  :invalid_object
+
+    # Errors are ActiveModel Errors
+    attr_reader :errors
+
+    def initialize(error, *args)
+      @errors = errors
+      super *args
+    end
+
+    def context
+      super.tap do |ctx|
+        extras            = (ctx[:extras] ||= {})
+        extras[:messages] = errors.to_hash
+      end
+    end
+
+  end
   
 end
