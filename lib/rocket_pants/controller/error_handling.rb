@@ -55,7 +55,8 @@ module RocketPants
       # TODO: Add in notification hooks for non-standard exceptions.
       name    = lookup_error_name(exception)
       message = (exception.message == exception.class.name) ? 'An unknown error has occurred.' : exception.message
-      I18n.t name, lookup_error_context(exception).reverse_merge(:scope => :"rocket_pants.errors", :default => message)
+      context = lookup_error_context(exception).reverse_merge(:scope => :"rocket_pants.errors", :default => message)
+      I18n.t name, context.except(:extra)
     end
 
     # Lookup error name will automatically handle translating errors to a
