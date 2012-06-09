@@ -10,4 +10,11 @@ module ConfigHelper
     RocketPants.send "#{name}=", original_value
   end
 
+  def restoring_env(*keys)
+    original = keys.map { |k| ENV[k] }
+    yield if block_given?
+  ensure
+    keys.each_with_index { |k,i | ENV[k] = original[i] }
+  end
+
 end

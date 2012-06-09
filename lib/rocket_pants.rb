@@ -39,6 +39,7 @@ module RocketPants
   autoload :UrlFor,             'rocket_pants/controller/url_for'
 
   mattr_accessor :caching_enabled, :header_metadata
+
   self.caching_enabled = false
   self.header_metadata = false
 
@@ -51,6 +52,39 @@ module RocketPants
     def cache
       @@cache ||= Moneta::Memory.new
     end
+
+    def env
+      @@env ||= default_env
+    end
+
+    def env=(value)
+      value = value.presence && ActiveSupport::StringInquirer.new(value)
+      @@env = value
+    end
+
+    def default_env
+      env = Rails.env.to_s if defined?(Rails.env)
+      env ||= ENV['RAILS_ENV'].presence || ENV['RACK_ENV'].presence || "development"
+      ActiveSupport::StringInquirer.new env
+    end
+
+    def default_pass_through_errors
+      env.development? || env.test?
+    end
+
+    def pass_through_errors
+      if defined?(@@pass_through_errors) && [true, false].include?(@@pass_through_errors)
+        @@pass_through_errors
+      else
+        @@pass_through_errors = default_pass_through_errors
+      end
+    end
+    alias pass_through_errors? pass_through_errors
+
+    def pass_through_errors=(value)
+      @@pass_through_errors = value
+    end
+
   end
 
 end
