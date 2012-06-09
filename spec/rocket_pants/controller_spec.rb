@@ -68,11 +68,6 @@ describe RocketPants::Base do
 
   describe 'respondable' do
 
-    pending 'should return unprocessible entity for invalid formats' do
-      get :test_data, :format => :xml
-      response.status.should == 422
-    end
-
     it 'should correctly convert a normal collection' do
       mock(TestController).test_data { %w(a b c d) }
       get :test_data
