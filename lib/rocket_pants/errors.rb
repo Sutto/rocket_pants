@@ -58,9 +58,9 @@ module RocketPants
     
   end
 
-  class InvalidObject < RocketPants::Error
-    http_status :unprocessible_entity
-    error_name  :invalid_object
+  class InvalidResource < RocketPants::Error
+    http_status :unprocessable_entity
+    error_name  :invalid_resource
 
     # Errors are ActiveModel Errors
     attr_reader :errors
@@ -73,10 +73,12 @@ module RocketPants
     def context
       super.tap do |ctx|
         extras            = (ctx[:extras] ||= {})
-        extras[:messages] = errors.to_hash
+        extras[:messages] = errors.to_hash if errors
       end
     end
 
+    Errors.add self
+    
   end
   
 end

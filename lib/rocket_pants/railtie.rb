@@ -40,6 +40,12 @@ module RocketPants
       end
     end
 
+    initializer "rocket_pants.setup_activerecord" do
+      if defined?(ActiveRecord)
+        require 'rocket_pants/active_record'
+      end
+    end
+
     rake_tasks do
       load "rocket_pants/tasks/rocket_pants.rake"
     end

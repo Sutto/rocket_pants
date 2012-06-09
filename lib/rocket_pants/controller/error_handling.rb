@@ -18,9 +18,8 @@ module RocketPants
       # a callable object.
       # @param [Class] from the exception class to map from.
       # @param [Class, #call] to the callable to map to, or a callback block.
-      def map_error!(from, to, &blk)
+      def map_error!(from, to = nil, &blk)
         to = (to || blk)
-        p to
         raise ArgumentError, "Either an option must be provided or a block given." unless to
         error_mapping[from] = (to || blk)
         rescue_from from, :with => :render_error

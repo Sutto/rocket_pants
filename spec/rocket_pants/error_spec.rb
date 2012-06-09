@@ -106,19 +106,19 @@ describe RocketPants::Error do
     
   end
 
-  describe RocketPants::InvalidObject do
+  describe RocketPants::InvalidResource do
 
     let(:error_messages) { {:name => %w(a b c), :other => %w(e)} }
 
     it 'should let you pass in error messages' do
       o = Object.new
       mock(o).to_hash { error_messages }
-      error = RocketPants::InvalidObject.new(o)
+      error = RocketPants::InvalidResource.new(o)
       error.context.should == {:extras => {:messages => error_messages}}
     end
 
     it 'should not override messages' do
-      error = RocketPants::InvalidObject.new(error_messages)
+      error = RocketPants::InvalidResource.new(error_messages)
       error.context = {:other => true, :extras => {:test => true}}
       error.context.should == {:extras => {:messages => error_messages, :test => true}, :other => true}
     end

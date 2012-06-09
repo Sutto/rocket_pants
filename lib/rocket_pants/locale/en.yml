@@ -6,3 +6,5 @@ en:
       invalid_version: "This action is not available in the given version of the api."
       not_implemented: "The feature you requested has not yet been implemented and hence is currently unavailable."
       not_found: "The requested resource could not be found."
+      bad_request: "The data given to this server does not meet our criteria."
+      invalid_resource: "The current resource was deemed invalid."
