@@ -80,7 +80,8 @@ module RocketPants
     # Returns extra error details for a given object, making it useable
     # for hooking in external exceptions.
     def lookup_error_extras(exception)
-      {}
+      context = lookup_error_context exception
+      context.fetch :extras, {} 
     end
 
     # Renders an exception as JSON using a nicer version of the error name and

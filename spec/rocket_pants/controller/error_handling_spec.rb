@@ -102,6 +102,18 @@ describe RocketPants::ErrorHandling do
       content['hello'].should == 'There'
     end
 
+    it 'should default to extracting extras from the context' do
+      def error.context;  {:extras => {:hello => 'There'}} ; end
+      get :test_error
+      content['hello'].should == 'There'
+    end
+
+    it 'should let you pass through data via the context in the controller' do
+      controller_class.send(:define_method, :demo_exception) { error! :throttled, :extras => {:hello => "There"}}
+      get :demo_exception
+      content['hello'].should == 'There'
+    end
+
     it 'should let you register an item in the error mapping' do
       controller_class.error_mapping[TestController::ErrorOfDoom] = RocketPants::Throttled
       get :test_error
