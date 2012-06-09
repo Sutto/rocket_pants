@@ -7,7 +7,8 @@ require 'moneta'
 require 'moneta/memory'
 
 module RocketPants
-  require 'rocket_pants/exceptions'
+  require 'rocket_pants/error'
+  require 'rocket_pants/errors'
 
   # Set up the routing in advance.
   require 'rocket_pants/routing'

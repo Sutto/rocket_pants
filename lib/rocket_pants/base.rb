@@ -1,4 +1,4 @@
-require 'rocket_pants/exceptions'
+require 'rocket_pants/errors'
 
 module RocketPants
 

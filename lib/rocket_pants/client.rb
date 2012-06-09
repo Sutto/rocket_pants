@@ -2,7 +2,7 @@ require 'active_support/core_ext/class/attribute'
 require 'active_support/core_ext/object/blank'
 require 'active_support/core_ext/string/inflections'
 
-require 'rocket_pants/exceptions'
+require 'rocket_pants/errors'
 
 require 'api_smith'
 require 'will_paginate/collection'
