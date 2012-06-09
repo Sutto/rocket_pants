@@ -13,4 +13,8 @@ end
 # 2.10 for the moment changes some exceptions.
 gem 'rspec', '~> 2.9.0'
 
+if (wp_version = ENV['WILL_PAGINATE_VERSION'])
+  gem 'will_paginate', wp_version
+end
+
 gemspec

@@ -16,4 +16,5 @@ RSpec.configure do |config|
   config.include I18nSpecHelper
   config.include ConfigHelper
   config.include WebmockResponses
+  config.filter_run_excluding :integration => true
 end

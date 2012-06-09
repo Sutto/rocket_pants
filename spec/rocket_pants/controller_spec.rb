@@ -1,15 +1,7 @@
 require 'spec_helper'
 require 'logger'
 require 'stringio'
-
 require 'will_paginate/collection'
-# Replace stderr because kaminari complains about not having a framework.
-begin
-  stderr, $stderr = $stderr, StringIO.new
-  require 'kaminari'
-ensure
-  $stderr = stderr
-end
 
 describe RocketPants::Base do
   include ControllerHelpers
@@ -47,18 +39,6 @@ describe RocketPants::Base do
         content[:count].should == 5
       end
 
-      it 'should let you expose a kaminari-paginated collection' do
-        1.upto(5) do |offset|
-          User.create :age => (18 + offset)
-        end
-        mock(TestController).test_data { User.page(1).per(2) }
-        get :test_data
-        content[:response].should be_present
-        content[:count].should == 2
-        content[:pagination].should be_present
-        content[:pagination][:count].should == 5
-      end
-
     end
 
   end
@@ -91,40 +71,6 @@ describe RocketPants::Base do
     pending 'should return unprocessible entity for invalid formats' do
       get :test_data, :format => :xml
       response.status.should == 422
-    end
-
-    it 'should correctly convert a kaminari array' do
-      pager = Kaminari::PaginatableArray.new((1..200).to_a, :limit => 10, :offset => 10)
-      mock(TestController).test_data { pager }
-      get :test_data
-      content.should have_key(:pagination)
-      content[:pagination].should == {
-        :next => 3,
-        :current => 2,
-        :previous => 1,
-        :pages => 20,
-        :count => 200,
-        :per_page => 10
-      }.stringify_keys
-      content.should have_key(:count)
-      content[:count].should == 10
-    end
-
-    it 'should correctly convert a will paginate collection' do
-      pager = WillPaginate::Collection.create(2, 10) { |p| p.replace %w(a b c d e f g h i j); p.total_entries = 200 }
-      mock(TestController).test_data { pager }
-      get :test_data
-      content.should have_key(:pagination)
-      content[:pagination].should == {
-        :next => 3,
-        :current => 2,
-        :previous => 1,
-        :pages => 20,
-        :count => 200,
-        :per_page => 10
-      }.stringify_keys
-      content.should have_key(:count)
-      content[:count].should == 10
     end
 
     it 'should correctly convert a normal collection' do
