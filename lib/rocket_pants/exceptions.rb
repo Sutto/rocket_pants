@@ -92,7 +92,8 @@ module RocketPants
     #   register! :ninjas_unavailable, :http_status => :service_unavailable
     def self.register!(name, options = {})
       klass_name = (options[:class_name] || name.to_s.classify).to_sym
-      klass = Class.new(Error)
+      base_klass = options[:base] || Error
+      klass = Class.new(base_klass)
       klass.error_name(options[:error_name] || name.to_s.underscore)
       klass.http_status(options[:http_status]) if options[:http_status].present?
       (options[:under] || RocketPants).const_set klass_name, klass
