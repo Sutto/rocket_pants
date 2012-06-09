@@ -65,7 +65,7 @@ module RocketPants
     # Errors are ActiveModel Errors
     attr_reader :errors
 
-    def initialize(error, *args)
+    def initialize(errors, *args)
       @errors = errors
       super *args
     end

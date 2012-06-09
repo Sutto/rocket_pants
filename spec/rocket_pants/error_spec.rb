@@ -105,5 +105,24 @@ describe RocketPants::Error do
     end
     
   end
+
+  describe RocketPants::InvalidObject do
+
+    let(:error_messages) { {:name => %w(a b c), :other => %w(e)} }
+
+    it 'should let you pass in error messages' do
+      o = Object.new
+      mock(o).to_hash { error_messages }
+      error = RocketPants::InvalidObject.new(o)
+      error.context.should == {:extras => {:messages => error_messages}}
+    end
+
+    it 'should not override messages' do
+      error = RocketPants::InvalidObject.new(error_messages)
+      error.context = {:other => true, :extras => {:test => true}}
+      error.context.should == {:extras => {:messages => error_messages, :test => true}, :other => true}
+    end
+
+  end
   
 end
