@@ -215,6 +215,8 @@ Setting up RocketPants in your rails application is pretty simple and requires a
 
 - `config.rocket_pants.use_caching` - Defaulting to true for production environments and false elsewhere, defines whether RocketPants caching setup as described below is used.
 - `config.rocket_pants.cache` - A `Moneta::Store` instance used as the RocketPants cache, defaulting to a moneta memory instance. Change for proper caching. (See [here](https://github.com/wycats/moneta) for more information on Moneta.)
+- `config.rocket_pants.header_metadata` - Defaults to false, if true enables header metadata in the application.
+- `config.rocket_pants.pass_through_errors` - Defaults true in development and test, false otherwise. If true, will pass through errors up the stack otherwise will swallow them and return a system error via JSON for any unhandled exceptions.
 
 ## Version Controllers / Routes
 
