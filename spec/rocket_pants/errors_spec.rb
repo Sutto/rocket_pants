@@ -63,7 +63,7 @@ describe RocketPants::Errors do
 
     it 'should let you set the parent object' do
       RocketPants::Errors.register! :test_base_exception
-      RocketPants::Errors.register! :test_child_exception, base: RocketPants::TestBaseException
+      RocketPants::Errors.register! :test_child_exception, :base => RocketPants::TestBaseException
       RocketPants.should be_const_defined(:TestBaseException)
       RocketPants.should be_const_defined(:TestChildException)
       RocketPants::TestChildException.should be < RocketPants::TestBaseException
@@ -71,7 +71,7 @@ describe RocketPants::Errors do
 
     it 'should let you set the parent object' do
       expect do
-        RocketPants::Errors.register! :test_child_exception_bad_base, base: StandardError
+        RocketPants::Errors.register! :test_child_exception_bad_base, :base => StandardError
       end.to raise_error ArgumentError
       RocketPants.should be_const_defined(:TestBaseException)
       RocketPants.should_not be_const_defined(:TestChildExceptionBadBase)
