@@ -346,6 +346,30 @@ Out of the box, the following exceptions come pre-registered and setup:
 - `:not_implemented` - The specified endpoint is not yet implemented.
 - `:not_found` - The given resource could not be found.
 
+Note that error also excepts a Hash of contextual options, many which will be passed through to the Rails I18N subsystem. E.g:
+
+```ruby
+error! :throttled, :max_per_hour => 100
+```
+
+Will look up the translation `rocket_pants.errors.throttled` in your I18N files, and call them with `:max_per_hour` as an argument.
+
+Finally, You can use this to also pass custom values to include in the response, e.g:
+
+```ruby
+error! :throttled, :extras => {:code => 123}
+```
+
+Will return something similar to:
+
+```json
+{
+  "error":             "throttled",
+  "error_description": "The example error message goes here",
+  "code":              123
+}
+```
+
 ## Implementing Efficient Validation
 
 One of the core design principles built into RocketPants is simple support for "Efficient Validation" as described in the [Rack::Cache FAQ](http://rtomayko.github.com/rack-cache/faq) - Namely, it adds simple support for object-level caching using etags with fast verification thanks to the `RocketPants::CacheMiddleware` cache middleware.
