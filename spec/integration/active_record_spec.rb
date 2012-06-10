@@ -6,13 +6,7 @@ require 'rocket_pants/active_record'
 describe RocketPants::Base, 'active record integration', :integration => true, :target => 'active_record' do
   include ControllerHelpers
 
-  let(:table_manager) { ReversibleData.manager_for(:fish) }
-
-  before :each do
-    table_manager.up!
-  end
-
-  after(:each) { table_manager.down! }
+  use_reversible_tables :fish, :scope => :all
 
   let(:controller_class) do
     Class.new(TestController)

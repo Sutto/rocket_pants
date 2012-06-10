@@ -14,16 +14,10 @@ describe RocketPants::Base, 'kaminari integration', :integration => true, :targe
 
   describe 'on models' do
 
-    let(:table_manager) { ReversibleData.manager_for(:users) }
+    use_reversible_tables :users, :scope => :all
 
     before :all do
-      table_manager.up!
       25.times { |i| User.create :age => (18 + i) }
-    end
-
-    after(:all) do
-      User.delete_all
-      table_manager.down!
     end
 
     it 'should let you expose a kaminari-paginated collection' do

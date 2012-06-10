@@ -16,5 +16,6 @@ RSpec.configure do |config|
   config.include I18nSpecHelper
   config.include ConfigHelper
   config.include WebmockResponses
+  config.extend  ReversibleData::RSpec2Macros
   config.filter_run_excluding :integration => true
 end
