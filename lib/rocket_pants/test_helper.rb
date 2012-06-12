@@ -13,6 +13,10 @@ module RocketPants
     end
 
     module ResponseHelper
+      
+      def recycle_cached_body!
+        @_parsed_body = @_decoded_body = nil
+      end
 
       def parsed_body
         @_parsed_body ||= begin
@@ -70,6 +74,7 @@ module RocketPants
 
     # Like process, but automatically adds the api version.
     def process(action, parameters = nil, session = nil, flash = nil, http_method = 'GET')
+      response.recycle_cached_body!
       parameters ||= {}
       if _default_version.present? && parameters[:version].blank? && parameters['version'].blank?
         parameters[:version] = _default_version
