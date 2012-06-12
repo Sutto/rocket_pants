@@ -2,6 +2,10 @@
 
 **Please Note**: This change log only covers v1.3 forwards - apologies for anything missing prior to that.
 
+## Version 1.5.1
+
+* Merge in a fix from [nagash](https://github.com/nagash) that prevents reusing decoded / parsed responses in the test helper.
+
 ## Version 1.5
 
 * Add in a built in `:invalid_resource` error, with support for passing through error messages.
