@@ -17,5 +17,5 @@ fish.define_model do
   # Yes, I know it's technically not right.
   validates :latin_name, :length => {:minimum => 5}, :format => /\A(\w+) (\w+)\Z/
   validates :child_number, :numericality => true
-  validates :token, :unique => true, :allow_nil => true
+  # validates :token, :uniqueness => true, :allow_nil => true
 end
