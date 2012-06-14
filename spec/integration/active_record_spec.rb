@@ -46,4 +46,11 @@ describe RocketPants::Base, 'active record integration', :integration => true, :
     end
   end
 
+  it 'should automatically map ActiveRecord::RecordNotUnique' do
+    Fish.create! :token => "a"
+    action_is { Fish.create! :token => "a" }
+    get :test_data
+    content['error'].should == 'conflict'
+  end
+
 end

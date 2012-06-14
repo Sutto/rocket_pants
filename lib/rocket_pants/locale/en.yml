@@ -8,3 +8,4 @@ en:
       not_found: "The requested resource could not be found."
       bad_request: "The data given to this server does not meet our criteria."
       invalid_resource: "The current resource was deemed invalid."
+      conflict: "The request conflicts with an existing resource."

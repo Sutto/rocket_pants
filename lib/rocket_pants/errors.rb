@@ -1,25 +1,25 @@
 module RocketPants
 
   require 'rocket_pants/error'
-  
+
   # A simple map of data about errors that the rocket pants system can handle.
   class Errors
-    
+
     @@errors = {}
-    
+
     # Returns a hash of all known errors, keyed by their error name.
     # @return [Hash{Symbol => RocketPants::Error}] the hash of known errors.
     def self.all
       @@errors.dup
     end
-    
+
     # Looks up a specific error from the given name, returning nil if none are found.
     # @param [#to_sym] name the name of the error to look up.
     # @return [Error, nil] the error class if found, otherwise nil.
     def self.[](name)
       @@errors[name.to_sym]
     end
-    
+
     # Adds a given Error class in the list of all errors, making it suitable
     # for lookup via [].
     # @see Errors[]
@@ -27,7 +27,7 @@ module RocketPants
     def self.add(error)
       @@errors[error.error_name] = error
     end
-    
+
     # Creates an error class to represent a given error state.
     # @param [Symbol] name the name of the given error
     # @param [Hash] options the options used to create the error class.
@@ -47,7 +47,7 @@ module RocketPants
       add klass
       klass
     end
-    
+
     # The default set of exceptions.
     register! :throttled,       :http_status => :service_unavailable
     register! :unauthenticated, :http_status => :unauthorized
@@ -55,7 +55,8 @@ module RocketPants
     register! :not_implemented, :http_status => :service_unavailable
     register! :not_found,       :http_status => :not_found
     register! :bad_request,     :http_status => :bad_request
-    
+    register! :conflict,        :http_status => :conflict
+
   end
 
   class InvalidResource < RocketPants::Error
@@ -78,7 +79,7 @@ module RocketPants
     end
 
     Errors.add self
-    
+
   end
-  
+
 end
