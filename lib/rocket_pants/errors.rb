@@ -55,6 +55,7 @@ module RocketPants
     register! :not_implemented, :http_status => :service_unavailable
     register! :not_found,       :http_status => :not_found
     register! :bad_request,     :http_status => :bad_request
+    register! :conflict,        :http_status => :conflict
 
   end
 
