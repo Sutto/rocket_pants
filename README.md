@@ -351,6 +351,7 @@ Out of the box, the following exceptions come pre-registered and setup:
 - `:not_found` - The given resource could not be found.
 - `:invalid_resource` - The given resource was invalid.
 - `:bad_request` - The given request was not as expected.
+- `:conflict` - The resource was a conflict with the existing version.
 
 Note that error also excepts a Hash of contextual options, many which will be passed through to the Rails I18N subsystem. E.g:
 
@@ -382,6 +383,7 @@ Out of the box, Rocket Pants will automatically map the following to built in er
 as appropriate.
 
 - `ActiveRecord::RecordNotFound` into `RocketPants::NotFound`
+- `ActiveRecord::RecordNotUnique` into `RocketPants::Conflict`
 - `ActiveRecord::RecordNotSaved` into `RocketPants::InvalidResource (with no validation messages).`
 - `ActiveRecord::RecordInvalid` into `RocketPants::InvalidResource (with messages in the "messages" key of the JSON).`
 
