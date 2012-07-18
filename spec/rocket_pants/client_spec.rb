@@ -67,6 +67,17 @@ describe RocketPants::Client do
       end
     end
     
+    it 'should use error messages for invalid_resource exception' do
+      begin
+        stub_with_fixture :get, 'error?', 'invalid_resource_error'
+        client.get 'error'
+      rescue RocketPants::Error => e
+        error_object = Crack::JSON.parse(api_fixture_json('invalid_resource_error'))
+        e.context.should be_kind_of(Hash)
+        e.errors.should == error_object["messages"]
+      end
+    end
+
     it 'should use the rocket pants error registry' do
       stub_with_fixture :get, 'error?', 'simple_error'
       expect do

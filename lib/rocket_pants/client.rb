@@ -127,7 +127,7 @@ module RocketPants
         raise RocketPants::Error, "The response from the server was not in a supported format."
       elsif response.has_key?("error")
         klass = RocketPants::Errors[response["error"]] || RocketPants::Error
-        raise klass.new(response["error_description"])
+        raise klass.new(response["messages"] || response["error_description"])
       end
     end
     
