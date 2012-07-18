@@ -74,7 +74,8 @@ describe RocketPants::Client do
       rescue RocketPants::Error => e
         error_object = Crack::JSON.parse(api_fixture_json('invalid_resource_error'))
         e.context.should be_kind_of(Hash)
-        e.errors.should == error_object["messages"]
+        e.errors.should  == error_object["messages"]
+        e.message.should == error_object["error_description"]
       end
     end
 
