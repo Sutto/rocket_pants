@@ -1,0 +1,9 @@
+{
+  "error": "invalid_resource",
+  "error_description": "The current resource was deemed invalid.",
+  "messages": {
+    "ninja": [
+      "can't be blank"
+    ]
+  }
+}
