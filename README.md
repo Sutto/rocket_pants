@@ -153,7 +153,7 @@ Using the example above, we could then use the following to write a client:
 
 ```ruby
 class FoodsClient < RocketPants::Client
-  
+
   version  1
   base_uri 'http://localhost:3000'
 
@@ -455,7 +455,7 @@ get :index, :version => 1
 
 Otherwise it will raise an exception.
 
-RocketPants includes a set of helpers to make testing controllers built on `RocketPants::Base` simpler. 
+RocketPants includes a set of helpers to make testing controllers built on `RocketPants::Base` simpler.
 
 * `be_singular_resource` - Checks the response is a single resource - e.g. `response.should be_siingular_resource`.
 * `be_collection_resource` - Checks the response is collection of resources - e.g. `response.should be_collection_resource`.
@@ -481,8 +481,9 @@ Inside the `RSpec.configure do |config|` block.
 
 - [Darcy Laycock](https://github.com/Sutto) - Main developer, current maintainer.
 - [Steve Webb](https://github.com/swebb) - Helped with original work at [The Frontier Group](https://github.com/thefrontiergroup), inc. original design.
-- [Fred Wu](https://github.com/fredwu) - README fixes.
+- [Fred Wu](https://github.com/fredwu) - README fixes, other contributions / fixes.
 - [Levi Buzolic](https://github.com/levibuzolic) - README fixes.
+- [Samuel Cochran](https://github.com/sj26) - Misc. work on RocketPants / tweaks.
 
 ## Contributing
 

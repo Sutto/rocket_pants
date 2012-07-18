@@ -2,6 +2,14 @@
 
 **Please Note**: This change log only covers v1.3 forwards - apologies for anything missing prior to that.
 
+## Version 1.5.3
+
+* Add in support for messages on `RocketPants::InvalidResource` to `RocketPants::Client`, thanks to @fredwu
+
+## Version 1.5.2
+
+* Map `ActiveRecord::RecordNotUnique` to `RocketPants::Conflict`.
+
 ## Version 1.5.1
 
 * Merge in a fix from [nagash](https://github.com/nagash) that prevents reusing decoded / parsed responses in the test helper.
