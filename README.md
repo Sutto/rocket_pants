@@ -342,16 +342,73 @@ error! :not_found
 
 In the controller.
 
-Out of the box, the following exceptions come pre-registered and setup:
+Out of the box, the following exceptions come pre-registered and setup. For each of them, you can either use the error form (`error! :error_key) or you can raise an instance of the exception class like normal.
 
-- `:throttled` - The user has hit an api throttled error.
-- `:unauthenticated` - The user doesn't have valid authentication details.
-- `:invalid_version` - An invalid API version was specified.
-- `:not_implemented` - The specified endpoint is not yet implemented.
-- `:not_found` - The given resource could not be found.
-- `:invalid_resource` - The given resource was invalid.
-- `:bad_request` - The given request was not as expected.
-- `:conflict` - The resource was a conflict with the existing version.
+Note that inside your application, you can also use `rake rocket_pants:errors` to view
+a list of *all* registered errors, including custom ones.
+
+<table>
+  <tr>
+    <th>Error Key</th>
+    <th>Exception Class</th>
+    <th>HTTP Status</th>
+    <th>Description</th>
+  </tr>
+  <tr>
+    <td><code>:throttled</code></td>
+    <td><code>RocketPants::Throttled</code></td>
+    <td><code>503 Unavailable</code></td>
+    <td>The user has hit an api throttled error.</td>
+  </tr>
+  <tr>
+    <td><code>:unauthenticated</code></td>
+    <td><code>RocketPants::Unauthenticated</code></td>
+    <td><code>401 Unauthorized</code></td>
+    <td>The user doesn't have valid authentication details.</td>
+  </tr>
+  <tr>
+    <td><code>:invalid_version</code></td>
+    <td><code>RocketPants::Invalidversion</code></td>
+    <td><code>404 Not Found</code></td>
+    <td>An invalid API version was specified.</td>
+  </tr>
+  <tr>
+    <td><code>:not_implemented</code></td>
+    <td><code>RocketPants::NotImplemented</code></td>
+    <td><code>503 Unavailable</code></td>
+    <td>The specified endpoint is not yet implemented.</td>
+  </tr>
+  <tr>
+    <td><code>:not_found</code></td>
+    <td><code>RocketPants::NotFound</code></td>
+    <td><code>404 Not Found</code></td>
+    <td>The given resource could not be found.</td>
+  </tr>
+  <tr>
+    <td><code>:invalid_resource</code></td>
+    <td><code>RocketPants::InvalidResource</code></td>
+    <td><code>422 Unprocessable Entity</code></td>
+    <td>The given resource was invalid.</td>
+  </tr>
+  <tr>
+    <td><code>:bad_request</code></td>
+    <td><code>RocketPants::BadRequest</code></td>
+    <td><code>400 Bad Request</code></td>
+    <td>The given request was not as expected.</td>
+  </tr>
+  <tr>
+    <td><code>:conflict</code></td>
+    <td><code>RocketPants::Conflict</code></td>
+    <td><code>409 Conflict</code></td>
+    <td>The resource was a conflict with the existing version.</td>
+  </tr>
+  <tr>
+    <td><code>:forbidden</code></td>
+    <td><code>RocketPants::Forbidden</code></td>
+    <td><code>403 Forbidden</code></td>
+    <td>The requested action was forbidden.</td>
+  </tr>
+</table>
 
 Note that error also excepts a Hash of contextual options, many which will be passed through to the Rails I18N subsystem. E.g:
 
