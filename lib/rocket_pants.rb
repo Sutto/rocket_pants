@@ -45,7 +45,8 @@ module RocketPants
 
   self.caching_enabled       = false
   self.header_metadata       = false
-  self.version_header_prefix = 'application/com.filtersquad.'
+  # This defaults to application/vnd.rocket-pants-v1+json
+  self.version_header_prefix = 'application/vnd.rocket-pants'
 
   mattr_writer :cache
 
@@ -59,7 +60,7 @@ module RocketPants
         prefix = version_header_prefix
         raise "Please ensure RocketPants.version_header_prefix is setup" unless prefix.present?
         prefix = Regexp.escape(prefix) if prefix.is_a?(String)
-        /\A#{prefix}(\d+?)/
+        /\A#{prefix}-v(\d+?)\+json\Z/
       end
     end
 
