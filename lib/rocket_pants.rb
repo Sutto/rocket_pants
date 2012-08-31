@@ -39,16 +39,49 @@ module RocketPants
   autoload :FormatVerification, 'rocket_pants/controller/format_verification'
   autoload :UrlFor,             'rocket_pants/controller/url_for'
 
-  mattr_accessor :caching_enabled, :header_metadata
+  VALID_VERSIONING_STYLES = [:path, :header]
 
-  self.caching_enabled = false
-  self.header_metadata = false
+  mattr_accessor :caching_enabled, :header_metadata, :version_header_prefix
+
+  self.caching_enabled       = false
+  self.header_metadata       = false
+  self.version_header_prefix = 'application/com.filtersquad.'
 
   mattr_writer :cache
 
   class << self
+
     alias caching_enabled? caching_enabled
     alias header_metadata? header_metadata
+
+    def compiled_version_header_regexp
+      @compiled_version_header_regexp ||= begin
+        prefix = version_header_prefix
+        raise "Please ensure RocketPants.version_header_prefix is setup" unless prefix.present?
+        prefix = Regexp.escape(prefix) if prefix.is_a?(String)
+        /\A#{prefix}(\d+?)/
+      end
+    end
+
+    def versioning_style
+      @@versioning_style ||= :path
+    end
+
+    def versioning_style=(style)
+      style = style.presence && style.to_sym
+      unless style.nil? || VALID_VERSIONING_STYLES.include?(style)
+        raise ArgumentError.new("Invalid versioning style #{style.inspect}, must be one of #{VALID_VERSIONING_STYLES.inspect}")
+      end
+      @@versioning_style = style
+    end
+
+    def path_versioning?
+      versioning_style == :path
+    end
+
+    def header_versioning?
+      versioning_style == :header
+    end
 
     def cache
       @@cache ||= Moneta::Memory.new
