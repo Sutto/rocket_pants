@@ -1,10 +1,12 @@
 module RocketPants
   class Railtie < Rails::Railtie
 
-    config.rocket_pants                     = ActiveSupport::OrderedOptions.new
-    config.rocket_pants.use_caching         = nil
-    config.rocket_pants.header_metadata     = nil
-    config.rocket_pants.pass_through_errors = nil
+    config.rocket_pants                       = ActiveSupport::OrderedOptions.new
+    config.rocket_pants.use_caching           = nil
+    config.rocket_pants.header_metadata       = nil
+    config.rocket_pants.pass_through_errors   = nil
+    config.rocket_pants.versioning_style      = nil
+    config.rocket_pants.version_header_prefix = nil
 
     config.i18n.railties_load_path << File.expand_path('../locale/en.yml', __FILE__)
 
@@ -18,6 +20,10 @@ module RocketPants
       RocketPants.caching_enabled     = rp_config.use_caching
       RocketPants.header_metadata     = rp_config.header_metadata unless rp_config.header_metadata.nil?
       RocketPants.pass_through_errors = rp_config.pass_through_errors unless rp_config.pass_through_errors.nil?
+
+      # Copy across versioning information.
+      RocketPants.versioning_style      = rp_config.versioning_style unless rp_config.versioning_style.nil?
+      RocketPants.version_header_prefix = rp_config.version_header_prefix unless rp_config.version_header_prefix.nil?
       # Set the rocket pants cache if present.
       RocketPants.cache = rp_config.cache if rp_config.cache
     end
