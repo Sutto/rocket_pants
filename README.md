@@ -514,7 +514,7 @@ Otherwise it will raise an exception.
 
 RocketPants includes a set of helpers to make testing controllers built on `RocketPants::Base` simpler.
 
-* `be_singular_resource` - Checks the response is a single resource - e.g. `response.should be_siingular_resource`.
+* `be_singular_resource` - Checks the response is a single resource - e.g. `response.should be_singular_resource`.
 * `be_collection_resource` - Checks the response is collection of resources - e.g. `response.should be_collection_resource`.
 * `be_paginated_resource` - Checks the response is paginated - e.g. `response.should be_paginated_resource`.
 * `be_api_error(type = any)` - Checks it returned an error for the specified exception (or check the response is an error without any argument) - e.g. `response.should be_api_error RocketPants::NotFound`.
