@@ -542,6 +542,8 @@ Inside the `RSpec.configure do |config|` block.
 - [Levi Buzolic](https://github.com/levibuzolic) - README fixes.
 - [Samuel Cochran](https://github.com/sj26) - Misc. work on RocketPants / tweaks.
 
+If you're not on this list and thing you should be, let @Sutto know.
+
 ## Contributing
 
 We encourage all community contributions. Keeping this in mind, please follow these general guidelines when contributing:
