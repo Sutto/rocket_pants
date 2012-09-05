@@ -7,6 +7,7 @@ describe RocketPants::Base, 'kaminari integration', :integration => true, :targe
     begin
       stderr, $stderr = $stderr, StringIO.new
       require 'kaminari'
+      Kaminari::Hooks.init if defined?(Kaminari::Hooks.init)
     ensure
       $stderr = stderr
     end
