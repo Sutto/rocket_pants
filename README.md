@@ -507,10 +507,22 @@ The only difference one needs to take into the account is the need to specify th
 parameter on any http requests, e.g:
 
 ```ruby
+# get
 get :index, :version => 1
+
+# post
+post :index, :version => 1, :payload => { :foo => 'bar' ... }
 ```
 
 Otherwise it will raise an exception.
+
+To set the version to be used for all tests in a given set of specs you can use the `default_version` tag. It will set the version for all tests in that block and not require `:version` to be set individually:
+
+```ruby
+describe YourAwesomeController do
+  default_version 1
+end
+```
 
 RocketPants includes a set of helpers to make testing controllers built on `RocketPants::Base` simpler.
 
