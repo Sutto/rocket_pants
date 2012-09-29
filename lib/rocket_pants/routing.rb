@@ -11,6 +11,11 @@ module RocketPants
       versions.each do |version|
         raise ArgumentError, "Got invalid version: '#{version}'" unless version =~ /\A\d+\Z/
       end
+      if (optional_prefix = options.delete(:allow_prefix))
+        versions.map! { |v| "#{optional_prefix}?#{v}" }
+      elsif (required_prefix = options.delete(:require_prefix))
+        versions.map! { |v| "#{required_prefix}#{v}" }
+      end
       versions_regexp = /(#{versions.uniq.join("|")})/
       raise ArgumentError, 'please provide atleast one version' if versions.empty?
       options = options.deep_merge({
