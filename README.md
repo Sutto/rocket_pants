@@ -1,4 +1,4 @@
-# Rocket Pants! [![Build Status](https://secure.travis-ci.org/filtersquad/rocket_pants.png?branch=master)](http://travis-ci.org/filtersquad/rocket_pants) [![Dependency Status](https://gemnasium.com/filtersquad/rocket_pants.png)](https://gemnasium.com/filtersquad/rocket_pants)
+# Rocket Pants! [![Build Status](https://secure.travis-ci.org/filtersquad/rocket_pants.png?branch=master)](http://travis-ci.org/filtersquad/rocket_pants)
 
 ## Introduction
 
@@ -566,7 +566,7 @@ We encourage all community contributions. Keeping this in mind, please follow th
 * Create a new GitHub Issue with the commit, asking for review. Alternatively, send a pull request with details of what you added.
 * Once it’s accepted, if you want access to the core repository feel free to ask! Otherwise, you can continue to hack away in your own fork.
 
-Other than that, our guidelines very closely match the GemCutter guidelines [here](http://wiki.github.com/qrush/gemcutter/contribution-guidelines).
+Other than that, our guidelines very closely match the GemCutter guidelines [here](https://github.com/rubygems/rubygems.org/wiki/Contribution-Guidelines).
 
 (Thanks to [GemCutter](http://wiki.github.com/qrush/gemcutter/) for the contribution guide)
 
