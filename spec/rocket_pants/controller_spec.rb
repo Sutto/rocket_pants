@@ -45,7 +45,42 @@ describe RocketPants::Base do
 
   describe 'versioning' do
 
-    it 'should ok with a valid version' do
+    it 'should be ok with an optional prefix with the specified prefix' do
+      get :echo, {}, :version => 'v1', :rp_prefix => {:text => "v", :required => false}
+      content[:error].should be_nil
+    end
+
+    it 'should be ok with an optional prefix without the specified prefix' do
+      get :echo, {}, :version => '1', :rp_prefix => {:text => "v", :required => false}
+      content[:error].should be_nil
+    end
+
+    it 'should be ok with a required prefix and one given' do
+      get :echo, {}, :version => 'v1', :rp_prefix => {:text => "v", :required => true}
+      content[:error].should be_nil
+    end
+
+    it 'should return an error when a prefix is required and not given' do
+      get :echo, {}, :version => '1', :rp_prefix => {:text => "v", :required => true}
+      content[:error].should == 'invalid_version'
+    end
+
+    it 'should return an error when a prefix is required and a different one is given' do
+      get :echo, {}, :version => 'x1', :rp_prefix => {:text => "v", :required => true}
+      content[:error].should == 'invalid_version'
+    end
+
+    it 'should return an error when an optional prefix is allowed and a different one is given' do
+      get :echo, {}, :version => 'x1', :rp_prefix => {:text => "v", :required => false}
+      content[:error].should == 'invalid_version'
+    end
+
+    it 'should return an error when a prefix is now allowed and is given' do
+      get :echo, {}, :version => 'v1'
+      content[:error].should == 'invalid_version'
+    end
+
+    it 'should be ok with a valid version' do
       %w(1 2).each do |version|
         get :echo, {}, :version => version.to_s
         content[:error].should be_nil
