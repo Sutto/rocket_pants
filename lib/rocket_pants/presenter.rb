@@ -18,7 +18,8 @@ module RocketPants
 
     # Override to only show model attributes marked for presentation with attr_presented
     def serializable_hash(options = {})
-      options[:only] = (options[:only] || []) | self.class._presented_attributes
+      options[:only] = (options[:only] || []) | (self.class._presented_attributes || [])
+      options[:only] = nil if options[:only].empty?
       super(options)
     end
 
