@@ -22,6 +22,9 @@ module RocketPants
   autoload :Cacheable,       'rocket_pants/cacheable'
   autoload :CacheMiddleware, 'rocket_pants/cache_middleware'
 
+  # Model
+  autoload :Presenter,        'rocket_pants/presenter'
+
   # Helpers for various testing frameworks.
   autoload :TestHelper,      'rocket_pants/test_helper'
   autoload :RSpecMatchers,   'rocket_pants/rspec_matchers'
