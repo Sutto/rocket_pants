@@ -10,6 +10,10 @@ if rails_version && rails_version.length > 0
   gem 'activerecord', rails_version
 end
 
+if (moneta_version = ENV["MONETA_VERSION"])
+  gem 'moneta', moneta_version
+end
+
 # 2.10 for the moment changes some exceptions.
 gem 'rspec', '~> 2.9.0'
 
