@@ -41,6 +41,8 @@ module RocketPants
     end
 
     def self.normalise_object(object, options = {})
+      # First, prepare the object for serialization.
+      object = normalise_to_serializer object, options
       # Convert the object using a standard grape-like lookup chain.
       if object.is_a?(Array) || object.is_a?(Set)
         object.map { |o| normalise_object o, options }
@@ -53,12 +55,26 @@ module RocketPants
       end
     end
 
+    def self.normalise_to_serializer(object, options)
+      serializer = options.delete(:serializer)
+      serializer = object.active_model_serializer if object.respond_to?(:active_model_serializer) && serializer.nil?
+      return object unless serializer
+      serializer.new object, options
+    end
+
     RENDERING_OPTIONS = [:status, :content_type]
 
     private
 
     def normalise_object(object, options = {})
-      Respondable.normalise_object object, options.except(*RENDERING_OPTIONS)
+      Respondable.normalise_object object, options.except(*RENDERING_OPTIONS).reverse_merge(default_serializer_options)
+    end
+
+    def default_serializer_options
+      {
+        :url_options => url_options,
+        :root        => false
+      }
     end
 
     # Given a json object or encoded json, will encode it
