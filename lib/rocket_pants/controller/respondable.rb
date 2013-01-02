@@ -2,6 +2,19 @@ module RocketPants
   module Respondable
     extend ActiveSupport::Concern
 
+    SerializerWrapper = Struct.new(:serializer, :object) do
+
+      def serializable_hash(options = {})
+        instance = serializer.new(object, options)
+        if instance.respond_to?(:serializable_hash)
+          instance.serializable_hash
+        else
+          instance.as_json options
+        end
+      end
+
+    end
+
     def self.pagination_type(object)
       if object.respond_to?(:total_entries)
         :will_paginate
@@ -59,7 +72,7 @@ module RocketPants
       serializer = options.delete(:serializer)
       serializer = object.active_model_serializer if object.respond_to?(:active_model_serializer) && serializer.nil?
       return object unless serializer
-      serializer.new object, options
+      SerializerWrapper.new serializer, object
     end
 
     RENDERING_OPTIONS = [:status, :content_type]
