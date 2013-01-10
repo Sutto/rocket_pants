@@ -175,6 +175,28 @@ describe RocketPants::ErrorHandling do
       end
     end
 
+    it 'should default to having the exception message' do
+      with_config :show_exception_message, true do
+        with_config :pass_through_errors, false do
+          stub(controller_class).test_error { StandardError.new("This is a fake message.") }
+          get :test_error
+          content[:error_description].should be_present
+          content[:error_description].should == "This is a fake message."
+        end
+      end
+    end
+
+    it 'should let you disable using the exception message' do
+      with_config :show_exception_message, false do
+        with_config :pass_through_errors, false do
+          stub(controller_class).test_error { StandardError.new("This is a fake message.") }
+          get :test_error
+          content[:error_description].should be_present
+          content[:error_description].should_not == "This is a fake message."
+        end
+      end
+    end
+
   end
 
 end
