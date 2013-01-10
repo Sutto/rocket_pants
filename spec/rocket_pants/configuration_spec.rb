@@ -84,4 +84,38 @@ describe RocketPants, 'Configuration' do
 
   end
 
+  describe 'showing exception messages' do
+
+    around :each do |test|
+      with_config :show_exception_message, nil, &test
+    end
+
+    it 'should allow you to force it to false' do
+      RocketPants.show_exception_message = false
+      RocketPants.should_not be_show_exception_message
+    end
+
+    it 'should allow you to force it to true' do
+      RocketPants.show_exception_message = true
+      RocketPants.should be_show_exception_message
+    end
+
+    it 'should default to true in test and development' do
+      %w(development test).each do |environment|
+        stub(RocketPants).env { ActiveSupport::StringInquirer.new environment }
+        RocketPants.show_exception_message = nil
+        RocketPants.should be_show_exception_message
+      end
+    end
+
+    it 'should default to false in other environments' do
+      %w(production staging somethingelse).each do |environment|
+        stub(RocketPants).env { ActiveSupport::StringInquirer.new environment }
+        RocketPants.show_exception_message = nil
+        RocketPants.should_not be_show_exception_message
+      end
+    end
+
+  end
+
 end

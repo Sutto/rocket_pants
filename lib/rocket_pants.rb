@@ -70,6 +70,16 @@ module RocketPants
       @@env = value
     end
 
+    def show_exception_message?
+      @@show_exception_message = default_show_exception_message if !defined?(@@show_exception_message) || @@show_exception_message.nil?
+      @@show_exception_message
+    end
+    alias show_exception_message show_exception_message?
+
+    def show_exception_message=(value)
+      @@show_exception_message = value
+    end
+
     def default_env
       env = Rails.env.to_s if defined?(Rails.env)
       env ||= ENV['RAILS_ENV'].presence || ENV['RACK_ENV'].presence || "development"
@@ -77,6 +87,10 @@ module RocketPants
     end
 
     def default_pass_through_errors
+      env.development? || env.test?
+    end
+
+    def default_show_exception_message
       env.development? || env.test?
     end
 
