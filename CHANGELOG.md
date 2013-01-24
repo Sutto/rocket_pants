@@ -2,6 +2,11 @@
 
 **Please Note**: This change log only covers v1.3 forwards - apologies for anything missing prior to that.
 
+## Version 1.6.0, 1.6.1
+
+* ActiveModel Serializer Support
+* Fix to avoid exposing exception messages in production.
+
 ## Version 1.5.4
 
 * Add in `RocketPants::Forbidden` at the request of @dangalipo.
