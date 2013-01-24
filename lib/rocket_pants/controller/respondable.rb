@@ -69,6 +69,7 @@ module RocketPants
     end
 
     def self.normalise_to_serializer(object, options)
+      return object unless RocketPants.serializers_enabled?
       serializer = options.delete(:serializer)
       serializer = object.active_model_serializer if object.respond_to?(:active_model_serializer) && serializer.nil?
       return object unless serializer

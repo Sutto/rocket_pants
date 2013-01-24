@@ -38,10 +38,11 @@ module RocketPants
   autoload :FormatVerification, 'rocket_pants/controller/format_verification'
   autoload :UrlFor,             'rocket_pants/controller/url_for'
 
-  mattr_accessor :caching_enabled, :header_metadata
+  mattr_accessor :caching_enabled, :header_metadata, :serializers_enabled
 
-  self.caching_enabled = false
-  self.header_metadata = false
+  self.caching_enabled     = false
+  self.header_metadata     = false
+  self.serializers_enabled = true
 
   mattr_writer :cache
 
@@ -54,8 +55,9 @@ module RocketPants
   end
 
   class << self
-    alias caching_enabled? caching_enabled
-    alias header_metadata? header_metadata
+    alias caching_enabled?     caching_enabled
+    alias header_metadata?     header_metadata
+    alias serializers_enabled? serializers_enabled
 
     def cache
       @@cache ||= (MONETA_LEGACY ? Moneta::Memory : Moneta::Adapters::Memory).new

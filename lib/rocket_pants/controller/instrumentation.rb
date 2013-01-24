@@ -5,7 +5,7 @@ module RocketPants
   module Instrumentation
     extend  ActiveSupport::Concern
     include AbstractController::Logger
-    
+
     def process_action(action, *args)
       raw_payload = {
         :controller => self.class.name,
@@ -24,7 +24,7 @@ module RocketPants
         result
       end
     end
-    
+
   end
   ActionController::LogSubscriber.attach_to :rocket_pants
 end

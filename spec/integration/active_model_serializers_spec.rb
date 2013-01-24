@@ -24,6 +24,16 @@ describe RocketPants::Base, 'active_model_serializers integration', :integration
 
   describe 'on instances' do
 
+    it 'should let you disable the serializer' do
+      with_config :serializers_enabled, false do
+        mock(TestController).test_data { fish }
+        dont_allow(fish).active_model_serializer
+        get :test_data
+        content[:response].should be_present
+        content[:response].should be_a Hash
+      end
+    end
+
     it 'should use the active_model_serializer' do
       mock(TestController).test_data { fish }
       mock(fish).active_model_serializer { SerializerB }
