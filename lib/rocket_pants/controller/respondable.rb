@@ -29,6 +29,10 @@ module RocketPants
       !pagination_type(object).nil?
     end
 
+    def self.collection?(object)
+      object.is_a?(Array) || object.respond_to?(:to_ary)
+    end
+
     def self.extract_pagination(collection)
       case pagination_type(collection)
       when :will_paginate
@@ -141,7 +145,7 @@ module RocketPants
     def exposes(object, options = {})
       if Respondable.paginated?(object)
         paginated object, options
-      elsif object.is_a?(Array)
+      elsif Respondable.collection?(object)
         collection object, options
       else
         resource object, options
