@@ -2,6 +2,12 @@
 
 **Please Note**: This change log only covers v1.3 forwards - apologies for anything missing prior to that.
 
+## Version 1.7.0
+
+* Make RocketPants work with Rails 4.0.0.beta1, Test against Ruby 2.0.0.
+
+Note: This is a rather large change to the dependencies, hence the minor version bump.
+
 ## Version 1.6.0, 1.6.1
 
 * ActiveModel Serializer Support
