@@ -28,6 +28,7 @@ module RocketPants
       ActionController::Rescue,
       ErrorHandling,
       Rescuable,
+      Presenter,
       JSONP
       # FormatVerification # TODO: Implement Format Verification
     ].compact

@@ -33,6 +33,9 @@ Say, for example, you have a basic Food model:
 ```ruby
 class Food < ActiveRecord::Base
   include RocketPants::Cacheable
+
+  # Only expose the following attributes in the API JSON response
+  attr_expose :name, :calories
 end
 ```
 
