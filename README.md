@@ -463,6 +463,21 @@ For Invalid Resource messages, the response looks roughly akin to:
 }
 ```
 
+### A Note on Mongoid
+
+We currently don't support mongoid / other ORMs in RocketPants, but you can map errors directly like so:
+
+```ruby
+ApiController < RocketPants::Base
+  map_error! Mongoid::Errors::Validations do |exception|
+    RocketPants::InvalidResource.new exception.record.errors
+  end
+end
+```
+
+Thanks to @tiredenzo on #47 for this information. If you'd be interested in making
+a `rocket_pants-mongoid` gem mapping more errors, please get in touch.
+
 ## Implementing Efficient Validation
 
 One of the core design principles built into RocketPants is simple support for "Efficient Validation" as described in the [Rack::Cache FAQ](http://rtomayko.github.com/rack-cache/faq) - Namely, it adds simple support for object-level caching using etags with fast verification thanks to the `RocketPants::CacheMiddleware` cache middleware.
@@ -554,6 +569,13 @@ Inside the `RSpec.configure do |config|` block.
 - [Fred Wu](https://github.com/fredwu) - README fixes, other contributions / fixes.
 - [Levi Buzolic](https://github.com/levibuzolic) - README fixes.
 - [Samuel Cochran](https://github.com/sj26) - Misc. work on RocketPants / tweaks.
+- [tiredenzo](https://github.com/tiredenzo) - mongoid error information.
+- [Fabio Napoleoni](https://github.com/fabn) - Version prefix support.
+- [Justin Jones](https://github.com/nagash) - Bug fixes.
+- [Eran Kampf](https://github.com/ekampf) - Support for `:bad_request` errors.
+- [Matthew Nielsen](https://github.com/xunker) - README fixes.
+- [Pavel Kotlyar](https://github.com/paxer) - Typo fixes.
+- [John Rees](https://github.com/johnrees) - README fixes.
 
 If you're not on this list and thing you should be, let @Sutto know.
 
