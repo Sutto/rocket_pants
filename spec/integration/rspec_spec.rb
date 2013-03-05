@@ -10,6 +10,8 @@ describe TestController, 'rspec integration', :integration => true, :target => '
   include RocketPants::TestHelper
   include RocketPants::RSpecMatchers
 
+  default_version 1
+
   before do
     @routes     = TestRouter
     @controller = TestController.new
@@ -19,7 +21,7 @@ describe TestController, 'rspec integration', :integration => true, :target => '
 
   describe 'should have_exposed' do
     it "allows you to asset what should have been exposed by an action" do
-      get :echo, :echo => "ping", :version => 1
+      get :echo, :echo => "ping"
 
       response.should have_exposed(:echo => "ping")
     end
