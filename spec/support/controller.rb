@@ -1,11 +1,19 @@
 TestRouter = ActionDispatch::Routing::RouteSet.new
 TestRouter.draw do
-  get  'echo', :to => 'test#echo'
-  put  'echo', :to => 'test#echo'
-  post 'echo', :to => 'test#echo'
-  api :version => 2, :allow_prefix => 'v' do
-    get 'a', :to => 'test#echo'
+  api :version => 1 do
+    get  'echo', :to => 'test#echo'
+    put  'echo', :to => 'test#echo'
+    post 'echo', :to => 'test#echo'
   end
+
+  api :version => 2 do
+    get 'echo', :to => 'test#echo'
+  end
+
+  api :version => 2, :allow_prefix => 'v' do
+    get 'echo', :to => 'test#echo'
+  end
+
   # Actual mockable endpoints
   get 'exception',        :to => 'test#demo_exception'
   get 'test_data',        :to => 'test#test_data'
