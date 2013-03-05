@@ -97,7 +97,7 @@ module RocketPants
       end
 
       failure_message_for_should do |response|
-        message = "expected api to have exposed #{normalised_response.inspect}, got #{response.parsed_body} instead."
+        message = "expected api to have exposed #{args.first.inspect}, got #{response.parsed_body} instead."
         message << "\n\nDiff: #{RSpecMatchers.differ.diff_as_object(@decoded, normalised_response)}"
         message
       end
