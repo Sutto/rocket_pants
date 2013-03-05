@@ -77,7 +77,7 @@ module RocketPants
     # Like process, but automatically adds the api version.
     def process(action, http_method = 'GET', *args)
       # Rails 4 changes the method signature. In rails 3, http_method is actually
-      # the paramters.
+      # the parameters.
       if http_method.kind_of?(String)
         parameters, session, flash = args
       else
@@ -89,7 +89,7 @@ module RocketPants
       if _default_version.present? && parameters[:version].blank? && parameters['version'].blank?
         parameters[:version] = _default_version
       end
-      super
+      super action, parameters, *args
     end
 
     def normalise_value(value)
