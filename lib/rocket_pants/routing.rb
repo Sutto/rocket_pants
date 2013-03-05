@@ -9,22 +9,22 @@ module RocketPants
     def rocket_pants(options = {}, &blk)
       versions = extract_rocket_pants_versions options
 
-      defaults = {:format => 'json'}
-
       if (optional_prefix = options.delete(:allow_prefix))
         versions.map! { |v| "#{optional_prefix}?#{v}" }
-        defaults[:rp_prefix] = {:text => optional_prefix.to_s, :required => false}
       elsif (required_prefix = options.delete(:require_prefix))
         versions.map! { |v| "#{required_prefix}#{v}" }
-        defaults[:rp_prefix] = {:text => required_prefix.to_s, :required => true}
       end
+
       versions_regexp = /(#{versions.uniq.join("|")})/
+
       raise ArgumentError, 'please provide atleast one version' if versions.empty?
+
       options = options.deep_merge({
         :constraints => {:version => versions_regexp},
         :path        => ':version',
-        :defaults    => defaults
+        :defaults    => {:format => 'json'}
       })
+
       scope options, &blk
     end
     alias api rocket_pants

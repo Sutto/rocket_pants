@@ -22,7 +22,7 @@ module RocketPants
     def version
       if !instance_variable_defined?(:@version)
         @version = begin
-          version = extract_version_string_with_prefix params[:version], request.symbolized_path_parameters[:rp_prefix]
+          version = remove_prefix_from_version params[:version]
           version.presence && Integer(version)
         rescue ArgumentError
           nil
@@ -35,17 +35,10 @@ module RocketPants
       error! :invalid_version unless version.present? && _version_range.include?(version)
     end
 
-    def extract_version_string_with_prefix(version, prefix)
-      if version && prefix.is_a?(Hash)
-        # We need to strip the text from the prefix.
-        prefix_regexp = /^#{prefix[:text]}/
-        version = version.to_s
-        if prefix[:required] && version !~ prefix_regexp
-          raise ArgumentError, "You required the route version prefix #{prefix[:text]}, but not was given."
-        end
-        version.gsub prefix_regexp, ''
+    def remove_prefix_from_version(version)
+      if version
+        version.gsub /[^0-9]+/, ''
       else
-        # Otherwise, return it intact.
         version
       end
     end
