@@ -3,6 +3,9 @@ TestRouter.draw do
   get  'echo', :to => 'test#echo'
   put  'echo', :to => 'test#echo'
   post 'echo', :to => 'test#echo'
+  api :version => 2, :allow_prefix => 'v' do
+    get 'a', :to => 'test#echo'
+  end
   # Actual mockable endpoints
   get 'exception',        :to => 'test#demo_exception'
   get 'test_data',        :to => 'test#test_data'
@@ -15,19 +18,19 @@ TestRouter.finalize!
 
 class TestController < RocketPants::Base
   include TestRouter.url_helpers
-  
+
   ErrorOfDoom = Class.new(StandardError)
   YetAnotherError = Class.new(ErrorOfDoom)
-  
+
   version 1..2
-  
+
   def self.test_data
   end
 
   def self.test_options
     {}
   end
-  
+
   def self.test_error
     NotImplementedError
   end
@@ -35,11 +38,11 @@ class TestController < RocketPants::Base
   def echo
     expose :echo => params[:echo]
   end
-  
+
   def demo_exception
     error! :throttled
   end
-  
+
   def test_data
     expose self.class.test_data, self.class.test_options
   end
@@ -51,7 +54,7 @@ class TestController < RocketPants::Base
   def test_render_json
     render_json self.class.test_data, self.class.test_options
   end
-  
+
   def test_error
     raise self.class.test_error
   end
@@ -64,5 +67,5 @@ class TestController < RocketPants::Base
     error! :throtted
     exposes :finished => true
   end
-  
+
 end

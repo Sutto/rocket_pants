@@ -26,4 +26,18 @@ describe TestController, 'rspec integration', :integration => true, :target => '
       response.should have_exposed(:echo => "ping")
     end
   end
+
+  describe 'specifying a prefixed version' do
+    after do
+      response.should have_exposed(:echo => "ping")
+    end
+
+    it "gets the correct path when specifying a version of `2`" do
+      get :echo, :echo => "ping", :version => 2
+    end
+
+    it "gets the correct path when specifying a version of `v2`" do
+      get :echo, :echo => "ping", :version => 'v2'
+    end
+  end
 end
