@@ -20,10 +20,17 @@ describe TestController, 'rspec integration', :integration => true, :target => '
   end
 
   describe 'should have_exposed' do
-    it "allows you to asset what should have been exposed by an action" do
-      get :echo, :echo => "ping"
-
-      response.should have_exposed(:echo => "ping")
+    context "given a request with parameters" do
+      it "allows you to asset what should have been exposed by an action" do
+        get :echo, :echo => "ping"
+        response.should have_exposed(:echo => "ping")
+      end
+    end
+    context "given a request without parameters" do
+      it "allows you to asset what should have been exposed by an action" do
+        get :test_data
+        request.params.should include(:version)
+      end
     end
   end
 end
