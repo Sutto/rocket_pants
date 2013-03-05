@@ -75,20 +75,22 @@ module RocketPants
     protected
 
     # Like process, but automatically adds the api version.
-    def process(action, http_method = 'GET', *args)
-      # Rails 4 changes the method signature. In rails 3, http_method is actually
-      # the paramters.
-      if http_method.kind_of?(String)
-        parameters, session, flash = args
+    def process(action, *args)
+      # Rails 4: def process(action, http_method, parameters, session, flash)
+      # Rails 3: def process(action, parameters, session, flash, http_method)
+      if args.first.kind_of?(String)
+        http_method, parameters, session, flash = args
       else
-        parameters = http_method
+        parameters, session, flash, http_method = args
       end
 
       response.recycle_cached_body!
+
       parameters ||= {}
       if _default_version.present? && parameters[:version].blank? && parameters['version'].blank?
         parameters[:version] = _default_version
       end
+
       super
     end
 
