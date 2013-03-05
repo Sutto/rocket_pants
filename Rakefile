@@ -7,7 +7,7 @@ require 'bundler/gem_tasks'
 desc "Run all specs in spec directory (excluding plugin specs)"
 RSpec::Core::RakeTask.new(:spec)
 
-INTEGRATION_LIBS = %w(will_paginate kaminari active_record active_model_serializers)
+INTEGRATION_LIBS = %w(will_paginate kaminari active_record active_model_serializers rspec)
 
 namespace :spec do
 

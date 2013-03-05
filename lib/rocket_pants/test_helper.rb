@@ -5,6 +5,8 @@ module RocketPants
     extend ActiveSupport::Concern
 
     included do
+      require 'action_controller/test_case'
+
       # Extend the response on first include.
       class_attribute :_default_version
       unless ActionController::TestResponse < ResponseHelper
@@ -13,7 +15,7 @@ module RocketPants
     end
 
     module ResponseHelper
-      
+
       def recycle_cached_body!
         @_parsed_body = @_decoded_body = nil
       end
