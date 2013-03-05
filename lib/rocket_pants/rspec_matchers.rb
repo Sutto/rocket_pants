@@ -90,6 +90,7 @@ module RocketPants
 
     matcher :have_exposed do |*args|
       normalised_response = RSpecMatchers.normalise_response(*args)
+      expected_data = args.first
 
       match do |response|
         @decoded = RSpecMatchers.normalise_urls(response.parsed_body["response"])
@@ -97,13 +98,13 @@ module RocketPants
       end
 
       failure_message_for_should do |response|
-        message = "expected api to have exposed #{args.first.inspect}, got #{response.parsed_body} instead."
-        message << "\n\nDiff: #{RSpecMatchers.differ.diff_as_object(@decoded, normalised_response)}"
+        message = "expected api to have exposed #{expected_data.inspect}, got #{response.parsed_body} instead."
+        message << "\n\nDiff: #{RSpecMatchers.differ.diff_as_object(expected_data, response.parsed_body)}"
         message
       end
 
       failure_message_for_should_not do |response|
-        "expected api to not have exposed #{normalised_response.inspect}"
+        "expected api to not have exposed #{expected_data.inspect}"
       end
 
     end
