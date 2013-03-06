@@ -21,9 +21,9 @@ module RocketPants
 
     def version
       if !instance_variable_defined?(:@version)
-        @version = begin
+        begin
           version = remove_prefix_from_version params[:version]
-          version.presence && Integer(version)
+          @version = version.presence && Integer(version)
         rescue ArgumentError
           nil
         end
@@ -36,8 +36,8 @@ module RocketPants
     end
 
     def remove_prefix_from_version(version)
-      if version
-        version.gsub /[^0-9]+/, ''
+      if version.is_a?(String)
+        version[/(\d+)/, 1]
       else
         version
       end
