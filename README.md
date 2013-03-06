@@ -577,6 +577,7 @@ Inside the `RSpec.configure do |config|` block.
 - [Pavel Kotlyar](https://github.com/paxer) - Typo fixes.
 - [John Rees](https://github.com/johnrees) - README fixes.
 - [Keith Pitt](https://github.com/keithpitt) - Bug fixes.
+- [Antoine Lagadec](https://github.com/oakho) - Bug fixes.
 
 If you're not on this list and thing you should be, let @Sutto know.
 
