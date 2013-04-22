@@ -7,51 +7,59 @@ describe RocketPants::ErrorHandling do
 
   context 'error handler functions' do
 
-    around :each do |test|
-      with_config :pass_through_errors, false, &test
-    end
-
-    it 'should allow you to set the error handle from a named type' do
-      controller_class.exception_notifier_callback.should == controller_class::DEFAULT_NOTIFIER_CALLBACK
-      controller_class.use_named_exception_notifier :airbrake
-      controller_class.exception_notifier_callback.should_not == controller_class::DEFAULT_NOTIFIER_CALLBACK
-      controller_class.exception_notifier_callback.should == controller_class::NAMED_NOTIFIER_CALLBACKS[:airbrake]
-      controller_class.use_named_exception_notifier :nonexistant
-      controller_class.exception_notifier_callback.should == controller_class::DEFAULT_NOTIFIER_CALLBACK
-    end
-
-    it 'should include the error identifier in the response if set' do
-      controller_class.exception_notifier_callback = lambda do |controller, exception, req|
-        controller.error_identifier = 'my-test-identifier'
+    context 'when pass_through_errors is false' do
+      around :each do |test|
+        with_config :pass_through_errors, false, &test
       end
-      get :test_error
-      content[:error_identifier].should == 'my-test-identifier'
-    end
 
-    it 'should throw the correct error for invalid api versions' do
-      get :echo, {}, :version => '3'
-      content['error'].should == 'invalid_version'
-    end
+      it 'should allow you to set the error handle from a named type' do
+        controller_class.exception_notifier_callback.should == controller_class::DEFAULT_NOTIFIER_CALLBACK
 
-    it 'should return the correct output for a manually thrown error' do
-      get :demo_exception
-      content['error'].should == 'throttled'
-      content['error_description'].should be_present
-    end
+        controller_class.use_named_exception_notifier :airbrake
+        controller_class.exception_notifier_callback.should_not == controller_class::DEFAULT_NOTIFIER_CALLBACK
+        controller_class.exception_notifier_callback.should == controller_class::NAMED_NOTIFIER_CALLBACKS[:airbrake]
 
-    it 'should stop the flow if you raise an exception' do
-      get :premature_termination
-      content['error'].should be_present
-      content['error_description'].should be_present
-      content['response'].should be_nil
-    end
+        controller_class.use_named_exception_notifier :honeybadger
+        controller_class.exception_notifier_callback.should_not == controller_class::DEFAULT_NOTIFIER_CALLBACK
+        controller_class.exception_notifier_callback.should == controller_class::NAMED_NOTIFIER_CALLBACKS[:honeybadger]
 
-    it 'should use i18n for error messages' do
-      with_translations :rocket_pants => {:errors => {:throttled => 'Oh noes, a puddle.'}} do
+        controller_class.use_named_exception_notifier :nonexistent
+        controller_class.exception_notifier_callback.should == controller_class::DEFAULT_NOTIFIER_CALLBACK
+      end
+
+      it 'should include the error identifier in the response if set' do
+        controller_class.exception_notifier_callback = lambda do |controller, exception, req|
+          controller.error_identifier = 'my-test-identifier'
+        end
+        get :test_error
+        content[:error_identifier].should == 'my-test-identifier'
+      end
+
+      it 'should throw the correct error for invalid api versions' do
+        get :echo, {}, :version => '3'
+        content['error'].should == 'invalid_version'
+      end
+
+      it 'should return the correct output for a manually thrown error' do
         get :demo_exception
+        content['error'].should == 'throttled'
+        content['error_description'].should be_present
       end
-      content['error'].should == 'throttled'
-      content['error_description'].should == 'Oh noes, a puddle.'
+
+      it 'should stop the flow if you raise an exception' do
+        get :premature_termination
+        content['error'].should be_present
+        content['error_description'].should be_present
+        content['response'].should be_nil
+      end
+
+      it 'should use i18n for error messages' do
+        with_translations :rocket_pants => {:errors => {:throttled => 'Oh noes, a puddle.'}} do
+          get :demo_exception
+        end
+        content['error'].should == 'throttled'
+        content['error_description'].should == 'Oh noes, a puddle.'
+      end
     end
 
   end
@@ -194,6 +202,31 @@ describe RocketPants::ErrorHandling do
           content[:error_description].should be_present
           content[:error_description].should_not == "This is a fake message."
         end
+      end
+    end
+
+  end
+
+  describe 'custom exception_notifier_callback' do
+    before do
+      @called_exception_notifier_callback = false
+    end
+
+    let(:custom_exception_notifier_callback) {
+      lambda {|c,e,r| @called_exception_notifier_callback = true }
+    }
+
+    before :each do
+      # Replace it with a new error mapping.
+      stub(controller_class).error_mapping { error_mapping }
+      stub.instance_of(controller_class).error_mapping { error_mapping }
+      controller_class.exception_notifier_callback = custom_exception_notifier_callback
+    end
+
+    it "should call the custom exception notifier callback" do
+      with_config :pass_through_errors, false do
+        get :test_error
+        @called_exception_notifier_callback.should be_true
       end
     end
 
