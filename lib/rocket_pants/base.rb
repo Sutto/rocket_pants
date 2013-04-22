@@ -40,6 +40,15 @@ module RocketPants
     rescue LoadError => e
     end
 
+    # If possible, include Honeybadger methods in the Rails controller
+    begin
+      require 'honeybadger'
+      require 'honeybadger/rails/controller_methods'
+      MODULES << Honeybadger::Rails::ControllerMethods
+    rescue LoadError => e
+    end
+
+
     MODULES.each do |mixin|
       include mixin
     end
