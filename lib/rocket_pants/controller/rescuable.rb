@@ -16,6 +16,11 @@ module RocketPants
         unless c.send(:airbrake_local_request?)
           c.error_identifier = Airbrake.notify(e, c.send(:airbrake_request_data))
         end
+      },
+      :honeybadger => lambda { |controller, exception, request|
+        if controller.respond_to?(:notify_honeybadger, true)
+          controller.send(:notify_honeybadger, exception)
+        end
       }
     }
 
