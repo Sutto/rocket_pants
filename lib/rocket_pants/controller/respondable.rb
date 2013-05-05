@@ -7,7 +7,7 @@ module RocketPants
       def serializable_hash(options = {})
         instance = serializer.new(object, options)
         if instance.respond_to?(:serializable_hash)
-          instance.serializable_hash
+          instance.serializable_hash options
         else
           instance.as_json options
         end
