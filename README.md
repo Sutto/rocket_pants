@@ -607,6 +607,7 @@ Inside the `RSpec.configure do |config|` block.
 - [John Rees](https://github.com/johnrees) - README fixes.
 - [Keith Pitt](https://github.com/keithpitt) - Bug fixes.
 - [Antoine Lagadec](https://github.com/oakho) - Bug fixes.
+- [Moncef Belyamani](https://github.com/monfresh) - README clarification.
 
 If you're not on this list and thing you should be, let @Sutto know.
 
