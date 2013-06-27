@@ -16,7 +16,7 @@ Why use RocketPants over alternatives like Grape or normal Rails? The reasons we
 4. **[It's built on ActionPack](#general-structure)** - One of the key differentiators to Grape is that RocketPants embraces ActionPack and uses the modular components included from Rails 3.0 onwards to provide things you're familiar with already such as filters.
 5. **[Semi-efficient Caching Support](#implementing-efficient-validation)** - Thanks to a combination of Rails middleware and collection vs. resource distinctions, RocketPants makes it relatively easy to implement "Efficient Validation" (See [here](#implementing-efficient-validation)). As a developer, this means you get even more benefits of http caching where possible, without the need to generate full requests when etags are present.
 6. **[Simple tools to consume RocketPants apis](#example-client-code)** - RocketPants includes the `RocketPants::Client` class which builds upon [APISmith](https://github.com/filtersquad/api_smith) to make it easier to build clients e.g. automatically converting paginated responses back.
-7. **[Build in Header Metadata Support](#header-metadata)** - APIs can easily expose `Link:` headers (it's even partly built in for paginated data - see below) and request metadata (e.g. Object count etc) can easily be embedded in the headers of the response, making useful `HEAD` requests.
+7. **[Built-in Header Metadata Support](#header-metadata)** - APIs can easily expose `Link:` headers (it's even partly built-in for paginated data - see below), and request metadata (e.g. Object count, etc.) can easily be embedded in the headers of the response, making useful `HEAD` requests.
 8. **[Out of the Box ActiveRecord mapping](#built-in-activerecord-errors)** - We'll automatically take care of mapping `ActiveRecord::RecordNotFound`, `ActiveRecord::RecordNotSaved` and `ActiveRecord::RecordInvalid` for you, even including validation messages where possible.
 9. **[Support for active_model_serializers](https://github.com/rails-api/active_model_serializers)** - If you want to use ActiveModelSerializers, we'll take care of it. Even better, in your expose call, pass through `:serializer` as expected and we'll automatically take care of invoking it for you.
 
@@ -210,7 +210,36 @@ Installing RocketPants is a simple matter of adding:
 
     gem 'rocket_pants', '~> 1.0'
 
-To your `Gemfile` and running `bundle install`. Next, instead of inherited from `ActionController::Base`, simply inherit from `RocketPants::Base` instead. If you're working with an API-only application, I typically change this in `ApplicationController` and inherit from `ApplicationController` as usual. Otherwise, I generate a new `ApiController` base controller along side `ApplicationController` which instead inherits from `RocketPants::Base` and place all my logic there.
+To your `Gemfile` and running `bundle install`. Next, instead of inheriting from `ActionController::Base`, simply inherit from `RocketPants::Base`. For example, if you're working with an API-only application, instead of having this at the top of `application_controller.rb`:
+
+    class ApplicationController < ActionController::Base
+
+you would do this:
+
+    class ApplicationController < RocketPants::Base
+
+Your other controllers would inherit from `ApplicationController` as usual. For example:
+
+    class UsersController < ApplicationController
+
+Otherwise, you can generate a new `api_controller.rb` base controller which inherits from `RocketPants::Base`, and place all your logic there. For example:
+
+In `application_controller.rb`:
+
+    class ApplicationController < ActionController::Base
+
+In `api_controller.rb`:
+
+```
+class ApiController < RocketPants::Base
+
+# logic goes here
+```
+
+In your other controllers, such as `users_controller.rb`:
+
+    class UsersController < ApiController
+
 
 ## Configuration
 
