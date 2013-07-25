@@ -3,6 +3,8 @@ require 'spec_helper'
 describe RocketPants::Base, 'strong parameters integration' do
   include ControllerHelpers
 
+  before { pending "Strong parameters are included in rails 4." unless defined? ActionController::StrongParameters }
+
   let!(:controller_class) { Class.new(TestController) }
 
   it "should have action controller parameters in controller" do

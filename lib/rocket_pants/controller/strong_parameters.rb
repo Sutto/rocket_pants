@@ -3,9 +3,11 @@ module RocketPants
     extend ActiveSupport::Concern
 
     included do
-      include ActionController::StrongParameters
-      map_error! ActionController::ParameterMissing, RocketPants::BadRequest
-      map_error! ActionController::UnpermittedParameters, RocketPants::BadRequest
+      if defined? ActionController::StrongParameters
+        include ActionController::StrongParameters
+        map_error! ActionController::ParameterMissing, RocketPants::BadRequest
+        map_error! ActionController::UnpermittedParameters, RocketPants::BadRequest
+      end
     end
   end
 end
