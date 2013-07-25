@@ -12,10 +12,6 @@ describe RocketPants::Base, 'active record integration', :integration => true, :
     Class.new(TestController)
   end
 
-  def action_is(&blk)
-    controller_class.send :define_method, :test_data, &blk
-  end
-
   it 'should automatically map ActiveRecord::RecordNotFound' do
     action_is { Fish.find(1000) }
     get :test_data
