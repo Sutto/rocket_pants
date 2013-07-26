@@ -2,6 +2,11 @@
 
 **Please Note**: This change log only covers v1.3 forwards - apologies for anything missing prior to that.
 
+## Version 1.8.0
+
+* Strong Parameter and test tweaks, thanks to [joergschiller](https://github.com/joergschiller).
+* Better explanation for error handling, thanks to [ahegyi](https://github.com/ahegyi).
+
 ## Version 1.7.0
 
 * Make RocketPants work with Rails 4.0.0.beta1, Test against Ruby 2.0.0.
