@@ -415,8 +415,8 @@ a list of *all* registered errors, including custom ones.
     <td>The given resource could not be found.</td>
   </tr>
   <tr>
-    <td><code>:invalid_resource</code></td>
-    <td><code>RocketPants::InvalidResource</code></td>
+    <td><code>:invalid_resource</code>*</td>
+    <td><code>RocketPants::InvalidResource</code>*</td>
     <td><code>422 Unprocessable Entity</code></td>
     <td>The given resource was invalid.</td>
   </tr>
@@ -463,6 +463,16 @@ Will return something similar to:
   "code":              123
 }
 ```
+
+\* Note that `:invalid_resource` (`RocketPants::InvalidResource`), although registered as a default RocketPants error, does not behave like other default registered errors. When using it, you **must** include an ActiveModel errors object, e.g.:
+
+```ruby
+error!(:invalid_resource, post.errors)
+# or
+render_error RocketPants::InvalidResource.new(post.errors)
+```
+
+If you don't do that, you may get an `ArgumentError`, because of the way Rocket Pants handles instantiation of a `RocketPants::InvalidResource`.
 
 ### Built in ActiveRecord Errors
 
