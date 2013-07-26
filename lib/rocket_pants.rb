@@ -37,6 +37,7 @@ module RocketPants
   autoload :Versioning,         'rocket_pants/controller/versioning'
   autoload :FormatVerification, 'rocket_pants/controller/format_verification'
   autoload :UrlFor,             'rocket_pants/controller/url_for'
+  autoload :StrongParameters,   'rocket_pants/controller/strong_parameters'
 
   mattr_accessor :caching_enabled, :header_metadata, :serializers_enabled
 

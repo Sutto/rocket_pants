@@ -44,4 +44,8 @@ module ControllerHelpers
     RocketPants.caching_enabled = caching
   end
 
+  def action_is(&blk)
+    controller_class.send :define_method, :test_data, &blk
+  end
+
 end
