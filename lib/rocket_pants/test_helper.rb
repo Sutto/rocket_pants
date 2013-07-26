@@ -79,8 +79,9 @@ module RocketPants
       # Rails 4 changes the method signature. In rails 3, http_method is actually
       # the parameters.
       if http_method.kind_of?(String)
-        parameters, session, flash = args
+        parameters = args.shift
       else
+        rails3_method_signature = true
         parameters = http_method
       end
 
@@ -89,7 +90,12 @@ module RocketPants
       if _default_version.present? && parameters[:version].blank? && parameters['version'].blank?
         parameters[:version] = _default_version
       end
-      super action, parameters, *args
+
+      if rails3_method_signature
+        super action, parameters, *args
+      else
+        super action, http_method, parameters, *args
+      end
     end
 
     def normalise_value(value)

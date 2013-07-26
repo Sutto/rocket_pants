@@ -3,6 +3,8 @@ TestRouter.draw do
   get  'echo', :to => 'test#echo'
   put  'echo', :to => 'test#echo'
   post 'echo', :to => 'test#echo'
+  get  'echo_session', :to => 'test#echo_session'
+  get  'echo_flash', :to => 'test#echo_flash'
   # Actual mockable endpoints
   get 'exception',        :to => 'test#demo_exception'
   get 'test_data',        :to => 'test#test_data'
@@ -34,6 +36,14 @@ class TestController < RocketPants::Base
 
   def echo
     expose :echo => params[:echo]
+  end
+  
+  def echo_session
+    expose :echo => session[:echo]
+  end
+
+  def echo_flash
+    expose :echo => request.flash[:echo]
   end
   
   def demo_exception
