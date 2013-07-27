@@ -2,6 +2,10 @@
 
 **Please Note**: This change log only covers v1.3 forwards - apologies for anything missing prior to that.
 
+## Version 1.8.2
+
+* Remove test deprecation notice on Rails 4.
+
 ## Version 1.8.1
 
 * Fix the test helper on Rails 3.0.
