@@ -74,8 +74,21 @@ module RocketPants
 
     protected
 
+    def insert_action_controller_testing_into_base
+      if defined?(ActionController::Testing)
+        unless RocketPants::Base < ActionController::Testing
+          RocketPants::Base.class_eval do
+            include ActionController::Testing
+          end
+        end
+      end
+    end
+
     # Like process, but automatically adds the api version.
     def process(action, http_method = 'GET', *args)
+
+      insert_action_controller_testing_into_base
+
       # Rails 4 changes the method signature. In rails 3, http_method is actually
       # the parameters.
       if http_method.kind_of?(String)
