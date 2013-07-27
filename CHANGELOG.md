@@ -6,6 +6,7 @@
 
 * Strong Parameter and test tweaks, thanks to [joergschiller](https://github.com/joergschiller).
 * Better explanation for error handling, thanks to [ahegyi](https://github.com/ahegyi).
+* Change the order of Instrumentation in RocketPants so it correct logs the error results.
 
 ## Version 1.7.0
 
