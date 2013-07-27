@@ -21,8 +21,15 @@ module RocketPants
       ActiveSupport::Notifications.instrument("process_action.rocket_pants", raw_payload) do |payload|
         result = super
         payload[:status] = response.status
+        append_info_to_payload payload
         result
       end
+    end
+
+    private
+
+    def append_info_to_payload(payload) #:nodoc:
+      # Append any custom information here.
     end
 
   end

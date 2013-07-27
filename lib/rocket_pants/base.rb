@@ -21,7 +21,6 @@ module RocketPants
       HeaderMetadata,
       Linking,
       Versioning,
-      Instrumentation,
       Caching,
       # Include earliest as possible in the request.
       AbstractController::Callbacks,
@@ -29,7 +28,8 @@ module RocketPants
       ErrorHandling,
       Rescuable,
       JSONP,
-      StrongParameters
+      StrongParameters,
+      Instrumentation
       # FormatVerification # TODO: Implement Format Verification
     ].compact
 
