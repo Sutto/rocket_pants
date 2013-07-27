@@ -2,6 +2,11 @@
 
 **Please Note**: This change log only covers v1.3 forwards - apologies for anything missing prior to that.
 
+## Version 1.8.1
+
+* Fix the test helper on Rails 3.0.
+* Get travis working again.
+
 ## Version 1.8.0
 
 * Strong Parameter and test tweaks, thanks to [joergschiller](https://github.com/joergschiller).
