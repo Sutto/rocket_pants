@@ -7,6 +7,11 @@ Bundler.require :default, :test
 
 require 'rocket_pants'
 
+# This should be a per-app configuration setting.
+ActiveSupport.on_load(:active_record) do
+  self.include_root_in_json = false
+end
+
 require 'webmock/rspec'
 
 Dir[Pathname(__FILE__).dirname.join("support/**/*.rb")].each { |f| require f }
