@@ -283,6 +283,35 @@ api :versions => 1..3 do
 end
 ```
 
+### How do I layout file system versions versions?
+
+Using users an an example, for a namespaced / modularised version controller the file system location would be
+`app/controllers/api/v1/users_controller.rb` - Rails uses it's own inflection to look for `Api::V1::UsersController` in that file.
+In here, you'd write your control roughly like:
+
+```ruby
+class Api::V1::UsersController < RocketPants::Base
+  version 1
+
+  def index
+    expose User.all # Not what we'd actually do, of course.
+  end
+
+end
+```
+
+Note that I'd personally also introduce `Api::V1::BaseController`, and inherit from that - that way any shared logic (e.g. authentication) can be put in there.
+
+Finally, in the routes - the easiest way would be in the api declaration:
+
+```ruby
+api versions: 1, module: "api/v1" do
+  resources :users, only: [:index]  
+end
+```
+
+Which will set up `/1/users` to hit the index action of `Api::V1::UsersController` - the `module` parameter comes from the rails built in routing configuration: http://api.rubyonrails.org/classes/ActionDispatch/Routing/Mapper/Scoping.html#method-i-scope
+
 ## Working with data
 
 When using RocketPants, you write your controllers the same as how you would with normal ActionController, the only thing that changes is how you handle data. `head` and `redirect_to` still work exactly the same as in Rails, but instead of using `respond_with` and `render` you instead use RocketPant's `exposes` methods (and it's kind). Namely:
