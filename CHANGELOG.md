@@ -2,6 +2,10 @@
 
 **Please Note**: This change log only covers v1.3 forwards - apologies for anything missing prior to that.
 
+## Version 1.9.1
+
+* `encode_to_json` hook for internal refactoring.
+
 ## Version 1.9.0
 
 * Bump hashie version to support 1.0 and 2.0 versions. Note I've bumped to 1.9.0 to avoid
