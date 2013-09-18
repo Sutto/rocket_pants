@@ -95,6 +95,10 @@ module RocketPants
       }
     end
 
+    def encode_to_json(object)
+      ActiveSupport::JSON.encode object
+    end
+
     # Given a json object or encoded json, will encode it
     # and set it to be the output of the given page.
     def render_json(json, options = {})
@@ -103,7 +107,7 @@ module RocketPants
       self.content_type = options[:content_type] if options[:content_type]
       options = options.slice(*RENDERING_OPTIONS)
       # Don't convert raw strings to JSON.
-      json = ActiveSupport::JSON.encode(json) unless json.respond_to?(:to_str)
+      json = encode_to_json(json) unless json.respond_to?(:to_str)
       # Encode the object to json.
       self.status        ||= :ok
       self.content_type  ||= Mime::JSON
