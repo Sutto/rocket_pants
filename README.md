@@ -394,7 +394,7 @@ This comes in useful when you wish to automatically convert exceptions such as `
 
 It also adds a facilities to make it easy to add extra information to the response.
 
-RocketPants will also attempt to convert all errors in the controller, defaulting to the `"system"` exception name and message as the error description. We also provide a registry to allow throwing exception from their symbolic name like so:
+RocketPants will also attempt to convert all errors in the controller, defaulting to `"system"` as the exception name and message as the error description. We also provide a registry to allow throwing exception from their symbolic name like so:
 
 ```ruby
 error! :not_found
@@ -402,7 +402,7 @@ error! :not_found
 
 In the controller.
 
-Out of the box, the following exceptions come pre-registered and setup. For each of them, you can either use the error form (`error! :error_key) or you can raise an instance of the exception class like normal.
+Out of the box, the following exceptions come pre-registered and setup. For each of them, you can either use the error form (`error! :error_key`) or you can raise an instance of the exception class like normal.
 
 Note that inside your application, you can also use `rake rocket_pants:errors` to view
 a list of *all* registered errors, including custom ones.
