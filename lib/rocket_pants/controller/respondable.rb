@@ -5,12 +5,8 @@ module RocketPants
     SerializerWrapper = Struct.new(:serializer, :object) do
 
       def serializable_hash(options = {})
-        instance = serializer.new(object, options)
-        if instance.respond_to?(:serializable_hash)
-          instance.serializable_hash
-        else
-          instance.as_json options
-        end
+        instance = serializer.new(object, options.except(:root))
+        instance.as_json options.except(:root)
       end
 
     end
