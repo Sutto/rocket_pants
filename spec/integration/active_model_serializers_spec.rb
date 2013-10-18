@@ -12,13 +12,20 @@ describe RocketPants::Base, 'active_model_serializers integration', :integration
   # t.string  :token
 
   let(:fish)   { Fish.create! :name => "Test Fish", :latin_name => "Fishus fishii", :child_number => 1, :token => "xyz" }
-  after(:each) { Fish.delete_all }
+  after(:each) do
+    Fish.delete_all
+    SerializerB.root = false
+  end
 
   class SerializerA < ActiveModel::Serializer
+    self.root = false
+
     attributes :name, :latin_name
   end
 
   class SerializerB < ActiveModel::Serializer
+    self.root = false
+
     attributes :name, :child_number
   end
 
@@ -32,6 +39,19 @@ describe RocketPants::Base, 'active_model_serializers integration', :integration
         content[:response].should be_present
         content[:response].should be_a Hash
       end
+    end
+
+    it "should respect the serializers setting for including the root in JSON" do
+      mock(TestController).test_data { fish }
+      SerializerB.root = true
+      mock(fish).active_model_serializer { SerializerB }
+      mock.proxy(SerializerB).new(fish, anything) { |r| r }
+      get :test_data
+      content[:response].should be_present
+      content[:response].should be_a Hash
+      puts content[:response].inspect
+      content[:response]["serializer_b"].should be_a Hash
+      content[:response]["serializer_b"].keys.map(&:to_sym).should =~ [:name, :child_number]
     end
 
     it 'should use the active_model_serializer' do
@@ -133,7 +153,6 @@ describe RocketPants::Base, 'active_model_serializers integration', :integration
     it 'should default to root being false' do
       mock(TestController).test_data { [fish] }
       mock(TestController).test_options { {:each_serializer => SerializerA} }
-      mock.proxy(SerializerA).new(fish, rr_satisfy { |h| h[:root] == false }) { |r| r }
       get :test_data
       content[:response].should be_present
       content[:response].should be_a Array
