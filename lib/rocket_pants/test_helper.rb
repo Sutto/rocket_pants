@@ -12,6 +12,10 @@ module RocketPants
       unless ActionController::TestResponse < ResponseHelper
         ActionController::TestResponse.send :include, ResponseHelper
       end
+
+      unless ActionDispatch::TestResponse < ResponseHelper
+        ActionDispatch::TestResponse.send :include, ResponseHelper
+      end
     end
 
     module ResponseHelper
