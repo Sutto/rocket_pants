@@ -109,7 +109,7 @@ module RocketPants
     # api design.
     # @param [StandardError] exception the error to render a response for.
     def render_error(exception)
-      logger.debug "Rendering error for #{exception.class.name}: #{exception.message}" if logger
+      logger.debug "Exception raised: #{exception.class.name}: #{exception.message}" if logger
       # When a normalised class is present, make sure we
       # convert it to a useable error class.
       normalised_class = exception.class.ancestors.detect do |klass|
