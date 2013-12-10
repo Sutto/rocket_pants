@@ -316,7 +316,7 @@ Which will set up `/1/users` to hit the index action of `Api::V1::UsersControlle
 
 When using RocketPants, you write your controllers the same as how you would with normal ActionController, the only thing that changes is how you handle data. `head` and `redirect_to` still work exactly the same as in Rails, but instead of using `respond_with` and `render` you instead use RocketPant's `exposes` methods (and it's kind). Namely:
 
-- `expose` / `exposes` - The core of all type conversion, will check the type of data and automatically convert it to the correct time (for either a singular, collection or paginated resource).
+- `expose` / `exposes` - The core of all type conversion, will check the type of data and automatically convert it to the correct type (for either a singular, collection or paginated resource).
 - `paginated` - Render an object as a paginated collection of data.
 - `collection` - Renders a collection of objects - e.g. an array of users.
 - `resource` - Renders a single object.
