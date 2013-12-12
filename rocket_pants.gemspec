@@ -19,6 +19,7 @@ Gem::Specification.new do |s|
   s.add_dependency 'hashie',        '>= 1.0', '< 3'
   s.add_dependency 'api_smith'
   s.add_dependency 'moneta'
+  s.add_dependency 'rocket_pants-core', '~> 2.0.0.pre.2'
   s.add_development_dependency 'rspec',       '~> 2.4'
   s.add_development_dependency 'rspec-rails', '~> 2.4'
   s.add_development_dependency 'rr',          '~> 1.0'

@@ -6,8 +6,7 @@ require 'action_controller'
 require 'moneta'
 
 module RocketPants
-  require 'rocket_pants/error'
-  require 'rocket_pants/errors'
+  require 'rocket_pants/core'
 
   # Set up the routing in advance.
   require 'rocket_pants/routing'
