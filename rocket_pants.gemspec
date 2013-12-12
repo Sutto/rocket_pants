@@ -15,6 +15,7 @@ Gem::Specification.new do |s|
 
   s.add_dependency 'actionpack', '~> 4.0'
   s.add_dependency 'railties',   '~> 4.0'
+  s.add_dependency 'rails-api'
   s.add_dependency 'will_paginate', '~> 3.0'
   s.add_dependency 'hashie',        '>= 1.0', '< 3'
   s.add_dependency 'moneta'
