@@ -10,6 +10,7 @@ fish = ReversibleData.add(:fish) do |t|
   t.string  :latin_name
   t.integer :child_number
   t.string  :token
+  t.index   :token, unique: true, name: "by_unique_token"
 end
 
 fish.define_model do
@@ -17,5 +18,4 @@ fish.define_model do
   # Yes, I know it's technically not right.
   validates :latin_name, :length => {:minimum => 5}, :format => /\A(\w+) (\w+)\Z/
   validates :child_number, :numericality => true
-  # validates :token, :uniqueness => true, :allow_nil => true
 end
