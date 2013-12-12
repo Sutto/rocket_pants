@@ -1,5 +1,7 @@
 # Rocket Pants! [![Build Status](https://secure.travis-ci.org/filtersquad/rocket_pants.png?branch=master)](http://travis-ci.org/filtersquad/rocket_pants)
 
+**NOTE**: This is the WIP branch for RocketPants 2.0
+
 ## Introduction
 
 First thing's first, you're probably asking yourself - "Why the ridiculous name?". It's simple, really - RocketPants is memorable, and sounds completely bad ass. - everything a library needs.
