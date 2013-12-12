@@ -16,7 +16,6 @@ module RocketPants
 
   # Extra parts of RocketPants.
   autoload :Base,            'rocket_pants/base'
-  autoload :Client,          'rocket_pants/client'
   autoload :Cacheable,       'rocket_pants/cacheable'
   autoload :CacheMiddleware, 'rocket_pants/cache_middleware'
 
