@@ -33,7 +33,6 @@ module RocketPants
   autoload :HeaderMetadata,     'rocket_pants/controller/header_metadata'
   autoload :Linking,            'rocket_pants/controller/linking'
   autoload :Versioning,         'rocket_pants/controller/versioning'
-  autoload :FormatVerification, 'rocket_pants/controller/format_verification'
   autoload :UrlFor,             'rocket_pants/controller/url_for'
   autoload :StrongParameters,   'rocket_pants/controller/strong_parameters'
 
