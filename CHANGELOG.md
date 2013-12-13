@@ -2,6 +2,11 @@
 
 **Please Note**: This change log only covers v1.3 forwards - apologies for anything missing prior to that.
 
+## Version 2.0.0 (WIP)
+
+* `RocketPants.cache` is an instance of `ActiveSupport::Cache::Store`, instead of using moneta.
+* RocketPants uses Rails API as a base for better compatibility.
+
 ## Version 1.9.1
 
 * `encode_to_json` hook for internal refactoring.
