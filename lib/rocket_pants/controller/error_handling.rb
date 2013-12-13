@@ -54,7 +54,7 @@ module RocketPants
       # TODO: Add in notification hooks for non-standard exceptions.
       name    = lookup_error_name(exception)
       message = default_message_for_exception exception
-      context = lookup_error_context(exception).reverse_merge(:scope => :"rocket_pants.errors", :default => message)
+      context = lookup_error_context(exception).reverse_merge(scope: "rocket_pants.errors", default: message)
       I18n.t name, context.except(:metadata)
     end
 
