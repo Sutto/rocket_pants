@@ -38,6 +38,7 @@ module RocketPants
     end
 
     initializer "rocket_pants.setup_caching" do |app|
+      RocketPants.cache = Rails.cache
       if RocketPants.caching_enabled?
         app.middleware.insert 'Rack::Runtime', RocketPants::CacheMiddleware
       end

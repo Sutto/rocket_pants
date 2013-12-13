@@ -43,7 +43,7 @@ module RocketPants
           default_etag = ck
         end
         generated_etag = Digest::MD5.hexdigest(default_etag)
-        RocketPants.cache[cache_key] = generated_etag
+        RocketPants.cache.write cache_key, generated_etag
       end
       
       # Given an object, returns the etag value to be used in
@@ -53,7 +53,7 @@ module RocketPants
       # @param [#cache_key] object what to look up the etag for
       def etag_for(object)
         cache_key = cache_key_for(object)
-        etag_value = RocketPants.cache[cache_key].presence || record(object, cache_key)
+        etag_value = RocketPants.cache.read(cache_key).presence || record(object, cache_key)
         "#{cache_key}:#{etag_value}"
       end
     

@@ -3,8 +3,6 @@ require 'action_dispatch'
 require 'action_dispatch/routing'
 require 'action_controller'
 
-require 'moneta'
-
 module RocketPants
   require 'rocket_pants/core'
 
@@ -44,21 +42,13 @@ module RocketPants
 
   mattr_writer :cache
 
-  begin
-    require 'moneta/memory'
-    MONETA_LEGACY = true
-  rescue LoadError => e
-    require 'moneta'
-    MONETA_LEGACY = false
-  end
-
   class << self
     alias caching_enabled?     caching_enabled
     alias header_metadata?     header_metadata
     alias serializers_enabled? serializers_enabled
 
     def cache
-      @@cache ||= (MONETA_LEGACY ? Moneta::Memory : Moneta::Adapters::Memory).new
+      @@cache ||= ActiveSupport::Cache::MemoryStore.new
     end
 
     def env

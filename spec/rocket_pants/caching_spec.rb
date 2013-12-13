@@ -8,9 +8,9 @@ describe RocketPants::Caching do
     
     it 'should let you remove an item from the cache' do
       stub(RocketPants::Caching).cache_key_for(object) { 'my-cache-key' }
-      RocketPants.cache['my-cache-key'] = 'hello there'
+      RocketPants.cache.write 'my-cache-key', 'hello there'
       RocketPants::Caching.remove object
-      RocketPants.cache['my-cache-key'].should be_nil
+      RocketPants.cache.read('my-cache-key').should be_nil
     end
     
     it 'should safely delete a non-existant item from the cache' do
@@ -23,13 +23,13 @@ describe RocketPants::Caching do
       mock(RocketPants::Caching).cache_key_for(object) { 'my-cache-key' }
       mock(object).cache_key { 'hello' }
       RocketPants::Caching.record object
-      RocketPants.cache['my-cache-key'].should == Digest::MD5.hexdigest('hello')
+      RocketPants.cache.read('my-cache-key').should == Digest::MD5.hexdigest('hello')
     end
     
     it 'should let you record an object in the cache with the default inspect value' do
       mock(RocketPants::Caching).cache_key_for(object) { 'my-cache-key' }
       RocketPants::Caching.record object
-      RocketPants.cache['my-cache-key'].should == Digest::MD5.hexdigest(object.inspect)
+      RocketPants.cache.read('my-cache-key').should == Digest::MD5.hexdigest(object.inspect)
     end
     
   end
@@ -86,13 +86,13 @@ describe RocketPants::Caching do
     end
     
     it 'should fetch the recorded etag' do
-      mock(RocketPants.cache)['my-cache-key'].returns 'hello-world'
+      mock(RocketPants.cache).read('my-cache-key').returns 'hello-world'
       RocketPants::Caching.etag_for(object)
     end
     
     it 'should generate a new etag if one does not exist' do
       mock(RocketPants::Caching).record object, 'my-cache-key'
-      stub(RocketPants.cache)['my-cache-key'].returns nil
+      stub(RocketPants.cache).read('my-cache-key').returns nil
       RocketPants::Caching.etag_for object
     end
     

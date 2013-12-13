@@ -10,10 +10,6 @@ if rails_version && rails_version.length > 0
   gem 'activerecord', rails_version
 end
 
-if (moneta_version = ENV["MONETA_VERSION"])
-  gem 'moneta', moneta_version
-end
-
 gem 'rspec'
 
 if (wp_version = ENV['WILL_PAGINATE_VERSION'])
