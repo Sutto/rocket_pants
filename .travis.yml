@@ -6,7 +6,6 @@ rvm:
 env:
   - RAILS_VERSION=""
   - RAILS_VERSION="~>4.0.0"
-  - RAILS_VERSION="" MONETA_VERSION="~> 0.7.0"
 notifications:
   email:
     - sutto@sutto.net
