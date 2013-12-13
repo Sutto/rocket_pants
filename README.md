@@ -17,10 +17,9 @@ Why use RocketPants over alternatives like Grape or normal Rails? The reasons we
 3. **[Extended Error Support](#registering--dealing-with-errors)** - RocketPants has a built in framework to manage errors it knows how to handle (in the forms of mapping exceptions to a well defined JSON structure) as well as tools to make it simple to hook up to Airbrake and do things such as including an error identifier in the response.
 4. **[It's built on ActionPack](#general-structure)** - One of the key differentiators to Grape is that RocketPants embraces ActionPack and uses the modular components included from Rails 3.0 onwards to provide things you're familiar with already such as filters. If you're using Strong Parameters (e.g. in Rails 4), we'll even give you support for that.
 5. **[Semi-efficient Caching Support](#implementing-efficient-validation)** - Thanks to a combination of Rails middleware and collection vs. resource distinctions, RocketPants makes it relatively easy to implement "Efficient Validation" (See [here](#implementing-efficient-validation)). As a developer, this means you get even more benefits of http caching where possible, without the need to generate full requests when etags are present.
-6. **[Simple tools to consume RocketPants apis](#example-client-code)** - RocketPants includes the `RocketPants::Client` class which builds upon [APISmith](https://github.com/filtersquad/api_smith) to make it easier to build clients e.g. automatically converting paginated responses back.
-7. **[Built-in Header Metadata Support](#header-metadata)** - APIs can easily expose `Link:` headers (it's even partly built-in for paginated data - see below), and request metadata (e.g. Object count, etc.) can easily be embedded in the headers of the response, making useful `HEAD` requests.
-8. **[Out of the Box ActiveRecord mapping](#built-in-activerecord-errors)** - We'll automatically take care of mapping `ActiveRecord::RecordNotFound`, `ActiveRecord::RecordNotSaved` and `ActiveRecord::RecordInvalid` for you, even including validation messages where possible.
-9. **[Support for active_model_serializers](https://github.com/rails-api/active_model_serializers)** - If you want to use ActiveModelSerializers, we'll take care of it. Even better, in your expose call, pass through `:serializer` as expected and we'll automatically take care of invoking it for you.
+6. **[Built-in Header Metadata Support](#header-metadata)** - APIs can easily expose `Link:` headers (it's even partly built-in for paginated data - see below), and request metadata (e.g. Object count, etc.) can easily be embedded in the headers of the response, making useful `HEAD` requests.
+7. **[Out of the Box ActiveRecord mapping](#built-in-activerecord-errors)** - We'll automatically take care of mapping `ActiveRecord::RecordNotFound`, `ActiveRecord::RecordNotSaved` and `ActiveRecord::RecordInvalid` for you, even including validation messages where possible.
+8. **[Support for active_model_serializers](https://github.com/rails-api/active_model_serializers)** - If you want to use ActiveModelSerializers, we'll take care of it. Even better, in your expose call, pass through `:serializer` as expected and we'll automatically take care of invoking it for you.
 
 ## Examples
 
@@ -147,32 +146,6 @@ def index
   # Probably not the best example...
   links next: random_wallpaper_path, prev: random_wallpaper_path
   expose Wallpaper.random
-end
-```
-
-### Example Client Code
-
-Using the example above, we could then use the following to write a client:
-
-```ruby
-class FoodsClient < RocketPants::Client
-
-  version  1
-  base_uri 'http://localhost:3000'
-
-  class Food < APISmith::Smash
-    property :id
-    property :name
-  end
-
-  def foods
-    get 'foods', transformer: Food
-  end
-
-  def food(id)
-    get "foods/#{id}", transformer: Food
-  end
-
 end
 ```
 
