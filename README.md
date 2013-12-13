@@ -1,4 +1,4 @@
-# Rocket Pants! [![Build Status](https://secure.travis-ci.org/filtersquad/rocket_pants.png?branch=master)](http://travis-ci.org/filtersquad/rocket_pants)
+# Rocket Pants! [![Build Status](https://secure.travis-ci.org/Sutto/rocket_pants.png?branch=2.0-rewrite)](http://travis-ci.org/Sutto/rocket_pants)
 
 **NOTE**: This is the WIP branch for RocketPants 2.0
 
@@ -650,4 +650,4 @@ Other than that, our guidelines very closely match the GemCutter guidelines [her
 
 ## License
 
-RocketPants is released under the MIT License (see the [license file](https://github.com/filtersquad/rocket_pants/blob/master/LICENSE)) and is copyright Filter Squad, 2012.
+RocketPants is released under the MIT License (see the [license file](https://github.com/Sutto/rocket_pants/blob/master/LICENSE)) and is copyright Filter Squad and Darcy Laycock, 2012-2013.
