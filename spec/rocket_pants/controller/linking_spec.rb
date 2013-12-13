@@ -67,7 +67,7 @@ describe RocketPants::Linking do
     end
 
     it 'should allow extra attributes' do
-      link_portion { link :search, "http://google.com/", :awesome => "Sure Am" }
+      link_portion { link :search, "http://google.com/", awesome: "Sure Am" }
       links = response.headers['Link']
       links.should be_present
       links.size.should == 1
@@ -81,7 +81,7 @@ describe RocketPants::Linking do
   describe 'generating multiple links' do
 
     it 'should provide a shorthand to generate multiple links' do
-      link_portion { links :next => "http://example.com/page/3", :prev => "http://example.com/page/1" }
+      link_portion { links next: "http://example.com/page/3", prev: "http://example.com/page/1" }
       links = response.headers['Link']
       links.should be_present
       links.size.should == 2

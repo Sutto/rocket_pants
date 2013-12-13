@@ -8,12 +8,12 @@ module RocketPants
 
     def process_action(action, *args)
       raw_payload = {
-        :controller => self.class.name,
-        :action     => self.action_name,
-        :params     => request.filtered_parameters,
-        :formats    => [:json],
-        :method     => request.method,
-        :path       => (request.fullpath rescue "unknown")
+        controller: self.class.name,
+        action:     self.action_name,
+        params:     request.filtered_parameters,
+        formats:    [:json],
+        method:     request.method,
+        path:       (request.fullpath rescue "unknown")
       }
 
       ActiveSupport::Notifications.instrument("start_processing.rocket_pants", raw_payload.dup)

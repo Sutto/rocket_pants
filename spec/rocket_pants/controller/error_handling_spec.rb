@@ -36,7 +36,7 @@ describe RocketPants::ErrorHandling do
       end
 
       it 'should throw the correct error for invalid api versions' do
-        get :echo, {}, :version => '3'
+        get :echo, {}, version: '3'
         content['error'].should == 'invalid_version'
       end
 
@@ -54,7 +54,7 @@ describe RocketPants::ErrorHandling do
       end
 
       it 'should use i18n for error messages' do
-        with_translations :rocket_pants => {:errors => {:throttled => 'Oh noes, a puddle.'}} do
+        with_translations rocket_pants: {errors: {throttled: 'Oh noes, a puddle.'}} do
           get :demo_exception
         end
         content['error'].should == 'throttled'
@@ -69,7 +69,7 @@ describe RocketPants::ErrorHandling do
     let(:controller_class) do
       klass = Class.new(TestController)
       klass.class_eval do
-        rescue_from StandardError, :with => :render_error
+        rescue_from StandardError, with: :render_error
       end
       klass
     end
@@ -106,19 +106,19 @@ describe RocketPants::ErrorHandling do
     end
 
     it 'should let you add error items to the response' do
-      mock.instance_of(controller_class).lookup_error_extras(error).returns(:hello => 'There')
+      mock.instance_of(controller_class).lookup_error_extras(error).returns(hello: 'There')
       get :test_error
       content['hello'].should == 'There'
     end
 
     it 'should default to extracting metadata from the context' do
-      def error.context;  {:metadata => {:hello => 'There'}} ; end
+      def error.context;  {metadata: {hello: 'There'}} ; end
       get :test_error
       content['hello'].should == 'There'
     end
 
     it 'should let you pass through data via the context in the controller' do
-      controller_class.send(:define_method, :demo_exception) { error! :throttled, :metadata => {:hello => "There"}}
+      controller_class.send(:define_method, :demo_exception) { error! :throttled, metadata: {hello: "There"}}
       get :demo_exception
       content['hello'].should == 'There'
     end
@@ -140,7 +140,7 @@ describe RocketPants::ErrorHandling do
     it 'should let you register a custom error mapping with metadata' do
       controller_class.error_mapping[TestController::ErrorOfDoom] = lambda do |exception|
         RocketPants::Throttled.new(exception).tap do |e|
-          e.context = {:metadata => {:test => true}}
+          e.context = {metadata: {test: true}}
         end
       end
       get :test_error

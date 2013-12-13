@@ -23,7 +23,7 @@ describe RocketPants::Base do
       after(:each)  { table_manager.down! }
 
       it 'should let you expose a single item' do
-        user = User.create :age => 21
+        user = User.create age: 21
         mock(TestController).test_data { user }
         get :test_data
         content[:response].should == user.serializable_hash
@@ -31,7 +31,7 @@ describe RocketPants::Base do
 
       it 'should let you expose a collection' do
         1.upto(5) do |offset|
-          User.create :age => (18 + offset)
+          User.create age: (18 + offset)
         end
         mock(TestController).test_data { User.all }
         get :test_data
@@ -46,56 +46,56 @@ describe RocketPants::Base do
   describe 'versioning' do
 
     it 'should be ok with an optional prefix with the specified prefix' do
-      get :echo, {}, :version => 'v1', :rp_prefix => {:text => "v", :required => false}
+      get :echo, {}, version: 'v1', rp_prefix: {text: "v", required: false}
       content[:error].should be_nil
     end
 
     it 'should be ok with an optional prefix without the specified prefix' do
-      get :echo, {}, :version => '1', :rp_prefix => {:text => "v", :required => false}
+      get :echo, {}, version: '1', rp_prefix: {text: "v", required: false}
       content[:error].should be_nil
     end
 
     it 'should be ok with a required prefix and one given' do
-      get :echo, {}, :version => 'v1', :rp_prefix => {:text => "v", :required => true}
+      get :echo, {}, version: 'v1', rp_prefix: {text: "v", required: true}
       content[:error].should be_nil
     end
 
     it 'should return an error when a prefix is required and not given' do
-      get :echo, {}, :version => '1', :rp_prefix => {:text => "v", :required => true}
+      get :echo, {}, version: '1', rp_prefix: {text: "v", required: true}
       content[:error].should == 'invalid_version'
     end
 
     it 'should return an error when a prefix is required and a different one is given' do
-      get :echo, {}, :version => 'x1', :rp_prefix => {:text => "v", :required => true}
+      get :echo, {}, version: 'x1', rp_prefix: {text: "v", required: true}
       content[:error].should == 'invalid_version'
     end
 
     it 'should return an error when an optional prefix is allowed and a different one is given' do
-      get :echo, {}, :version => 'x1', :rp_prefix => {:text => "v", :required => false}
+      get :echo, {}, version: 'x1', rp_prefix: {text: "v", required: false}
       content[:error].should == 'invalid_version'
     end
 
     it 'should return an error when a prefix is now allowed and is given' do
-      get :echo, {}, :version => 'v1'
+      get :echo, {}, version: 'v1'
       content[:error].should == 'invalid_version'
     end
 
     it 'should be ok with a valid version' do
       %w(1 2).each do |version|
-        get :echo, {}, :version => version.to_s
+        get :echo, {}, version: version.to_s
         content[:error].should be_nil
       end
     end
 
     it 'should return an error for an invalid version number' do
       [0, 3, 10, 2.5, 2.2, '1.1'].each do |version|
-        get :echo, {}, :version => version.to_s
+        get :echo, {}, version: version.to_s
         content[:error].should == 'invalid_version'
       end
     end
 
     it 'should return an error for no version number' do
-      get :echo, {}, :version => nil
+      get :echo, {}, version: nil
       content[:error].should == 'invalid_version'
     end
 
@@ -112,7 +112,7 @@ describe RocketPants::Base do
     end
 
     it 'should correctly convert a normal object' do
-      object = {:a => 1, :b => 2}
+      object = {a: 1, b: 2}
       mock(TestController).test_data { object }
       get :test_data
       content[:count].should be_nil
@@ -121,16 +121,16 @@ describe RocketPants::Base do
     end
 
     it 'should correctly convert an object with a serializable hash method' do
-      object = {:a => 1, :b => 2}
-      stub(object).serializable_hash(anything) { {:serialised => true}}
+      object = {a: 1, b: 2}
+      stub(object).serializable_hash(anything) { {serialised: true}}
       mock(TestController).test_data { object }
       get :test_data
       content[:response].should == {'serialised' => true}
     end
 
     it 'should correct convert an object with as_json' do
-      object = {:a => 1, :b => 2}
-      stub(object).as_json(anything) { {:serialised => true}}
+      object = {a: 1, b: 2}
+      stub(object).as_json(anything) { {serialised: true}}
       mock(TestController).test_data { object }
       get :test_data
       content[:response].should == {'serialised' => true}
@@ -157,7 +157,7 @@ describe RocketPants::Base do
     end
 
     it 'should correctly hook into singular responses' do
-      object = {:a => 1, :b => 2}
+      object = {a: 1, b: 2}
       mock(TestController).test_data { object }
       hooks = []
       mock.instance_of(TestController).pre_process_exposed_object(object, :resource, true) { hooks << :pre }
@@ -167,45 +167,45 @@ describe RocketPants::Base do
     end
 
     it 'should accept status options when rendering json' do
-      stub(TestController).test_data    { {:hello => "World"} }
-      stub(TestController).test_options { {:status => :created} }
+      stub(TestController).test_data    { {hello: "World"} }
+      stub(TestController).test_options { {status: :created} }
       get :test_render_json
       response.status.should == 201
     end
 
     it 'should accept status options when responding with data' do
-      stub(TestController).test_data    { {:hello => "World"} }
-      stub(TestController).test_options { {:status => :created} }
+      stub(TestController).test_data    { {hello: "World"} }
+      stub(TestController).test_options { {status: :created} }
       get :test_responds
       response.status.should == 201
     end
 
     it 'should accept status options when responding with a single object' do
-      stub(TestController).test_data    { {:hello => "World"} }
-      stub(TestController).test_options { {:status => :created} }
+      stub(TestController).test_data    { {hello: "World"} }
+      stub(TestController).test_options { {status: :created} }
       get :test_data
       response.status.should == 201
     end
 
     it 'should accept status options when responding with a paginated collection' do
       stub(TestController).test_data do
-        WillPaginate::Collection.create(1, 1) {|c| c.replace([{:hello => "World"}]); c.total_entries = 1 }
+        WillPaginate::Collection.create(1, 1) {|c| c.replace([{hello: "World"}]); c.total_entries = 1 }
       end
-      stub(TestController).test_options { {:status => :created} }
+      stub(TestController).test_options { {status: :created} }
       get :test_data
       response.status.should == 201
     end
 
     it 'should accept status options when responding with collection' do
-      stub(TestController).test_data    { [{:hello => "World"}] }
-      stub(TestController).test_options { {:status => :created} }
+      stub(TestController).test_data    { [{hello: "World"}] }
+      stub(TestController).test_options { {status: :created} }
       get :test_data
       response.status.should == 201
     end
 
     it 'should let you override the content type' do
-      stub(TestController).test_data    { {:hello => "World"} }
-      stub(TestController).test_options { {:content_type => Mime::HTML} }
+      stub(TestController).test_data    { {hello: "World"} }
+      stub(TestController).test_options { {content_type: Mime::HTML} }
       get :test_data
       response.headers['Content-Type'].should =~ /text\/html/
     end
@@ -226,7 +226,7 @@ describe RocketPants::Base do
 
     it 'should let you set the caching timeout' do
       expect do
-        controller_class.caches :test_data, :cache_for => 10.minutes
+        controller_class.caches :test_data, cache_for: 10.minutes
         controller_class.caching_timeout.should == 10.minutes
       end.to change(controller_class, :caching_timeout)
     end
@@ -326,63 +326,63 @@ describe RocketPants::Base do
 
     it 'should let you specify requests as having jsonp' do
       controller_class.jsonp
-      get :echo, :echo => "Hello World"
+      get :echo, echo: "Hello World"
       response.content_type.should include 'application/json'
       response.body.should == %({"response":{"echo":"Hello World"}})
-      get :echo, :echo => "Hello World", :callback => "test"
+      get :echo, echo: "Hello World", callback: "test"
       response.content_type.should include 'application/javascript'
       response.body.should == %|test({"response":{"echo":"Hello World"}});|
     end
 
     it 'should automatically inherit it' do
-      first_controller.jsonp :enable => true
-      get :echo, :echo => "Hello World", :callback => "test"
+      first_controller.jsonp enable: true
+      get :echo, echo: "Hello World", callback: "test"
       response.content_type.should include 'application/javascript'
       response.body.should == %|test({"response":{"echo":"Hello World"}});|
-      get :echo, :echo => "Hello World", :other_callback => "test"
+      get :echo, echo: "Hello World", other_callback: "test"
       response.content_type.should include 'application/json'
       response.body.should == %({"response":{"echo":"Hello World"}})
     end
 
     it 'should allow you to disable at a lower level' do
-      first_controller.jsonp :enable => true
-      controller_class.jsonp :enable => false
-      get :echo, :echo => "Hello World", :callback => "test"
+      first_controller.jsonp enable: true
+      controller_class.jsonp enable: false
+      get :echo, echo: "Hello World", callback: "test"
       response.content_type.should include 'application/json'
       response.body.should == %({"response":{"echo":"Hello World"}})
     end
 
     it 'should let you specify options to it' do
-      controller_class.jsonp :parameter => 'cb'
-      get :echo, :echo => "Hello World", :cb => "test"
+      controller_class.jsonp parameter: 'cb'
+      get :echo, echo: "Hello World", cb: "test"
       response.content_type.should include 'application/javascript'
       response.body.should == %|test({"response":{"echo":"Hello World"}});|
-      get :echo, :echo => "Hello World", :callback => "test"
+      get :echo, echo: "Hello World", callback: "test"
       response.content_type.should include 'application/json'
       response.body.should == %({"response":{"echo":"Hello World"}})
     end
 
     it 'should let you specify it on a per action level' do
-      controller_class.jsonp :only => [:test_data]
-      get :echo, :echo => "Hello World", :callback => "test"
+      controller_class.jsonp only: [:test_data]
+      get :echo, echo: "Hello World", callback: "test"
       response.content_type.should include 'application/json'
       response.body.should == %({"response":{"echo":"Hello World"}})
       stub(controller_class).test_data { {"other" => true} }
-      get :test_data, :callback => "test"
+      get :test_data, callback: "test"
       response.content_type.should include 'application/javascript'
       response.body.should == %|test({"response":{"other":true}});|
     end
 
     it 'should not wrap non-get actions' do
       controller_class.jsonp
-      post :echo, :echo => "Hello World", :callback => "test"
+      post :echo, echo: "Hello World", callback: "test"
       response.content_type.should include 'application/json'
       response.body.should == %({"response":{"echo":"Hello World"}})
     end
 
     it 'should have the correct content length' do
       controller_class.jsonp
-      get :echo, :echo => "Hello World", :callback => "test"
+      get :echo, echo: "Hello World", callback: "test"
       response.content_type.should include 'application/javascript'
       response.body.should == %|test({"response":{"echo":"Hello World"}});|
       response.headers['Content-Length'].to_i.should == Rack::Utils.bytesize(response.body)
@@ -393,7 +393,7 @@ describe RocketPants::Base do
   describe 'custom metadata' do
 
     it 'should allow custom metadata' do
-      get :test_metadata, :metadata => {:awesome => "1"}
+      get :test_metadata, metadata: {awesome: "1"}
       decoded = ActiveSupport::JSON.decode(response.body)
       decoded["awesome"].should == "1"
     end

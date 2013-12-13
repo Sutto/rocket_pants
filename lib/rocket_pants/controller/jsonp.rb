@@ -20,7 +20,7 @@ module RocketPants
         enable = options.delete(:enable) { true }
         param  = options.delete(:parameter).try(:to_sym)
         if enable
-          after_filter :wrap_response_in_jsonp, {:if => :jsonp_is_possible?}.reverse_merge(options)
+          after_filter :wrap_response_in_jsonp, {if: :jsonp_is_possible?}.reverse_merge(options)
           self._jsonp_parameter = param if param
         else
           skip_after_filter :wrap_response_in_jsonp, options

@@ -1,17 +1,17 @@
 TestRouter = ActionDispatch::Routing::RouteSet.new
 TestRouter.draw do
-  get  'echo', :to => 'test#echo'
-  put  'echo', :to => 'test#echo'
-  post 'echo', :to => 'test#echo'
-  get  'echo_session', :to => 'test#echo_session'
-  get  'echo_flash', :to => 'test#echo_flash'
+  get  'echo', to: 'test#echo'
+  put  'echo', to: 'test#echo'
+  post 'echo', to: 'test#echo'
+  get  'echo_session', to: 'test#echo_session'
+  get  'echo_flash', to: 'test#echo_flash'
   # Actual mockable endpoints
-  get 'exception',        :to => 'test#demo_exception'
-  get 'test_data',        :to => 'test#test_data'
-  get 'test_error',       :to => 'test#test_error'
-  get 'test_render_json', :to => 'test#test_render_json'
-  get 'test_responds',    :to => 'test#test_responds'
-  get 'test_metadata',    :to => 'test#test_metadata'
+  get 'exception',        to: 'test#demo_exception'
+  get 'test_data',        to: 'test#test_data'
+  get 'test_error',       to: 'test#test_error'
+  get 'test_render_json', to: 'test#test_render_json'
+  get 'test_responds',    to: 'test#test_responds'
+  get 'test_metadata',    to: 'test#test_metadata'
 end
 TestRouter.finalize!
 
@@ -35,15 +35,15 @@ class TestController < RocketPants::Base
   end
 
   def echo
-    expose :echo => params[:echo]
+    expose echo: params[:echo]
   end
   
   def echo_session
-    expose :echo => session[:echo]
+    expose echo: session[:echo]
   end
 
   def echo_flash
-    expose :echo => request.flash[:echo]
+    expose echo: request.flash[:echo]
   end
   
   def demo_exception
@@ -67,12 +67,12 @@ class TestController < RocketPants::Base
   end
 
   def test_metadata
-    expose({:test => true}, :metadata => params[:metadata])
+    expose({test: true}, metadata: params[:metadata])
   end
 
   def premature_termination
     error! :throtted
-    exposes :finished => true
+    exposes finished: true
   end
   
 end

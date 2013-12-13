@@ -7,7 +7,7 @@ module RocketPants
     # @param [Hash] attributes any other attributes for the link
     def link(rel, uri, attributes = {})
       headers['Link'] ||= []
-      attributes = {:rel => rel}.merge(attributes)
+      attributes = {rel: rel}.merge(attributes)
       link = "<#{uri}>"
       attributes.each_pair { |k, v| link << "; #{k}=\"#{v}\"" }
       headers['Link'] << link
@@ -29,10 +29,10 @@ module RocketPants
     def expose_metadata(metadata)
       super.tap do |meta|
         if RocketPants.header_metadata? && (pagination = meta[:pagination])
-          links :next  => (pagination[:next] && page_url(pagination[:next])),
-                :prev  => (pagination[:previous] && page_url(pagination[:previous])),                
-                :last  => (pagination[:pages] && page_url(pagination[:pages])),
-                :first => page_url(1)
+          links next:  (pagination[:next] && page_url(pagination[:next])),
+                prev:  (pagination[:previous] && page_url(pagination[:previous])),                
+                last:  (pagination[:pages] && page_url(pagination[:pages])),
+                first: page_url(1)
         end
       end
     end

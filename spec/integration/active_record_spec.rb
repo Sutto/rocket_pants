@@ -3,10 +3,10 @@ require 'spec_helper'
 require 'active_record'
 require 'rocket_pants/active_record'
 
-describe RocketPants::Base, 'active record integration', :integration => true, :target => 'active_record' do
+describe RocketPants::Base, 'active record integration', integration: true, target: 'active_record' do
   include ControllerHelpers
 
-  use_reversible_tables :fish, :scope => :all
+  use_reversible_tables :fish, scope: :all
 
   let(:controller_class) do
     Class.new(TestController)
@@ -43,7 +43,7 @@ describe RocketPants::Base, 'active record integration', :integration => true, :
   end
 
   it 'should automatically map ActiveRecord::RecordNotUnique' do
-    attrs = {:token => "a", :name => "Test Fish", :latin_name => "Latin Name", :child_number => 5}
+    attrs = {token: "a", name: "Test Fish", latin_name: "Latin Name", child_number: 5}
     Fish.create! attrs
     action_is { Fish.create!(attrs); raise "This should not happen..." }
     get :test_data

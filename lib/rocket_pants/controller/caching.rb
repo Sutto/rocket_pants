@@ -11,7 +11,7 @@ module RocketPants
       class_attribute :cached_actions, :caching_timeout, :caching_options
       self.caching_timeout     = 5.minutes
       self.cached_actions      = Set.new
-      self.caching_options     = {:public => true}
+      self.caching_options     = {public: true}
     end
     
     class << self
@@ -90,7 +90,7 @@ module RocketPants
       # @example Setting up caching on a series of actions
       #   caches :index, :show
       # @example Setting up caching with options
-      #   caches :index, :show, :cache_for => 3.minutes
+      #   caches :index, :show, cache_for: 3.minutes
       def caches(*args)
         options     = args.extract_options!
         self.cached_actions += Array.wrap(args).map(&:to_s).compact

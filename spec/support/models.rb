@@ -14,8 +14,8 @@ fish = ReversibleData.add(:fish) do |t|
 end
 
 fish.define_model do
-  validates :name, :child_number, :presence => true
+  validates :name, :child_number, presence: true
   # Yes, I know it's technically not right.
-  validates :latin_name, :length => {:minimum => 5}, :format => /\A(\w+) (\w+)\Z/
-  validates :child_number, :numericality => true
+  validates :latin_name, length: {minimum: 5}, format: /\A(\w+) (\w+)\Z/
+  validates :child_number, numericality: true
 end

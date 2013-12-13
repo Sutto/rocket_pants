@@ -12,12 +12,12 @@ module RocketPants
     end
     
     NAMED_NOTIFIER_CALLBACKS = {
-      :airbrake => lambda { |c, e, r|
+      airbrake: lambda { |c, e, r|
         unless c.send(:airbrake_local_request?)
           c.error_identifier = Airbrake.notify(e, c.send(:airbrake_request_data))
         end
       },
-      :honeybadger => lambda { |controller, exception, request|
+      honeybadger: lambda { |controller, exception, request|
         if controller.respond_to?(:notify_honeybadger, true)
           controller.send(:notify_honeybadger, exception)
         end
@@ -46,7 +46,7 @@ module RocketPants
     # to be sent back to the client.
     def lookup_error_extras(exception)
       extras = super
-      extras = extras.merge(:error_identifier => error_identifier) if error_identifier
+      extras = extras.merge(error_identifier: error_identifier) if error_identifier
       extras
     end
 

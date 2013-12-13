@@ -45,10 +45,10 @@ class FoodsController < RocketPants::Base
 
   # The list of foods is paginated for 5 minutes, the food itself is cached
   # until it's modified (using Efficient Validation)
-  caches :index, :show, :caches_for => 5.minutes
+  caches :index, :show, caches_for: 5.minutes
 
   def index
-    expose Food.paginate(:page => params[:page])
+    expose Food.paginate(page: params[:page])
   end
 
   def show
@@ -61,8 +61,8 @@ end
 And in the router we'd just use the normal REST-like routes in Rails:
 
 ```ruby
-api :version => 1 do
-  resources :foods, :only => [:index, :show]
+api version: 1 do
+  resources :foods, only: [:index, :show]
 end
 ```
 
@@ -117,11 +117,11 @@ To change this parameter, specify the `parameter` option like so:
 
 ```ruby
 class MyController < RocketPants::Base
-  jsonp :parameter => :jsonp
+  jsonp parameter: :jsonp
 end
 ```
 
-Finally, to disable it in a subclass, simple call `jsonp` in the child and pass `:enable => false` as an option.
+Finally, to disable it in a subclass, simple call `jsonp` in the child and pass `enable: false` as an option.
 
 #### Header Metadata
 
@@ -145,7 +145,7 @@ For batch adding links, you can use the `links` method:
 ```ruby
 def index
   # Probably not the best example...
-  links :next => random_wallpaper_path, :prev => random_wallpaper_path
+  links next: random_wallpaper_path, prev: random_wallpaper_path
   expose Wallpaper.random
 end
 ```
@@ -166,11 +166,11 @@ class FoodsClient < RocketPants::Client
   end
 
   def foods
-    get 'foods', :transformer => Food
+    get 'foods', transformer: Food
   end
 
   def food(id)
-    get "foods/#{id}", :transformer => Food
+    get "foods/#{id}", transformer: Food
   end
 
 end
@@ -270,8 +270,8 @@ And in the case of multiple versions, I strongly encourage namespaces the contro
 Next, in your `config/routes.rb` file, you can also declare versions using the following syntax and it will automatically set up the routes for you:
 
 ```ruby
-api :version => 1 do
-  get 'x', :to => 'test#item'
+api version: 1 do
+  get 'x', to: 'test#item'
 end
 ```
 
@@ -280,8 +280,8 @@ Which will route `GET /1/x` to `TestController#item`.
 Likewise, you can specify a route for multiple versions by:
 
 ```ruby
-api :versions => 1..3 do
-  get 'x', :to => 'test#item'
+api versions: 1..3 do
+  get 'x', to: 'test#item'
 end
 ```
 
@@ -475,7 +475,7 @@ a list of *all* registered errors, including custom ones.
 Note that error also excepts a Hash of contextual options, many which will be passed through to the Rails I18N subsystem. E.g:
 
 ```ruby
-error! :throttled, :max_per_hour => 100
+error! :throttled, max_per_hour: 100
 ```
 
 Will look up the translation `rocket_pants.errors.throttled` in your I18N files, and call them with `:max_per_hour` as an argument.
@@ -483,7 +483,7 @@ Will look up the translation `rocket_pants.errors.throttled` in your I18N files,
 Finally, You can use this to also pass custom values to include in the response, e.g:
 
 ```ruby
-error! :throttled, :metadata => {:code => 123}
+error! :throttled, metadata: {code: 123}
 ```
 
 Will return something similar to:
@@ -578,7 +578,7 @@ class UsersController < RocketPants::Base
 
   # Time based, e.g. collections, will be cached for 5 minutes - whilst singular
   # items e.g. show will use etag-based caching:
-  caches :show, :index, :caches_for => 5.minutes
+  caches :show, :index, caches_for: 5.minutes
 
   def index
     expose User.all
@@ -601,10 +601,10 @@ parameter on any http requests, e.g:
 
 ```ruby
 # get
-get :index, :version => 1
+get :index, version: 1
 
 # post
-post :index, :version => 1, :payload => { :foo => 'bar' ... }
+post :index, version: 1, payload: { foo: 'bar' ... }
 ```
 
 Otherwise it will raise an exception.
@@ -633,8 +633,8 @@ Likewise, it adds the following helper methods:
 To set up the integration, in your `spec/spec_helper.rb` add:
 
 ```ruby
-config.include RocketPants::TestHelper,    :type => :controller
-config.include RocketPants::RSpecMatchers, :type => :controller
+config.include RocketPants::TestHelper,    type: :controller
+config.include RocketPants::RSpecMatchers, type: :controller
 ```
 
 Inside the `RSpec.configure do |config|` block.

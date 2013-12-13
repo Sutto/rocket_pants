@@ -6,7 +6,7 @@ module RocketPants
     extend ActiveSupport::Concern
 
     included do
-      rescue_from RocketPants::Error, :with => :render_error
+      rescue_from RocketPants::Error, with: :render_error
       class_attribute :error_mapping
       self.error_mapping = {}
     end
@@ -22,7 +22,7 @@ module RocketPants
         to = (to || blk)
         raise ArgumentError, "Either an option must be provided or a block given." unless to
         error_mapping[from] = (to || blk)
-        rescue_from from, :with => :render_error
+        rescue_from from, with: :render_error
       end
 
     end
@@ -125,8 +125,8 @@ module RocketPants
       end
       self.status = lookup_error_status(exception)
       render_json({
-        :error             => lookup_error_name(exception).to_s,
-        :error_description => lookup_error_message(exception)
+        error:             lookup_error_name(exception).to_s,
+        error_description: lookup_error_message(exception)
       }.merge(lookup_error_metadata(exception)))
     end
 

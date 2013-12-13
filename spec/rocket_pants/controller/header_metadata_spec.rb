@@ -12,7 +12,7 @@ describe RocketPants::HeaderMetadata do
 
     let(:users) do
       1.upto(5) do |offset|
-        User.create :age => (18 + offset)
+        User.create age: (18 + offset)
       end
       User.all
     end

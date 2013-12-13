@@ -22,7 +22,7 @@ module ControllerHelpers
     path_parameters[:version] = 1 unless path_parameters.has_key?(:version)
     params[:action]  = action_name.to_s
     @content = nil
-    @response = @request.get('/', {:params => params, 'action_dispatch.request.path_parameters' => path_parameters}.reverse_merge(others))
+    @response = @request.get('/', {params: params, 'action_dispatch.request.path_parameters' => path_parameters}.reverse_merge(others))
   end
   
   def post(action_name, params = {}, path_parameters = {}, others = {})
@@ -30,7 +30,7 @@ module ControllerHelpers
     path_parameters[:version] = 1 unless path_parameters.has_key?(:version)
     params[:action]  = action_name.to_s
     @content = nil
-    @response = @request.post('/', {:params => params, 'action_dispatch.request.path_parameters' => path_parameters}.reverse_merge(others))
+    @response = @request.post('/', {params: params, 'action_dispatch.request.path_parameters' => path_parameters}.reverse_merge(others))
   end
   
   def content

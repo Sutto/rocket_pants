@@ -1,17 +1,17 @@
 require 'spec_helper'
 require 'active_model_serializers'
 
-describe RocketPants::Base, 'active_model_serializers integration', :integration => true, :target => 'active_model_serializers' do
+describe RocketPants::Base, 'active_model_serializers integration', integration: true, target: 'active_model_serializers' do
   include ControllerHelpers
 
-  use_reversible_tables :fish, :scope => :all
+  use_reversible_tables :fish, scope: :all
 
   # t.string  :name
   # t.string  :latin_name
   # t.integer :child_number
   # t.string  :token
 
-  let(:fish)   { Fish.create! :name => "Test Fish", :latin_name => "Fishus fishii", :child_number => 1, :token => "xyz" }
+  let(:fish)   { Fish.create! name: "Test Fish", latin_name: "Fishus fishii", child_number: 1, token: "xyz" }
   after(:each) { Fish.delete_all }
 
   class SerializerA < ActiveModel::Serializer
@@ -46,7 +46,7 @@ describe RocketPants::Base, 'active_model_serializers integration', :integration
 
     it 'should let you specify a custom serializer' do
       mock(TestController).test_data { fish }
-      mock(TestController).test_options { {:serializer => SerializerA} }
+      mock(TestController).test_options { {serializer: SerializerA} }
       mock.proxy(SerializerA).new(fish, anything) { |r| r }
       get :test_data
       content[:response].should be_present
@@ -68,7 +68,7 @@ describe RocketPants::Base, 'active_model_serializers integration', :integration
 
     it 'should pass through url options' do
       mock(TestController).test_data { fish }
-      mock(TestController).test_options { {:serializer => SerializerA} }
+      mock(TestController).test_options { {serializer: SerializerA} }
       mock.proxy(SerializerA).new(fish, rr_satisfy { |h| h[:url_options].present? }) { |r| r }
       get :test_data
       content[:response].should be_present
@@ -95,7 +95,7 @@ describe RocketPants::Base, 'active_model_serializers integration', :integration
     it 'should support each_serializer' do
       mock(TestController).test_data { [fish] }
       mock.proxy(SerializerA).new(fish, anything) { |r| r }
-      mock(TestController).test_options { {:each_serializer => SerializerA} }
+      mock(TestController).test_options { {each_serializer: SerializerA} }
       get :test_data
       content[:response].should be_present
       content[:response].should be_a Array
@@ -120,7 +120,7 @@ describe RocketPants::Base, 'active_model_serializers integration', :integration
 
     it 'should pass through url options' do
       mock(TestController).test_data { [fish] }
-      mock(TestController).test_options { {:each_serializer => SerializerA} }
+      mock(TestController).test_options { {each_serializer: SerializerA} }
       mock.proxy(SerializerA).new(fish, rr_satisfy { |h| h[:url_options].present? }) { |r| r }
       get :test_data
       content[:response].should be_present
@@ -132,7 +132,7 @@ describe RocketPants::Base, 'active_model_serializers integration', :integration
 
     it 'should default to root being false' do
       mock(TestController).test_data { [fish] }
-      mock(TestController).test_options { {:each_serializer => SerializerA} }
+      mock(TestController).test_options { {each_serializer: SerializerA} }
       mock.proxy(SerializerA).new(fish, rr_satisfy { |h| h[:root] == false }) { |r| r }
       get :test_data
       content[:response].should be_present

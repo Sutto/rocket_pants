@@ -33,4 +33,4 @@ namespace :spec do
   end
 end
 
-task :default => ([:spec] + INTEGRATION_LIBS.map { |l| "spec:integration:#{l}" })
+task default: ([:spec] + INTEGRATION_LIBS.map { |l| "spec:integration:#{l}" })

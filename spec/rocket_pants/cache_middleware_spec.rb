@@ -10,7 +10,7 @@ describe RocketPants::CacheMiddleware do
 
   it 'should return the correct status with the rails default etags' do
     # Now, do the request
-    get(:echo, {:echo => "same thing"}, {}, 'HTTP_IF_NONE_MATCH' => '"6f5d89fd787b63b076227b8ddcd27e27"')
+    get(:echo, {echo: "same thing"}, {}, 'HTTP_IF_NONE_MATCH' => '"6f5d89fd787b63b076227b8ddcd27e27"')
     response.status.should == 200 # Not 304.
   end
 

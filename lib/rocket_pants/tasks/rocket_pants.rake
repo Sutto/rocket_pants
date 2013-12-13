@@ -1,7 +1,7 @@
 namespace :rocket_pants do
 
   desc "Generates a pretty listing of errors registered in the application"
-  task :errors => :environment do
+  task errors: :environment do
     errors = RocketPants::Errors.all
     output = [["Error Name", "HTTP Status", "Class Name"]]
     errors.keys.map(&:to_s).sort.each do |key|

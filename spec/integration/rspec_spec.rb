@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe TestController, 'rspec integration', :integration => true, :target => 'rspec' do
+describe TestController, 'rspec integration', integration: true, target: 'rspec' do
   # Hack to allow us to include the ActionController::TestCase::Behaviour module
   def self.setup(*args); end
   def self.teardown(*args); end
@@ -23,8 +23,8 @@ describe TestController, 'rspec integration', :integration => true, :target => '
 
     context "given a request with parameters" do
       it "allows you to asset what should have been exposed by an action" do
-        get :echo, :echo => "ping"
-        response.should have_exposed(:echo => "ping")
+        get :echo, echo: "ping"
+        response.should have_exposed(echo: "ping")
       end
     end
 
@@ -37,15 +37,15 @@ describe TestController, 'rspec integration', :integration => true, :target => '
 
     context "given a request with session" do
       it "allows you to asset what should have been exposed by an action" do
-        get :echo_session, nil, { :echo => "ping" }, nil
-        response.should have_exposed(:echo => "ping")
+        get :echo_session, nil, { echo: "ping" }, nil
+        response.should have_exposed(echo: "ping")
       end
     end
 
     context "given a request with flash" do
       it "allows you to asset what should have been exposed by an action" do
-        get :echo_flash, nil, nil, { :echo => "ping" }
-        response.should have_exposed(:echo => "ping")
+        get :echo_flash, nil, nil, { echo: "ping" }
+        response.should have_exposed(echo: "ping")
       end
     end
 

@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe RocketPants::Base, 'will_paginate integration', :integration => true, :target => 'will_paginate' do
+describe RocketPants::Base, 'will_paginate integration', integration: true, target: 'will_paginate' do
   include ControllerHelpers
 
   before :all do
@@ -10,14 +10,14 @@ describe RocketPants::Base, 'will_paginate integration', :integration => true, :
 
   describe 'on models' do
 
-    use_reversible_tables :users, :scope => :all
+    use_reversible_tables :users, scope: :all
 
     before :all do
-      25.times { |i| User.create :age => (18 + i) }
+      25.times { |i| User.create age: (18 + i) }
     end
 
     it 'should let you expose a classically paginated collection' do
-      mock(TestController).test_data { User.paginate :per_page => 5, :page => 1 }
+      mock(TestController).test_data { User.paginate per_page: 5, page: 1 }
       get :test_data
       content[:response].should be_present
       content[:count].should == 5
@@ -52,12 +52,12 @@ describe RocketPants::Base, 'will_paginate integration', :integration => true, :
       get :test_data
       content.should have_key(:pagination)
       content[:pagination].should == {
-        :next => 3,
-        :current => 2,
-        :previous => 1,
-        :pages => 20,
-        :count => 200,
-        :per_page => 10
+        next: 3,
+        current: 2,
+        previous: 1,
+        pages: 20,
+        count: 200,
+        per_page: 10
       }.stringify_keys
       content.should have_key(:count)
       content[:count].should == 10
