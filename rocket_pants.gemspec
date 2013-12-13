@@ -8,7 +8,7 @@ Gem::Specification.new do |s|
   s.platform    = Gem::Platform::RUBY
   s.authors     = ["Darcy Laycock"]
   s.email       = ["sutto@sutto.net"]
-  s.homepage    = "http://github.com/filtersquad"
+  s.homepage    = "http://github.com/Sutto/rocket_pants"
   s.summary     = "JSON API love for Rails and ActionController"
   s.description = "Rocket Pants adds JSON API love to Rails and ActionController, making it simpler to build API-oriented controllers."
   s.required_rubygems_version = ">= 1.3.6"

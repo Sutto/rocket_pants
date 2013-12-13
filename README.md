@@ -1,4 +1,6 @@
-# Rocket Pants! [![Build Status](https://secure.travis-ci.org/filtersquad/rocket_pants.png?branch=master)](http://travis-ci.org/filtersquad/rocket_pants)
+# Rocket Pants! [![Build Status](https://secure.travis-ci.org/Sutto/rocket_pants.png?branch=master)](http://travis-ci.org/Sutto/rocket_pants)
+
+**Please Note:** Work on RocketPants 2.0 is currently underway on the [2.0-rewrite](https://github.com/Sutto/rocket_pants/tree/2.0-rewrite) branch. Please check there before requesting features.
 
 ## Introduction
 
@@ -15,7 +17,7 @@ Why use RocketPants over alternatives like Grape or normal Rails? The reasons we
 3. **[Extended Error Support](#registering--dealing-with-errors)** - RocketPants has a built in framework to manage errors it knows how to handle (in the forms of mapping exceptions to a well defined JSON structure) as well as tools to make it simple to hook up to Airbrake and do things such as including an error identifier in the response.
 4. **[It's built on ActionPack](#general-structure)** - One of the key differentiators to Grape is that RocketPants embraces ActionPack and uses the modular components included from Rails 3.0 onwards to provide things you're familiar with already such as filters. If you're using Strong Parameters (e.g. in Rails 4), we'll even give you support for that.
 5. **[Semi-efficient Caching Support](#implementing-efficient-validation)** - Thanks to a combination of Rails middleware and collection vs. resource distinctions, RocketPants makes it relatively easy to implement "Efficient Validation" (See [here](#implementing-efficient-validation)). As a developer, this means you get even more benefits of http caching where possible, without the need to generate full requests when etags are present.
-6. **[Simple tools to consume RocketPants apis](#example-client-code)** - RocketPants includes the `RocketPants::Client` class which builds upon [APISmith](https://github.com/filtersquad/api_smith) to make it easier to build clients e.g. automatically converting paginated responses back.
+6. **[Simple tools to consume RocketPants apis](#example-client-code)** - RocketPants includes the `RocketPants::Client` class which builds upon [APISmith](https://github.com/Sutto/api_smith) to make it easier to build clients e.g. automatically converting paginated responses back.
 7. **[Built-in Header Metadata Support](#header-metadata)** - APIs can easily expose `Link:` headers (it's even partly built-in for paginated data - see below), and request metadata (e.g. Object count, etc.) can easily be embedded in the headers of the response, making useful `HEAD` requests.
 8. **[Out of the Box ActiveRecord mapping](#built-in-activerecord-errors)** - We'll automatically take care of mapping `ActiveRecord::RecordNotFound`, `ActiveRecord::RecordNotSaved` and `ActiveRecord::RecordInvalid` for you, even including validation messages where possible.
 9. **[Support for active_model_serializers](https://github.com/rails-api/active_model_serializers)** - If you want to use ActiveModelSerializers, we'll take care of it. Even better, in your expose call, pass through `:serializer` as expected and we'll automatically take care of invoking it for you.
@@ -675,4 +677,4 @@ Other than that, our guidelines very closely match the GemCutter guidelines [her
 
 ## License
 
-RocketPants is released under the MIT License (see the [license file](https://github.com/filtersquad/rocket_pants/blob/master/LICENSE)) and is copyright Filter Squad, 2012.
+RocketPants is released under the MIT License (see the [license file](https://github.com/Sutto/rocket_pants/blob/master/LICENSE)) and is copyright Filter Squad and Darcy Laycock, 2013.
