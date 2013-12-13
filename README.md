@@ -4,9 +4,9 @@
 
 ## Introduction
 
-First thing's first, you're probably asking yourself - "Why the ridiculous name?". It's simple, really - RocketPants is memorable, and sounds completely bad ass. - everything a library needs.
-
-At its core, RocketPants is a set of tools (built around existing toolsets such as ActionPack) to make it easier to build well-designed APIs in Ruby and more importantly, along side Rails. You can think of it like [Grape](https://github.com/intridea/grape), a fantastic library which RocketPants was originally inspired by but with deeper Rails and ActionPack integration.
+RocketPants is a tool kit on top of [Rails](#) and, in particular, [rails-api](#) to provide tools
+for building Rich APIs. It adds a collection of tools which work together to make it easier for developers
+to build rich, well behaved APIs supporting a number of best practices.
 
 ## Key Features
 
