@@ -18,7 +18,7 @@ namespace :spec do
       desc "Run the #{lib} integrate specs"
       RSpec::Core::RakeTask.new(lib.to_sym) do |t|
         t.rspec_opts = "--tag integration"
-        t.pattern = "./spec/integration/#{lib}_spec.rb"
+        t.pattern = "./spec/**/#{lib}_spec.rb"
       end
 
     end
