@@ -3,6 +3,7 @@ module RocketPants
 
     require 'rocket_pants/converters/base'
     require 'rocket_pants/converters/serializable_object'
+    require 'rocket_pants/converters/ams'
     require 'rocket_pants/converters/collection'
     require 'rocket_pants/converters/paginated'
     require 'rocket_pants/converters/kaminari'
@@ -10,7 +11,7 @@ module RocketPants
 
     PAGINATED  = [WillPaginate, Kaminari]
     COLLECTION = [*PAGINATED, Collection]
-    INDIVIDUAL = [SerializableObject, Base]
+    INDIVIDUAL = [AMS, SerializableObject, Base]
 
     ALL = [*COLLECTION, *INDIVIDUAL]
 

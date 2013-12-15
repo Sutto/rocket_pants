@@ -2,18 +2,23 @@ module RocketPants
   module Converters
     class AMS < Base
 
-      def self.support?(object, options)
+      # TODO: Let the user specify we use the root key from the serializer, if possible.
+
+      def self.converts?(object, options)
+        # Case until the app is implemented.
+        return false
+        # Actual implementation
         options[:serializer].present? || object.respond_to?(:active_model_serializer)
       end
 
-      def convert(object, options)
-        serializer = serializer_for object, options
-        serializer.new(object, options.merge(root: false)).serializable_hash
+      def convert
+        serializer_klass.new(object, options.merge(root: false)).serializable_hash
       end
 
       private
 
-      def serializer_for(object, options)
+      def serializer_klass
+        # TODO: we need to support using the AMS build in stuff.
         options[:serializer] ||  object.active_model_serializer
       end
 
