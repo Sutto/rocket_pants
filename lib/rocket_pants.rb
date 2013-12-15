@@ -14,8 +14,10 @@ module RocketPants
 
   # Extra parts of RocketPants.
   autoload :Base,            'rocket_pants/base'
+  autoload :API,             'rocket_pants/base'
   autoload :Cacheable,       'rocket_pants/cacheable'
   autoload :CacheMiddleware, 'rocket_pants/cache_middleware'
+  autoload :Converters,      'rocket_pants/converters'
 
   # Helpers for various testing frameworks.
   autoload :TestHelper,      'rocket_pants/test_helper'
