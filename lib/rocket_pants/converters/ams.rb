@@ -5,10 +5,7 @@ module RocketPants
       # TODO: Let the user specify we use the root key from the serializer, if possible.
 
       def self.converts?(object, options)
-        # Case until the app is implemented.
-        return false
-        # Actual implementation
-        options[:serializer].present? || object.respond_to?(:active_model_serializer)
+        options[:serializer].present? || (object.respond_to?(:active_model_serializer) && object.active_model_serializer)
       end
 
       def convert

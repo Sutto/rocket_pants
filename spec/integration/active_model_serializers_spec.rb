@@ -4,7 +4,7 @@ require 'active_model_serializers'
 describe RocketPants::Base, 'active_model_serializers integration', integration: true, target: 'active_model_serializers' do
   include ControllerHelpers
 
-  use_reversible_tables :fish, scope: :all
+  use_reversible_tables :fish, scope: :each
 
   # t.string  :name
   # t.string  :latin_name
@@ -12,7 +12,6 @@ describe RocketPants::Base, 'active_model_serializers integration', integration:
   # t.string  :token
 
   let(:fish)   { Fish.create! name: "Test Fish", latin_name: "Fishus fishii", child_number: 1, token: "xyz" }
-  after(:each) { Fish.delete_all }
 
   class SerializerA < ActiveModel::Serializer
     attributes :name, :latin_name
