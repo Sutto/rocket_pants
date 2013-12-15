@@ -54,13 +54,37 @@ describe RocketPants::Converters::AMS, integration: true, target: 'active_model_
 
     it 'should proxy the AMS metadata'
 
-    it 'should work with an array serializer'
+    it 'should work with an array serializer' do
+      array = [fish]
+      mock(fish).active_model_serializer { SerializerA }
+      result = described_class.new(array, serializer: ActiveModel::ArraySerializer).convert
+      result.should == [{name: fish.name, latin_name: fish.latin_name}]
+    end
 
-    it 'should work with a specified serializer'
+    it 'should work with an array serializer and each_serializer' do
+      array = [fish]
+      stub(fish).active_model_serializer { SerializerA }
+      result = described_class.new(array, serializer: ActiveModel::ArraySerializer, each_serializer: SerializerB).convert
+      result.should == [{name: fish.name, child_number: fish.child_number}]
+    end
 
-    it 'should work with the serializer from active_model_serializer'
+    it 'should work with a specified serializer' do
+      stub(fish).active_model_serializer { SerializerA }
+      result = described_class.new(fish, serializer: SerializerB).convert
+      result.should == {name: fish.name, child_number: fish.child_number}
+    end
 
-    it 'should work with default serializer by name'
+    it 'should work with the serializer from active_model_serializer' do
+      stub(fish).active_model_serializer { SerializerA }
+      result = described_class.new(fish, {}).convert
+      result.should == {name: fish.name, latin_name: fish.latin_name}
+    end
+
+    it 'should work with never serialize the root' do
+      stub(fish).active_model_serializer { SerializerA }
+      result = described_class.new(fish, {root: 'x'}).convert
+      result.should == {name: fish.name, latin_name: fish.latin_name}
+    end
 
   end
 

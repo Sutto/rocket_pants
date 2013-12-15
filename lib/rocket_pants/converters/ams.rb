@@ -9,10 +9,18 @@ module RocketPants
       end
 
       def convert
-        serializer_klass.new(object, options.merge(root: false)).serializable_hash
+        if serializer.respond_to?(:serializable_array)
+          serializer.serializable_array
+        else
+          serializer.serializable_hash
+        end
       end
 
       private
+
+      def serializer
+        @serializer ||= serializer_klass.new(object, options.merge(root: false))
+      end
 
       def serializer_klass
         # TODO: we need to support using the AMS build in stuff.
