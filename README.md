@@ -569,7 +569,7 @@ When the user hits the index endpoint, it will generate an expiry-based caching 
 
 ## CORS
 
-If you are new to [CORS](http://www.w3.org/TR/access-control/#simple-cross-origin-request-and-actual-r) here is nice intro [Cross-domain Ajax with Cross-Origin Resource Sharing](http://www.nczonline.net/blog/2010/05/25/cross-domain-ajax-with-cross-origin-resource-sharing/).
+If you are new to [CORS](http://www.w3.org/TR/access-control/#simple-cross-origin-request-and-actual-r) here is a nice intro [Cross-domain Ajax with Cross-Origin Resource Sharing](http://www.nczonline.net/blog/2010/05/25/cross-domain-ajax-with-cross-origin-resource-sharing/).
 
 ### CORS via Rack::Cors
 
