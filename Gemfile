@@ -17,5 +17,6 @@ if (wp_version = ENV['WILL_PAGINATE_VERSION'])
 end
 
 gem 'active_model_serializers'
+gem 'rack-cors'
 
 gemspec

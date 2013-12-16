@@ -20,6 +20,7 @@ Why use RocketPants over alternatives like Grape or normal Rails? The reasons we
 6. **[Built-in Header Metadata Support](#header-metadata)** - APIs can easily expose `Link:` headers (it's even partly built-in for paginated data - see below), and request metadata (e.g. Object count, etc.) can easily be embedded in the headers of the response, making useful `HEAD` requests.
 7. **[Out of the Box ActiveRecord mapping](#built-in-activerecord-errors)** - We'll automatically take care of mapping `ActiveRecord::RecordNotFound`, `ActiveRecord::RecordNotSaved` and `ActiveRecord::RecordInvalid` for you, even including validation messages where possible.
 8. **[Support for active_model_serializers](https://github.com/rails-api/active_model_serializers)** - If you want to use ActiveModelSerializers, we'll take care of it. Even better, in your expose call, pass through `:serializer` as expected and we'll automatically take care of invoking it for you.
+9. **[CORS](#cors)** (via [Rack::Cors](https://github.com/cyu/rack-cors)) - If you need [CORS Support](http://www.w3.org/TR/access-control/#simple-cross-origin-request-and-actual-r) you can configure it in your application.rb to allow access from specific origins.
 
 ## Examples
 
@@ -565,6 +566,69 @@ end
 ```
 
 When the user hits the index endpoint, it will generate an expiry-based caching header that caches the result for up to 5 minutes. When the user instead hits the show endpoint, it will generate a special etag that contains and object identifier portion and an object cache key. Inside `RocketPants.cache`, we store the mapping and then inside `RocketPants::CacheMiddleware`, we simply check if the given cache key matches the specified object identifier. If it does, we return a not modified response otherwise we pass it through to controller - giving the advantage of efficient caching without having to hit the full database on every request.
+
+## CORS
+
+If you are new to [CORS](http://www.w3.org/TR/access-control/#simple-cross-origin-request-and-actual-r) here is nice intro [Cross-domain Ajax with Cross-Origin Resource Sharing](http://www.nczonline.net/blog/2010/05/25/cross-domain-ajax-with-cross-origin-resource-sharing/).
+
+### CORS via Rack::Cors
+
+We use [Rack::Cors](https://github.com/cyu/rack-cors) middleware to allow a fine grained CORS configuration.
+
+Add in `config/application.rb` respective `config/environments/(development|production).rb` if you need different settings in development or production.
+
+```ruby
+config.middleware.insert_before "ActionDispatch::Static", "Rack::Cors" do
+  allow do
+    origins '*'
+    resource '*',
+      headers: :any,
+      expose: ['Some-Custom-Response-Header'],
+      methods: [:get, :post, :put, :delete, :options],
+      max_age: 600
+  end
+end
+```
+
+```ruby
+config.middleware.insert_before "ActionDispatch::Static", "Rack::Cors" do
+  allow do
+    origins 'localhost:8000', /http:\/\/192\.168\.0\.\d{1,3}(:\d+)?/ # regular expressions can be used here
+    resource '/api/*',
+      headers: ['accept', 'authorization', 'content-type'],
+      methods: [:get, :post, :put, :delete],
+      max_age: 600
+  end
+end
+```
+
+```ruby
+config.middleware.insert_before "ActionDispatch::Static", "Rack::Cors" do
+  allow do
+    origins 'localhost:8000'
+    resource '/api/read/*',
+      headers: ['accept', 'authorization'],
+      methods: [:get],
+      max_age: 600
+  end
+  
+  allow do
+    origins 'localhost:8000'
+    resource '/api/write/*',
+      headers: ['accept', 'authorization', 'content-type'],
+      methods: [:post, :put],
+      max_age: 600
+  end
+end
+```
+
+#### Debugging
+Add `debug: true, logger: Rails.logger` to the `insert_before` options to enable debug output in your logs. 
+```ruby
+config.middleware.insert_before "ActionDispatch::Static", "Rack::Cors", debug: true do
+  ...
+end
+```
 
 ## Using with RSpec
 
