@@ -623,7 +623,7 @@ end
 ```
 
 #### Debugging
-Add `debug: true, logger: Rails.logger` to the `insert_before` options to enable debug output in your logs. 
+Add `debug: true` to the `insert_before` options to enable debug output in your logs. 
 ```ruby
 config.middleware.insert_before "ActionDispatch::Static", "Rack::Cors", debug: true do
   ...
