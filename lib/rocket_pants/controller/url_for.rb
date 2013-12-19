@@ -3,7 +3,7 @@ module RocketPants
     
     def url_options
       options = super
-      options = options.merge(:version => version) if version.present?
+      options = options.merge(:version => params[:version]) if version.present?
       options
     end
     
