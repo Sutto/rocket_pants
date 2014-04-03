@@ -45,7 +45,7 @@ class FoodsController < RocketPants::Base
 
   # The list of foods is paginated for 5 minutes, the food itself is cached
   # until it's modified (using Efficient Validation)
-  caches :index, :show, :caches_for => 5.minutes
+  caches :index, :show, :cache_for => 5.minutes
 
   def index
     expose Food.paginate(:page => params[:page])
@@ -578,7 +578,7 @@ class UsersController < RocketPants::Base
 
   # Time based, e.g. collections, will be cached for 5 minutes - whilst singular
   # items e.g. show will use etag-based caching:
-  caches :show, :index, :caches_for => 5.minutes
+  caches :show, :index, :cache_for => 5.minutes
 
   def index
     expose User.all
