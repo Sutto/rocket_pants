@@ -13,23 +13,26 @@ describe RocketPants::Base, 'strong parameters integration' do
   end
 
   it "should map parameter missing error to bad request" do
-    mock(controller_class).test_error { raise ActionController::ParameterMissing.new :foo }
+
+    exception = ActionController::ParameterMissing.new :foo
+    mock(controller_class).test_error { raise exception  }
 
     with_config :pass_through_errors, false do
       get :test_error
       content[:error].should == "bad_request"
-      content[:error_description].should == "param not found: foo"
+      content[:error_description].should == exception.message
       response.should be_bad_request
     end
   end
 
   it "should map unpermitted parameters error to bad request" do
-    mock(controller_class).test_error { raise ActionController::UnpermittedParameters.new [:foo, :bar] }
+    exception = ActionController::UnpermittedParameters.new [:foo, :bar]
+    mock(controller_class).test_error { raise exception }
 
     with_config :pass_through_errors, false do
       get :test_error
       content[:error].should == "bad_request"
-      content[:error_description].should == "found unpermitted parameters: foo, bar"
+      content[:error_description].should == exception.message
       response.should be_bad_request
     end
   end

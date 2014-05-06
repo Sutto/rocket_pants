@@ -40,7 +40,7 @@ describe RocketPants::Linking do
     end
 
     it 'should not include links without a pagination url method' do
-      controller_class.send(:define_method, :page_url) { |item| def page_url(p); nil end }
+      controller_class.send(:define_method, :page_url) { |item| nil }
       get :test_data
       response.headers['Link'].should be_blank
     end
