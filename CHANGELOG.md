@@ -2,6 +2,10 @@
 
 **Please Note**: This change log only covers v1.3 forwards - apologies for anything missing prior to that.
 
+## Version 1.9.2
+
+* Support for Rails 4.1.0's changed Record Identifier class.
+
 ## Version 1.9.1
 
 * `encode_to_json` hook for internal refactoring.

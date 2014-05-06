@@ -4,7 +4,7 @@ $:.unshift lib unless $:.include?(lib)
 
 Gem::Specification.new do |s|
   s.name        = "rocket_pants"
-  s.version     = "1.9.1"
+  s.version     = "1.9.2"
   s.platform    = Gem::Platform::RUBY
   s.authors     = ["Darcy Laycock"]
   s.email       = ["sutto@sutto.net"]
