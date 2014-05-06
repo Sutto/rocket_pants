@@ -658,6 +658,7 @@ Inside the `RSpec.configure do |config|` block.
 - [Moncef Belyamani](https://github.com/monfresh) - README clarification.
 - [Jörg Schiller](https://github.com/joergschiller) - Strong Parameter support, `process` fixes.
 - [Aron Hegyi](https://github.com/ahegyi) - Doc tweaks for `:invalid_resource`.
+- [Manuel Meurer](https://github.com/manuelmeurer) for Doc tweaks.
 
 If you're not on this list and thing you should be, let @Sutto know.
 
