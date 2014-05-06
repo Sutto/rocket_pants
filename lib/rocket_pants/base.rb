@@ -6,13 +6,21 @@ module RocketPants
 
     abstract!
 
+    record_identifier_klass = nil
+    begin
+      require 'action_view/record_identifier'
+      record_identifier_klass = ActionView::RecordIdentifier
+    rescue LoadError => e
+      record_identifier_klass = ActionController::RecordIdentifier
+    end
+
     MODULES = [
       ActionController::HideActions,
       ActionController::UrlFor,
       ActionController::Redirecting,
       ActionController::ConditionalGet,
       ActionController::RackDelegation,
-      ActionController::RecordIdentifier,
+      record_identifier_klass,
       ActionController::HttpAuthentication::Basic::ControllerMethods,
       ActionController::HttpAuthentication::Digest::ControllerMethods,
       ActionController::HttpAuthentication::Token::ControllerMethods,
