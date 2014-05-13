@@ -70,6 +70,14 @@ module RocketPants
           Digest::MD5.hexdigest "#{object.class.name}/#{suffix}"
         end
       end
+
+      # Checks whether or not the given object can be used to generate an etag. This is used since we
+      # no longer know ahead of time whether or not a given object is singular / multiple.
+      #
+      # @param [Object, #rp_object_key] the object to check the status for.
+      def can_generate_etag_for?(object)
+        object.respond_to?(:rp_object_key) || object.respond_to?(:id)
+      end
     
       def normalise_etag(identifier_or_object)
         %("#{identifier_or_object.to_s}")
@@ -108,12 +116,12 @@ module RocketPants
       RocketPants.caching_enabled? && cached_actions.include?(action)
     end
     
-    def cache_response(resource, single_resource)
+    def cache_response(resource)
       # Add in the default options.
       response.cache_control.merge! caching_options
       # We need to set the etag based on the object when it is singular
       # Note that the object is responsible for clearing the etag cache.
-      if single_resource
+      if Caching.can_generate_etag_for?(resource)
         response["ETag"] = Caching.normalise_etag Caching.etag_for(resource)
       # Otherwise, it's a collection and we need to use time based caching.
       else
@@ -124,10 +132,10 @@ module RocketPants
     # The callback use to automatically cache the current response object, using it's
     # cache key as a guide. For collections, instead of using an etag we'll use the request
     # path as a cache key and instead use a timeout.
-    def post_process_exposed_object(resource, type, singular)
+    def post_process_exposed_object(resource)
       super # Make sure we invoke the old hook.
       if cache_action?
-        cache_response resource, singular
+        cache_response resource
       end
     end
       
