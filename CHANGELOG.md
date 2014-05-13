@@ -2,6 +2,11 @@
 
 **Please Note**: This change log only covers v1.3 forwards - apologies for anything missing prior to that.
 
+## Version 1.10.0
+
+* Remove .rvmrc because is deprecated in favor of .ruby-version and .ruby-gemset
+* 'expose' method now validates invalid single objects
+
 ## Version 1.9.2
 
 * Support for Rails 4.1.0's changed Record Identifier class.
