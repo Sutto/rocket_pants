@@ -43,7 +43,7 @@ class FoodsController < RocketPants::Base
 
   version 1
 
-  # The list of foods is paginated for 5 minutes, the food itself is cached
+  # The list of foods is cached for 5 minutes, the food itself is cached
   # until it's modified (using Efficient Validation)
   caches :index, :show, :cache_for => 5.minutes
 
