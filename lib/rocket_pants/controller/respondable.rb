@@ -98,7 +98,7 @@ module RocketPants
     def self.serialize_collection collection, options
       serializer = options.delete(:each_serializer)
       collection.map do |object|
-        serializer = object.active_model_serializer if object.respond_to?(:active_model_serializer) && serializer.nil?
+        serializer = object.active_model_serializer if object.respond_to?(:active_model_serializer)
         if serializer
           SerializerWrapper.new serializer, object
         else
