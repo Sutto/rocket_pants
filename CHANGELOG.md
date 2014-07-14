@@ -2,6 +2,10 @@
 
 **Please Note**: This change log only covers v1.3 forwards - apologies for anything missing prior to that.
 
+## Version 1.10.1
+
+* `next` on kaminari with an empty result set should return the correct value.
+
 ## Version 1.10.0
 
 * Remove .rvmrc because is deprecated in favor of .ruby-version and .ruby-gemset
