@@ -21,6 +21,16 @@ describe RocketPants::Base, 'kaminari integration', :integration => true, :targe
       25.times { |i| User.create :age => (18 + i) }
     end
 
+    it 'correctly works with an empty page' do
+      mock(TestController).test_data { User.where('0').page(1).per(5) }
+      get :test_data
+      content[:response].should == []
+      content[:count].should == 0
+      content[:pagination].should be_present
+      content[:pagination][:count].should == 0
+      content[:pagination][:next].should be_nil
+    end
+
     it 'should let you expose a kaminari-paginated collection' do
       mock(TestController).test_data { User.page(1).per(5) }
       get :test_data
