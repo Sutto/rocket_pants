@@ -49,6 +49,10 @@ class TestController < RocketPants::Base
   def demo_exception
     error! :throttled
   end
+
+  def test_head
+    head :created
+  end
   
   def test_data
     expose self.class.test_data, self.class.test_options

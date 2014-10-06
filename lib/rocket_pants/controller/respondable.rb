@@ -26,7 +26,7 @@ module RocketPants
     end
 
     def self.invalid?(object)
-      object.respond_to?(:invalid?) && object.invalid?
+      object.respond_to?(:errors) && object.errors.present?
     end
 
     def self.paginated?(object)
@@ -164,6 +164,13 @@ module RocketPants
       end
     end
     alias expose exposes
+
+    # Fixes head to return the correct content type for you api.
+    #
+    # See the ActionController build in version for definitions.
+    def head(status, options = {})
+      super status, options.merge(content_type: 'application/json')
+    end
 
     # Hooks in to allow you to perform pre-processing of objects
     # when they are exposed. Used for plugins to the controller.

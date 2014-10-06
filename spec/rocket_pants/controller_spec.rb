@@ -415,4 +415,15 @@ describe RocketPants::Base do
 
   end
 
+  context 'empty responses' do
+
+    it 'correctly returns a blank body' do
+      get :test_head
+      response.status.should == 201
+      response.body.should be_blank
+      response.content_type.should == 'application/json'
+    end
+
+  end
+
 end
