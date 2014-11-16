@@ -1,6 +1,11 @@
 # RocketPants Change Log
 
 **Please Note**: This change log only covers v1.3 forwards - apologies for anything missing prior to that.
+
+## Version 1.11.0
+
+* Support for RSpec >= 3.0
+
 ## Version 1.10.0
 
 * Remove .rvmrc because is deprecated in favor of .ruby-version and .ruby-gemset
