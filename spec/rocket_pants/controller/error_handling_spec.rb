@@ -226,7 +226,7 @@ describe RocketPants::ErrorHandling do
     it "should call the custom exception notifier callback" do
       with_config :pass_through_errors, false do
         get :test_error
-        @called_exception_notifier_callback.should be_true
+        @called_exception_notifier_callback.should be_truthy
       end
     end
 
