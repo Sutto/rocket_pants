@@ -40,7 +40,14 @@ module RocketPants
     end
 
     def self.differ
-      @_differ ||= RSpec::Expectations::Differ.new
+      return @_differ if instance_variable_defined?(:@_differ)
+      if defined?(RSpec::Support::Differ)
+        @_differ = RSpec::Expectations::Differ
+      elsif defined?(RSpec::Expectations::Differ)
+        @_differ = RSpec::Expectations::Differ.new
+      else
+        @_differ = nil
+      end
     end
 
     matcher :_be_api_error do |error_type|
@@ -96,13 +103,18 @@ module RocketPants
         normalised_response == @decoded
       end
 
-      failure_message_for_should do |response|
+      should_failure_method     = respond_to?(:failure_message) ? :failure_message : :failure_message_for_should
+      should_not_failure_method = respond_to?(:failure_message_when_negated) ? :failure_message_when_negated : :failure_message_for_should_not
+
+      send(should_failure_method) do |response|
         message = "expected api to have exposed #{normalised_response.inspect}, got #{@decoded.inspect} instead."
-        message << "\n\nDiff: #{RSpecMatchers.differ.diff_as_object(@decoded, normalised_response)}"
+        if differ = RSpecMatchers.differ
+          message << "\n\nDiff: #{differ.diff_as_object(@decoded, normalised_response)}"
+        end
         message
       end
 
-      failure_message_for_should_not do |response|
+      send(should_not_failure_method) do |response|
         "expected api to not have exposed #{normalised_response.inspect}"
       end
 
