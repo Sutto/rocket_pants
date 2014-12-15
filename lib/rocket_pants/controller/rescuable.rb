@@ -21,6 +21,10 @@ module RocketPants
         if controller.respond_to?(:notify_honeybadger, true)
           controller.send(:notify_honeybadger, exception)
         end
+      },
+      :opbeat => lambda { |c, e, r|
+        Opbeat.set_context(:request => r)
+        Opbeat.capture_exception(e)
       }
     }
 
