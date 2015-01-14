@@ -25,6 +25,9 @@ module RocketPants
       :opbeat => lambda { |c, e, r|
         Opbeat.set_context(:request => r)
         Opbeat.capture_exception(e)
+      },
+      :newrelic => lambda { |c, e, r|
+        NewRelic::Agent.notice_error(e, {request_params: r})
       }
     }
 
