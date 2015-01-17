@@ -29,8 +29,8 @@ module RocketPants
       :newrelic => lambda { |c, e, r|
         NewRelic::Agent.notice_error(e, {request_params: r})
       },
-+      :bugsnag => lambda { |c, e, r|
-+        Bugsnag.notify(e, {request_params: r, controller: c})
+      :bugsnag => lambda { |c, e, r|
+        Bugsnag.notify(e, {request_params: r, controller: c})
        }
     }
 
