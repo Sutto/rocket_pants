@@ -22,7 +22,8 @@ module RocketPants
     def version
       if !instance_variable_defined?(:@version)
         @version = begin
-          version = extract_version_string_with_prefix params[:version], request.symbolized_path_parameters[:rp_prefix]
+          symbolized_path_params = request.path_parameters.inject({}){|memo,(k,v)| memo[k.to_sym] = v; memo}
+          version = extract_version_string_with_prefix params[:version], symbolized_path_params[:rp_prefix]
           version.presence && Integer(version)
         rescue ArgumentError
           nil
