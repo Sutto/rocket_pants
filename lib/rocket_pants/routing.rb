@@ -19,7 +19,7 @@ module RocketPants
         defaults[:rp_prefix] = {:text => required_prefix.to_s, :required => true}
       end
       versions_regexp = /(#{versions.uniq.join("|")})/
-      raise ArgumentError, 'please provide atleast one version' if versions.empty?
+      raise ArgumentError, 'please provide at least one version' if versions.empty?
       options = options.deep_merge({
         :constraints => {:version => versions_regexp},
         :path        => ':version',
