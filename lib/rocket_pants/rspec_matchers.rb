@@ -42,7 +42,7 @@ module RocketPants
     def self.differ
       return @_differ if instance_variable_defined?(:@_differ)
       if defined?(RSpec::Support::Differ)
-        @_differ = RSpec::Expectations::Differ
+        @_differ = RSpec::Support::Differ.new
       elsif defined?(RSpec::Expectations::Differ)
         @_differ = RSpec::Expectations::Differ.new
       else
