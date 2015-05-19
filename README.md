@@ -663,6 +663,7 @@ Inside the `RSpec.configure do |config|` block.
 - [Brandt Lareau](https://github.com/newdark) for RSpec v3 fixes.
 - [David Pedersen](https://github.com/davidpdrsn) for Rails 4.2 fixes.
 - [Damir Svrtan](https://github.com/DamirSvrtan) for Travis CI fixes.
+- [Michael Chrisco](https://github.com/michaelachrisco) for spelling fixes.
 
 If you're not on this list and thing you should be, let @Sutto know.
 
