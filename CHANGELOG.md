@@ -7,6 +7,7 @@
 * RSpec 3.0 Differ fixes, Thanks to [newdark](https://github.com/newdark).
 * Fix deprecation warning for `path_parameters` in 4.2, Thanks to [davidpdrsn](https://github.com/davidpdrsn).
 * Travis CI fixes, Thanks to [DamirSvrtan](https://github.com/DamirSvrtan).
+* Support for `:each_serializer`.
 
 ## Version 1.11.0
 
