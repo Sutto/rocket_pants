@@ -660,6 +660,9 @@ Inside the `RSpec.configure do |config|` block.
 - [Aron Hegyi](https://github.com/ahegyi) - Doc tweaks for `:invalid_resource`.
 - [Manuel Meurer](https://github.com/manuelmeurer) for Doc tweaks.
 - [Travis Pew](https://github.com/travisp) for initial RSpec v3 support.
+- [newdark](https://github.com/newdark) for RSpec v3 fixes.
+- [davidpdrsn](https://github.com/davidpdrsn) for Rails 4.2 fixes.
+- [DamirSvrtan](https://github.com/DamirSvrtan) for Travis CI fixes.
 
 If you're not on this list and thing you should be, let @Sutto know.
 
