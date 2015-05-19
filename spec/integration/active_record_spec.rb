@@ -19,7 +19,7 @@ describe RocketPants::Base, 'active record integration', :integration => true, :
   end
 
   it 'should automatically map ActiveRecord::RecordNotSaved' do
-    action_is { raise ActiveRecord::RecordNotSaved }
+    action_is { raise ActiveRecord::RecordNotSaved.new "Hello World Exception" }
     @action_body = lambda { Fish.new.save }
     get :test_data
     content['error'].should == 'invalid_resource'
