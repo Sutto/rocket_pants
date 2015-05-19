@@ -79,8 +79,8 @@ And then, using this example, hitting `GET http://localhost:3000/1/foods` would 
   }],
   "count": 2,
   "pagination": {
-    "previous": nil,
-    "next":     nil,
+    "previous": null,
+    "next":     null,
     "current":  1,
     "per_page": 10,
     "count":    2,
@@ -660,9 +660,9 @@ Inside the `RSpec.configure do |config|` block.
 - [Aron Hegyi](https://github.com/ahegyi) - Doc tweaks for `:invalid_resource`.
 - [Manuel Meurer](https://github.com/manuelmeurer) for Doc tweaks.
 - [Travis Pew](https://github.com/travisp) for initial RSpec v3 support.
-- [newdark](https://github.com/newdark) for RSpec v3 fixes.
-- [davidpdrsn](https://github.com/davidpdrsn) for Rails 4.2 fixes.
-- [DamirSvrtan](https://github.com/DamirSvrtan) for Travis CI fixes.
+- [Brandt Lareau](https://github.com/newdark) for RSpec v3 fixes.
+- [David Pedersen](https://github.com/davidpdrsn) for Rails 4.2 fixes.
+- [Damir Svrtan](https://github.com/DamirSvrtan) for Travis CI fixes.
 
 If you're not on this list and thing you should be, let @Sutto know.
 
