@@ -62,9 +62,12 @@ module RocketPants
     end
 
     def self.normalise_object(object, options = {})
+      object = object.to_a if options[:each_serializer]
+
       # First, prepare the object for serialization.
       object = normalise_to_serializer object, options
       # Convert the object using a standard grape-like lookup chain.
+
       if object.is_a?(Array) || object.is_a?(Set)
         object.map { |o| normalise_object o, options }
       elsif object.respond_to?(:serializable_hash)
@@ -78,10 +81,30 @@ module RocketPants
 
     def self.normalise_to_serializer(object, options)
       return object unless RocketPants.serializers_enabled?
+      if object.is_a?(Array)
+        serialize_collection object, options
+      else
+        serialize_object object, options
+      end
+    end
+
+    def self.serialize_object object, options
       serializer = options.delete(:serializer)
       serializer = object.active_model_serializer if object.respond_to?(:active_model_serializer) && serializer.nil?
       return object unless serializer
       SerializerWrapper.new serializer, object
+    end
+
+    def self.serialize_collection collection, options
+      serializer = options.delete(:each_serializer)
+      collection.map do |object|
+        serializer = object.active_model_serializer if object.respond_to?(:active_model_serializer)
+        if serializer
+          SerializerWrapper.new serializer, object
+        else
+          object
+        end
+      end
     end
 
     RENDERING_OPTIONS = [:status, :content_type]
