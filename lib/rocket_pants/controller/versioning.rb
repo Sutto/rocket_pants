@@ -22,7 +22,7 @@ module RocketPants
     def version
       if !instance_variable_defined?(:@version)
         @version = begin
-          version = extract_version_string_with_prefix params[:version], request.symbolized_path_parameters[:rp_prefix]
+          version = extract_version_string_with_prefix params[:version], request.path_parameters.symbolize_keys[:rp_prefix]
           version.presence && Integer(version)
         rescue ArgumentError
           nil
