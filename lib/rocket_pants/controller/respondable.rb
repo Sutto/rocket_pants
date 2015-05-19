@@ -65,7 +65,7 @@ module RocketPants
       # First, prepare the object for serialization.
       object = normalise_to_serializer object, options
       # Convert the object using a standard grape-like lookup chain.
-      if object.is_a?(Array) || object.is_a?(Set)
+      if object.is_a?(Array) || object.is_a?(Set) || (options[:each_serializer] && !options[:serializer])
         suboptions = options.dup
         if each_serializer = suboptions.delete(:each_serializer)
           suboptions[:serializer] = each_serializer

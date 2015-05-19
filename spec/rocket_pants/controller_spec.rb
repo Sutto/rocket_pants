@@ -39,6 +39,16 @@ describe RocketPants::Base do
         content[:count].should == 5
       end
 
+      it 'should let you expose a scope' do
+        1.upto(5) do |offset|
+          User.create :age => (18 + offset)
+        end
+        mock(TestController).test_data { User.where('1 = 1') }
+        get :test_data
+        content[:response].should == User.all.map(&:serializable_hash)
+        content[:count].should == 5
+      end
+
     end
 
     context 'with a invalid model' do
