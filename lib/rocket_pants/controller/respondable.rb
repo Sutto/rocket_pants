@@ -66,7 +66,11 @@ module RocketPants
       object = normalise_to_serializer object, options
       # Convert the object using a standard grape-like lookup chain.
       if object.is_a?(Array) || object.is_a?(Set)
-        object.map { |o| normalise_object o, options }
+        suboptions = options.dup
+        if each_serializer = suboptions.delete(:each_serializer)
+          suboptions[:serializer] = each_serializer
+        end
+        object.map { |o| normalise_object o, suboptions }
       elsif object.respond_to?(:serializable_hash)
         object.serializable_hash options
       elsif object.respond_to?(:as_json)
@@ -127,6 +131,7 @@ module RocketPants
 
     def respond_with_object_and_type(object, options, type, singular)
       pre_process_exposed_object object, type, singular
+      options = options.reverse_merge(:singular => singular)
       options = options.reverse_merge(:compact => true) unless singular
       meta = expose_metadata metadata_for(object, options, type, singular)
       render_json({:response => normalise_object(object, options)}.merge(meta), options)
