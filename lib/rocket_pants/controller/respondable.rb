@@ -62,6 +62,9 @@ module RocketPants
     end
 
     def self.normalise_object(object, options = {})
+      # So we don't use the wrong options / modify them up the chain...
+      options = options.dup
+
       # First, prepare the object for serialization.
       object = normalise_to_serializer object, options
 
@@ -71,7 +74,7 @@ module RocketPants
         if each_serializer = suboptions.delete(:each_serializer)
           suboptions[:serializer] = each_serializer
         end
-        object.map { |o| normalise_object o, suboptions.dup }
+        object.map { |o| normalise_object o, suboptions }
       elsif object.respond_to?(:serializable_hash)
         object.serializable_hash options
       elsif object.respond_to?(:as_json)
