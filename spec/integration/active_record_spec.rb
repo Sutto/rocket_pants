@@ -42,7 +42,8 @@ describe RocketPants::Base, 'active record integration', :integration => true, :
     end
   end
 
-  pending 'should automatically map ActiveRecord::RecordNotUnique' do
+  it 'should automatically map ActiveRecord::RecordNotUnique' do
+    Fish.connection.add_index :fish, :latin_name, unique: true
     attrs = {:token => "a", :name => "Test Fish", :latin_name => "Latin Name", :child_number => 5}
     Fish.create! attrs
     action_is { Fish.create!(attrs); raise "This should not happen..." }

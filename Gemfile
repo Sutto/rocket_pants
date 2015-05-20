@@ -20,6 +20,6 @@ if (wp_version = ENV['WILL_PAGINATE_VERSION'])
   gem 'will_paginate', wp_version
 end
 
-gem 'active_model_serializers'
+gem 'active_model_serializers', ENV['AMS_VERSION'] || '> 0.0'
 
 gemspec
