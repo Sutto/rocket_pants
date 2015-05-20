@@ -1,3 +1,5 @@
+require 'pathname'
+
 ENV["RAILS_ENV"] ||= 'test'
 $LOAD_PATH.unshift Pathname(__FILE__).dirname.dirname.join("lib").to_s
 

@@ -64,6 +64,7 @@ module RocketPants
     def self.normalise_object(object, options = {})
       # First, prepare the object for serialization.
       object = normalise_to_serializer object, options
+
       # Convert the object using a standard grape-like lookup chain.
       if object.is_a?(Array) || object.is_a?(Set) || (options[:each_serializer] && !options[:serializer])
         suboptions = options.dup
@@ -83,7 +84,8 @@ module RocketPants
     def self.normalise_to_serializer(object, options)
       return object unless RocketPants.serializers_enabled?
       serializer = options.delete(:serializer)
-      serializer = object.active_model_serializer if object.respond_to?(:active_model_serializer) && serializer.nil?
+      # AMS overrides active_model_serializer, so we ignore it and tell it to go away, generally...
+      serializer = object.active_model_serializer if object.respond_to?(:active_model_serializer) && serializer.nil? && !object.is_a?(Array)
       return object unless serializer
       SerializerWrapper.new serializer, object
     end
