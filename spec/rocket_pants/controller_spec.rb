@@ -431,7 +431,7 @@ describe RocketPants::Base do
       get :test_head
       response.status.should == 201
       response.body.should be_blank
-      response.content_type.should == 'application/json'
+      response.content_type.should include 'application/json'
     end
 
   end

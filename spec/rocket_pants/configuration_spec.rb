@@ -23,23 +23,23 @@ describe RocketPants, 'Configuration' do
 
     it 'should default to the Rails env if present' do
       ENV['RAILS_ENV'], ENV['RACK_ENV'] = "production", "staging"
-      RocketPants.env.should be_production
-      RocketPants.env.should_not be_staging
-      RocketPants.env.should_not be_development
+      RocketPants.env.production?.should eq true
+      RocketPants.env.staging?.should eq false
+      RocketPants.env.development?.should eq false
     end
 
     it 'should default to the rack env with no rails env if present' do
       ENV['RAILS_ENV'], ENV['RACK_ENV'] = nil, "staging"
-      RocketPants.env.should_not be_production
-      RocketPants.env.should be_staging
-      RocketPants.env.should_not be_development
+      RocketPants.env.production?.should eq false
+      RocketPants.env.staging?.should eq true
+      RocketPants.env.development?.should eq false
     end
 
     it 'should default to development otherwise' do
       ENV['RAILS_ENV'], ENV['RACK_ENV'] = nil, nil
-      RocketPants.env.should_not be_production
-      RocketPants.env.should_not be_staging
-      RocketPants.env.should be_development
+      RocketPants.env.production?.should eq false
+      RocketPants.env.staging?.should eq false
+      RocketPants.env.development?.should eq true
     end
 
     it 'should let you restore the environment' do
