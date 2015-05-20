@@ -664,6 +664,7 @@ Inside the `RSpec.configure do |config|` block.
 - [David Pedersen](https://github.com/davidpdrsn) for Rails 4.2 fixes.
 - [Damir Svrtan](https://github.com/DamirSvrtan) for Travis CI fixes.
 - [Michael Chrisco](https://github.com/michaelachrisco) for spelling fixes.
+- [Kevin Jalbert](https://github.com/kevinjalbert) for spelling fixes.
 
 If you're not on this list and thing you should be, let @Sutto know.
 
