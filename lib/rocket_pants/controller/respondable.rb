@@ -71,7 +71,7 @@ module RocketPants
         if each_serializer = suboptions.delete(:each_serializer)
           suboptions[:serializer] = each_serializer
         end
-        object.map { |o| normalise_object o, suboptions }
+        object.map { |o| normalise_object o, suboptions.dup }
       elsif object.respond_to?(:serializable_hash)
         object.serializable_hash options
       elsif object.respond_to?(:as_json)
