@@ -2,6 +2,10 @@
 
 **Please Note**: This change log only covers v1.3 forwards - apologies for anything missing prior to that.
 
+## Version 1.12.1
+
+* Fix for scopes and nested serialization working correctly (change Array check to `#to_ary`, as we should).
+
 ## Version 1.12.0
 
 * RSpec 3.0 Differ fixes, Thanks to [newdark](https://github.com/newdark).

@@ -147,7 +147,7 @@ describe RocketPants::Base do
 
     it 'should correctly convert an object with a serializable hash method' do
       object = {:a => 1, :b => 2}
-      stub(object).serializable_hash(anything) { {:serialised => true}}
+      def object.serializable_hash(*); {:serialised => true}; end
       mock(TestController).test_data { object }
       get :test_data
       content[:response].should == {'serialised' => true}
