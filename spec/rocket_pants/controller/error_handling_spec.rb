@@ -23,6 +23,10 @@ describe RocketPants::ErrorHandling do
         controller_class.exception_notifier_callback.should_not == controller_class::DEFAULT_NOTIFIER_CALLBACK
         controller_class.exception_notifier_callback.should == controller_class::NAMED_NOTIFIER_CALLBACKS[:honeybadger]
 
+        controller_class.use_named_exception_notifier :bugsnag
+        controller_class.exception_notifier_callback.should_not == controller_class::DEFAULT_NOTIFIER_CALLBACK
+        controller_class.exception_notifier_callback.should == controller_class::NAMED_NOTIFIER_CALLBACKS[:bugsnag]
+
         controller_class.use_named_exception_notifier :nonexistent
         controller_class.exception_notifier_callback.should == controller_class::DEFAULT_NOTIFIER_CALLBACK
       end

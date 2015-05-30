@@ -57,6 +57,11 @@ module RocketPants
     rescue LoadError => e
     end
 
+    # If possible, require bugsnag
+    begin
+      require 'bugsnag'
+    rescue LoadError
+    end
 
     MODULES.each do |mixin|
       include mixin
