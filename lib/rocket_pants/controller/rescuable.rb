@@ -22,8 +22,8 @@ module RocketPants
           controller.send(:notify_honeybadger, exception)
         end
       },
-      :bugsnag => lambda { |_controller, exception, _request|
-        Bugsnag.notify(exception)
+      :bugsnag => lambda { |_controller, exception, request|
+        Bugsnag.notify(exception, request: request)
       }
     }
 

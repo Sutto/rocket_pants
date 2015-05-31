@@ -36,6 +36,8 @@ describe RocketPants::ErrorHandling do
 
         let(:exception) { StandardError.new }
 
+        let(:request) { Rack::Request.new({})}
+
         context 'airbrake' do
           let(:request_data) { { method: 'POST', path: '/' } }
 
@@ -52,7 +54,7 @@ describe RocketPants::ErrorHandling do
           it 'should send notification when it is the named exception notifier' do
             mock(Airbrake).notify(exception, request_data)
 
-            controller_class.exception_notifier_callback.call(controller, exception, nil)
+            controller_class.exception_notifier_callback.call(controller, exception, request)
           end
         end
 
@@ -65,7 +67,7 @@ describe RocketPants::ErrorHandling do
           it 'should send notification when it is the named exception notifier' do
             mock(controller).notify_honeybadger(exception)
 
-            controller_class.exception_notifier_callback.call(controller, exception, nil)
+            controller_class.exception_notifier_callback.call(controller, exception, request)
           end
         end
 
@@ -74,14 +76,14 @@ describe RocketPants::ErrorHandling do
             controller_class.use_named_exception_notifier :bugsnag
 
             Bugsnag = Class.new do
-              define_singleton_method(:notify) { |exception| }
+              define_singleton_method(:notify) { |exception, request| }
             end
           end
 
           it 'should send notification when it is the named exception notifier' do
-            mock(Bugsnag).notify(exception)
+            mock(Bugsnag).notify(exception, { request: request })
 
-            controller_class.exception_notifier_callback.call(controller, exception, nil)
+            controller_class.exception_notifier_callback.call(controller, exception, request)
           end
         end
       end
