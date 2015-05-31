@@ -31,60 +31,58 @@ describe RocketPants::ErrorHandling do
         controller_class.exception_notifier_callback.should == controller_class::DEFAULT_NOTIFIER_CALLBACK
       end
 
-      context 'airbrake' do
-        let(:request_data) { { method: 'POST', path: '/' } }
+      context 'named exception notifier' do
+        let(:controller) { controller_class.new }
 
-        before :each do
-          controller_class.use_named_exception_notifier :airbrake
-          stub.instance_of(controller_class).airbrake_local_request? { false }
-          stub.instance_of(controller_class).airbrake_request_data { request_data }
+        let(:exception) { StandardError.new }
 
-          Airbrake = Class.new do
-            define_singleton_method(:notify) { |exception, request_data| }
+        context 'airbrake' do
+          let(:request_data) { { method: 'POST', path: '/' } }
+
+          before :each do
+            controller_class.use_named_exception_notifier :airbrake
+            stub.instance_of(controller_class).airbrake_local_request? { false }
+            stub.instance_of(controller_class).airbrake_request_data { request_data }
+
+            Airbrake = Class.new do
+              define_singleton_method(:notify) { |exception, request_data| }
+            end
+          end
+
+          it 'should send notification when it is the named exception notifier' do
+            mock(Airbrake).notify(exception, request_data)
+
+            controller_class.exception_notifier_callback.call(controller, exception, nil)
           end
         end
 
-        it 'should send notification when its the named exception notifier' do
-          exception = StandardError.new
+        context 'honeybadger' do
+          before :each do
+            controller_class.use_named_exception_notifier :honeybadger
+            stub.instance_of(controller_class).notify_honeybadger {}
+          end
 
-          mock(Airbrake).notify(exception, request_data)
+          it 'should send notification when it is the named exception notifier' do
+            mock(controller).notify_honeybadger(exception)
 
-          controller_class.exception_notifier_callback.call(controller_class.new, exception, nil)
-        end
-      end
-
-      context 'honeybadger' do
-        before :each do
-          controller_class.use_named_exception_notifier :honeybadger
-          stub.instance_of(controller_class).notify_honeybadger {}
-        end
-
-        it 'should send notification when its the named exception notifier' do
-          exception = StandardError.new
-
-          controller = controller_class.new
-
-          mock(controller).notify_honeybadger(exception)
-
-          controller_class.exception_notifier_callback.call(controller, exception, nil)
-        end
-      end
-
-      context 'bugsnag' do
-        before :each do
-          controller_class.use_named_exception_notifier :bugsnag
-
-          Bugsnag = Class.new do
-            define_singleton_method(:notify) { |exception| }
+            controller_class.exception_notifier_callback.call(controller, exception, nil)
           end
         end
 
-        it 'should send notification when its the named exception notifier' do
-          exception = StandardError.new
+        context 'bugsnag' do
+          before :each do
+            controller_class.use_named_exception_notifier :bugsnag
 
-          mock(Bugsnag).notify(exception)
+            Bugsnag = Class.new do
+              define_singleton_method(:notify) { |exception| }
+            end
+          end
 
-          controller_class.exception_notifier_callback.call(controller_class.new, exception, nil)
+          it 'should send notification when it is the named exception notifier' do
+            mock(Bugsnag).notify(exception)
+
+            controller_class.exception_notifier_callback.call(controller, exception, nil)
+          end
         end
       end
 
