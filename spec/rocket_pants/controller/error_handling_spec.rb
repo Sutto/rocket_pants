@@ -31,6 +31,63 @@ describe RocketPants::ErrorHandling do
         controller_class.exception_notifier_callback.should == controller_class::DEFAULT_NOTIFIER_CALLBACK
       end
 
+      context 'airbrake' do
+        let(:request_data) { { method: 'POST', path: '/' } }
+
+        before :each do
+          controller_class.use_named_exception_notifier :airbrake
+          stub.instance_of(controller_class).airbrake_local_request? { false }
+          stub.instance_of(controller_class).airbrake_request_data { request_data }
+
+          Airbrake = Class.new do
+            define_singleton_method(:notify) { |exception, request_data| }
+          end
+        end
+
+        it 'should send notification when its the named exception notifier' do
+          exception = StandardError.new
+
+          mock(Airbrake).notify(exception, request_data)
+
+          controller_class.exception_notifier_callback.call(controller_class.new, exception, nil)
+        end
+      end
+
+      context 'honeybadger' do
+        before :each do
+          controller_class.use_named_exception_notifier :honeybadger
+          stub.instance_of(controller_class).notify_honeybadger {}
+        end
+
+        it 'should send notification when its the named exception notifier' do
+          exception = StandardError.new
+
+          controller = controller_class.new
+
+          mock(controller).notify_honeybadger(exception)
+
+          controller_class.exception_notifier_callback.call(controller, exception, nil)
+        end
+      end
+
+      context 'bugsnag' do
+        before :each do
+          controller_class.use_named_exception_notifier :bugsnag
+
+          Bugsnag = Class.new do
+            define_singleton_method(:notify) { |exception| }
+          end
+        end
+
+        it 'should send notification when its the named exception notifier' do
+          exception = StandardError.new
+
+          mock(Bugsnag).notify(exception)
+
+          controller_class.exception_notifier_callback.call(controller_class.new, exception, nil)
+        end
+      end
+
       it 'should include the error identifier in the response if set' do
         controller_class.exception_notifier_callback = lambda do |controller, exception, req|
           controller.error_identifier = 'my-test-identifier'
