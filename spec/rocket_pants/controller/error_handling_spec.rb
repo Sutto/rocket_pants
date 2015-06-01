@@ -74,14 +74,11 @@ describe RocketPants::ErrorHandling do
         context 'bugsnag' do
           before :each do
             controller_class.use_named_exception_notifier :bugsnag
-
-            Bugsnag = Class.new do
-              define_singleton_method(:notify) { |exception, request| }
-            end
+            stub.instance_of(controller_class).notify_bugsnag {}
           end
 
           it 'should send notification when it is the named exception notifier' do
-            mock(Bugsnag).notify(exception, { request: request })
+            mock(controller).notify_bugsnag(exception, request: request)
 
             controller_class.exception_notifier_callback.call(controller, exception, request)
           end
