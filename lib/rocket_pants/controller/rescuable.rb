@@ -23,7 +23,7 @@ module RocketPants
         end
       },
       :bugsnag => lambda { |_controller, exception, request|
-        Bugsnag.notify(exception, request: request)
+        notify_bugsnag(exception, request: request)
       }
     }
 
