@@ -12,9 +12,9 @@ At its core, RocketPants is a set of tools (built around existing toolsets such 
 
 Why use RocketPants over alternatives like Grape or normal Rails? The reasons we built it come down to a couple of simple things:
 
-1. **[It's opinionated](#working-with-data)** (like Grape) - In this case, we dictate a certain JSON structure we've found nice to work with (after having worked with and investigated a large number of other apis), it makes it simple to add metadata along side requests and the like.
+1. **[It's opinionated]a** (like Grape) - In this case, we dictate a certain JSON structure we've found nice to work with (after having worked with and investigated a large number of other apis), it makes it simple to add metadata along side requests and the like.
 2. **[Simple and Often Automatic Response Metadata](#collections)** - RocketPants automatically takes care of sending metadata about paginated responses and arrays where possible. This means as a user, you only need to worry about writing `expose object_or_presenter` in your controller and RocketPants will do it's best to send as much information back to the user.
-3. **[Extended Error Support](#registering--dealing-with-errors)** - RocketPants has a built in framework to manage errors it knows how to handle (in the forms of mapping exceptions to a well defined JSON structure) as well as tools to make it simple to hook up to Airbrake and do things such as including an error identifier in the response.
+3. **[Extended Error Support](#registering--dealing-with-errors)** - RocketPants has a built in framework to manage errors it knows how to handle (in the forms of mapping exceptions to a well defined JSON structure) as well as tools to make it [simple to hook up to Airbrake](#tracking-errors-w-airbrake-honeybadger-or-bugsnag) and do things such as including an error identifier in the response.
 4. **[It's built on ActionPack](#general-structure)** - One of the key differentiators to Grape is that RocketPants embraces ActionPack and uses the modular components included from Rails 3.0 onwards to provide things you're familiar with already such as filters. If you're using Strong Parameters (e.g. in Rails 4), we'll even give you support for that.
 5. **[Semi-efficient Caching Support](#implementing-efficient-validation)** - Thanks to a combination of Rails middleware and collection vs. resource distinctions, RocketPants makes it relatively easy to implement "Efficient Validation" (See [here](#implementing-efficient-validation)). As a developer, this means you get even more benefits of http caching where possible, without the need to generate full requests when etags are present.
 6. **[Simple tools to consume RocketPants apis](#example-client-code)** - RocketPants includes the `RocketPants::Client` class which builds upon [APISmith](https://github.com/Sutto/api_smith) to make it easier to build clients e.g. automatically converting paginated responses back.
@@ -200,7 +200,7 @@ And added our own:
 * `RocketPants::Instrumentation` - Adds Instrumentation notifications making it easy to use and hook into with Rails.
 * `RocketPants::Caching` - Implements time-based caching for index actions and etag-based efficient validation for singular resources.
 * `RocketPants::ErrorHandling` - Short hand to create errors as well as simplifications to catch and render a standardised error representation.
-* `RocketPants::Rescuable` - Allows you to hook in to rescuing exceptions and to make it easy to post notifications to tools such as AirBrake.
+* `RocketPants::Rescuable` - Allows you to hook in to rescuing exceptions and to make it easy to [post notifications to tools such as Airbrake](#tracking-errors-w-airbrake-honeybadger-or-bugsnag).
 * `RocketPants::StrongParameters` - Adds support for strong parameters.
 
 To use RocketPants, instead of inheriting from `ActionController::Base`, just inherit from `RocketPants::Base`.
@@ -559,20 +559,20 @@ as `bad_request` API errors to the requesting users.
 
 Since Rocket Pants automatically rescues server errors, you'll additionally need to configure tracking them if you want to be warned when they happen.
 
-Rocket Pants comes with built in support for Airbrake, Honeybadger and Bugsnag. Depending on your prefered tracking solution, in your base controller add this:
+Rocket Pants comes with built in support for [Airbrake](https://airbrake.io/), [Honeybadger](https://www.honeybadger.io/) and [Bugsnag](https://bugsnag.com/). Depending on your prefered tracking solution, in your base controller add this:
 
 ```ruby
 class ApplicationController < RocketPants::Base
   # Airbrake
   use_named_exception_notifier :airbrake
-  # Honeybadger
+  # or Honeybadger
   use_named_exception_notifier :honeybadger
-  # Bugsnag
+  # or Bugsnag
   use_named_exception_notifier :bugsnag
 end
 ```
 
-If you're using some other service, you can add a custom notifier like this:
+If you're using some other service, you can add a custom notifier:
 
 ```ruby
 class ApplicationController < RocketPants::Base
