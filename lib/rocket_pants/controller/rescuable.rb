@@ -2,7 +2,7 @@ module RocketPants
   # An alternative to Rail's built in ActionController::Rescue module,
   # tailored to deeply integrate rescue notififers into the application.
   #
-  # Thus, it is relatively simple to 
+  # Thus, it is relatively simple to
   module Rescuable
     extend ActiveSupport::Concern
     include ActiveSupport::Rescuable
@@ -10,7 +10,7 @@ module RocketPants
     DEFAULT_NOTIFIER_CALLBACK = lambda do |controller, exception, req|
       # Does nothing
     end
-    
+
     NAMED_NOTIFIER_CALLBACKS = {
       :airbrake => lambda { |c, e, r|
         unless c.send(:airbrake_local_request?)
@@ -21,6 +21,9 @@ module RocketPants
         if controller.respond_to?(:notify_honeybadger, true)
           controller.send(:notify_honeybadger, exception)
         end
+      },
+      :bugsnag => lambda { |controller, exception, request|
+        controller.notify_bugsnag(exception, request: request)
       }
     }
 

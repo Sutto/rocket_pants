@@ -57,6 +57,13 @@ module RocketPants
     rescue LoadError => e
     end
 
+    # If possible, include Bugsnag methods in the Rails controller
+    begin
+      require 'bugsnag'
+      require 'bugsnag/rails/controller_methods'
+      MODULES << Bugsnag::Rails::ControllerMethods
+    rescue LoadError
+    end
 
     MODULES.each do |mixin|
       include mixin

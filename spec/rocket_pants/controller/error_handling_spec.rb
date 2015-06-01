@@ -23,8 +23,66 @@ describe RocketPants::ErrorHandling do
         controller_class.exception_notifier_callback.should_not == controller_class::DEFAULT_NOTIFIER_CALLBACK
         controller_class.exception_notifier_callback.should == controller_class::NAMED_NOTIFIER_CALLBACKS[:honeybadger]
 
+        controller_class.use_named_exception_notifier :bugsnag
+        controller_class.exception_notifier_callback.should_not == controller_class::DEFAULT_NOTIFIER_CALLBACK
+        controller_class.exception_notifier_callback.should == controller_class::NAMED_NOTIFIER_CALLBACKS[:bugsnag]
+
         controller_class.use_named_exception_notifier :nonexistent
         controller_class.exception_notifier_callback.should == controller_class::DEFAULT_NOTIFIER_CALLBACK
+      end
+
+      context 'named exception notifier' do
+        let(:controller) { controller_class.new }
+
+        let(:exception) { StandardError.new }
+
+        let(:request) { Rack::Request.new({})}
+
+        context 'airbrake' do
+          let(:request_data) { { method: 'POST', path: '/' } }
+
+          before :each do
+            controller_class.use_named_exception_notifier :airbrake
+            stub.instance_of(controller_class).airbrake_local_request? { false }
+            stub.instance_of(controller_class).airbrake_request_data { request_data }
+
+            Airbrake = Class.new do
+              define_singleton_method(:notify) { |exception, request_data| }
+            end
+          end
+
+          it 'should send notification when it is the named exception notifier' do
+            mock(Airbrake).notify(exception, request_data)
+
+            controller_class.exception_notifier_callback.call(controller, exception, request)
+          end
+        end
+
+        context 'honeybadger' do
+          before :each do
+            controller_class.use_named_exception_notifier :honeybadger
+            stub.instance_of(controller_class).notify_honeybadger {}
+          end
+
+          it 'should send notification when it is the named exception notifier' do
+            mock(controller).notify_honeybadger(exception)
+
+            controller_class.exception_notifier_callback.call(controller, exception, request)
+          end
+        end
+
+        context 'bugsnag' do
+          before :each do
+            controller_class.use_named_exception_notifier :bugsnag
+            stub.instance_of(controller_class).notify_bugsnag {}
+          end
+
+          it 'should send notification when it is the named exception notifier' do
+            mock(controller).notify_bugsnag(exception, request: request)
+
+            controller_class.exception_notifier_callback.call(controller, exception, request)
+          end
+        end
       end
 
       it 'should include the error identifier in the response if set' do
