@@ -308,7 +308,7 @@ Finally, in the routes - the easiest way would be in the api declaration:
 
 ```ruby
 api versions: 1, module: "api/v1" do
-  resources :users, only: [:index]  
+  resources :users, only: [:index]
 end
 ```
 
@@ -554,6 +554,33 @@ a `rocket_pants-mongoid` gem mapping more errors, please get in touch.
 One of the newer features of Rocket Pants, if you have the Strong Parameters plugin on Rails 3
 or are using Rails 4, is that we'll automatically rescue strong parameters errors and render them
 as `bad_request` API errors to the requesting users.
+
+### Tracking errors w/ Airbrake, Honeybadger or Bugsnag
+
+Since Rocket Pants automatically rescues server errors, you'll additionally need to configure tracking them if you want to be warned when they happen.
+
+Rocket Pants comes with built in support for Airbrake, Honeybadger and Bugsnag. Depending on your prefered tracking solution, in your base controller add this:
+
+```ruby
+class ApplicationController < RocketPants::Base
+  # Airbrake
+  use_named_exception_notifier :airbrake
+  # Honeybadger
+  use_named_exception_notifier :honeybadger
+  # Bugsnag
+  use_named_exception_notifier :bugsnag
+end
+```
+
+If you're using some other service, you can add a custom notifier like this:
+
+```ruby
+class ApplicationController < RocketPants::Base
+  self.exception_notifier_callback = lambda do |controller, exception, request|
+    # track errors
+  end
+end
+```
 
 ## Implementing Efficient Validation
 
