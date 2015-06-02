@@ -36,7 +36,7 @@ module RocketPants
     module ClassMethods
 
       # Tells rocketpants to use the given exception handler to deal with errors.
-      # E.g. use_named_exception_handler! :airbrake
+      # E.g. use_named_exception_notifier :airbrake
       # @param [Symbol] name the name of the exception handler to use.
       def use_named_exception_notifier(name)
         handler = NAMED_NOTIFIER_CALLBACKS.fetch(name, DEFAULT_NOTIFIER_CALLBACK)
