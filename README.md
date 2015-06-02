@@ -692,6 +692,7 @@ Inside the `RSpec.configure do |config|` block.
 - [Damir Svrtan](https://github.com/DamirSvrtan) for Travis CI fixes.
 - [Michael Chrisco](https://github.com/michaelachrisco) for spelling fixes.
 - [Kevin Jalbert](https://github.com/kevinjalbert) for spelling fixes.
+- [Damir Svrtan](https://github.com/DamirSvrtan) for support for bugsnag, docs and tests.
 
 If you're not on this list and thing you should be, let @Sutto know.
 
