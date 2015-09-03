@@ -1,4 +1,4 @@
-# Rocket Pants! [![Build Status](https://secure.travis-ci.org/Sutto/rocket_pants.png?branch=master)](http://travis-ci.org/Sutto/rocket_pants)
+# Rocket Pants! [![Build Status](https://secure.travis-ci.org/Sutto/rocket_pants.png?branch=master)](http://travis-ci.org/Sutto/rocket_pants)[![Code Climate](https://codeclimate.com/github/Sutto/rocket_pants/badges/gpa.svg)](https://codeclimate.com/github/Sutto/rocket_pants)[![Test Coverage](https://codeclimate.com/github/Sutto/rocket_pants/badges/coverage.svg)](https://codeclimate.com/github/Sutto/rocket_pants/coverage)
 
 **Please Note:** Work on RocketPants 2.0 is currently underway on the [2.0-rewrite](https://github.com/Sutto/rocket_pants/tree/2.0-rewrite) branch. Please check there before requesting features.
 
