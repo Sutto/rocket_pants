@@ -2,6 +2,10 @@
 
 **Please Note**: This change log only covers v1.3 forwards - apologies for anything missing prior to that.
 
+## Version 1.13.1
+
+* Bug fix to bugsnag, thanks to [DamirSvrtan](https://github.com/DamirSvrtan).
+
 ## Version 1.13.0
 
 * Support for Bugsnag and documentation tweaks around notifications.
