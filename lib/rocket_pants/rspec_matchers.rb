@@ -10,11 +10,14 @@ module RocketPants
       end
     end
 
+    KEYS_TO_DELETE = %w(url root instance_options).freeze
     def self.normalise_urls(object)
       if object.is_a?(Array)
-        object.each { |o| o['url'] = nil }
+        object.each do |o|
+          KEYS_TO_DELETE.each { |key| o[key] = nil }
+        end
       elsif object.is_a?(Hash) || (defined?(APISmith::Smash) && object.is_a?(APISmith::Smash))
-        object['url'] = nil
+        KEYS_TO_DELETE.each  { |key| object[key] = nil }
       end
       object
     end
