@@ -5,14 +5,17 @@ module RocketPants
     SerializerWrapper = Struct.new(:serializer, :object) do
 
       def serializable_hash(options = {})
-        instance = serializer.new(object, options)
-        if instance.respond_to?(:serializable_hash)
-          instance.serializable_hash
+        if Object.const_defined?('ActiveModel::SerializableResource')
+          ActiveModel::SerializableResource.new(object, options.merge(serializer: serializer)).serializable_hash
         else
-          instance.as_json options
+          instance = serializer.new(object, options)
+          if instance.respond_to?(:serializable_hash)
+            instance.serializable_hash
+          else
+            instance.as_json options
+          end
         end
       end
-
     end
 
     def self.pagination_type(object)
