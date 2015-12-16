@@ -102,10 +102,8 @@ module RocketPants
     end
 
     def default_serializer_options
-      {
-        :url_options => url_options,
-        :root        => false
-      }
+      RocketPants.default_serializer_options.reverse_merge({:url_options => url_options}) ||
+        {:url_options => url_options, :root => false}
     end
 
     def encode_to_json(object)

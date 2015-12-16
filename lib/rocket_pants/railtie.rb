@@ -1,11 +1,11 @@
 module RocketPants
   class Railtie < Rails::Railtie
 
-    config.rocket_pants                     = ActiveSupport::OrderedOptions.new
-    config.rocket_pants.use_caching         = nil
-    config.rocket_pants.header_metadata     = nil
-    config.rocket_pants.pass_through_errors = nil
-    config.rocket_pants.pass_through_errors = nil
+    config.rocket_pants                            = ActiveSupport::OrderedOptions.new
+    config.rocket_pants.use_caching                = nil
+    config.rocket_pants.header_metadata            = nil
+    config.rocket_pants.pass_through_errors        = nil
+    config.rocket_pants.default_serializer_options = nil
 
     config.i18n.railties_load_path << File.expand_path('../locale/en.yml', __FILE__)
 
@@ -14,13 +14,14 @@ module RocketPants
     end
 
     initializer "rocket_pants.configuration" do |app|
-      rp_config                          = app.config.rocket_pants
-      rp_config.use_caching              = Rails.env.production? if rp_config.use_caching.nil?
-      RocketPants.caching_enabled        = rp_config.use_caching
-      RocketPants.header_metadata        = rp_config.header_metadata unless rp_config.header_metadata.nil?
-      RocketPants.serializers_enabled    = rp_config.serializers_enabled unless rp_config.serializers_enabled.nil?
-      RocketPants.show_exception_message = rp_config.show_exception_message unless rp_config.show_exception_message.nil?
-      RocketPants.pass_through_errors    = rp_config.pass_through_errors unless rp_config.pass_through_errors.nil?
+      rp_config                              = app.config.rocket_pants
+      rp_config.use_caching                  = Rails.env.production? if rp_config.use_caching.nil?
+      RocketPants.caching_enabled            = rp_config.use_caching
+      RocketPants.header_metadata            = rp_config.header_metadata unless rp_config.header_metadata.nil?
+      RocketPants.serializers_enabled        = rp_config.serializers_enabled unless rp_config.serializers_enabled.nil?
+      RocketPants.show_exception_message     = rp_config.show_exception_message unless rp_config.show_exception_message.nil?
+      RocketPants.pass_through_errors        = rp_config.pass_through_errors unless rp_config.pass_through_errors.nil?
+      RocketPants.default_serializer_options = rp_config.default_serializer_options unless rp_config.default_serializer_options.nil?
       # Set the rocket pants cache if present.
       RocketPants.cache = rp_config.cache if rp_config.cache
     end
