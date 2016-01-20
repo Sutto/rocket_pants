@@ -15,7 +15,6 @@ module RocketPants
     end
 
     MODULES = [
-      ActionController::HideActions,
       ActionController::UrlFor,
       ActionController::Redirecting,
       ActionController::ConditionalGet,
