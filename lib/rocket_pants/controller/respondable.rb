@@ -123,7 +123,7 @@ module RocketPants
       json = encode_to_json(json) unless json.respond_to?(:to_str)
       # Encode the object to json.
       self.status        ||= :ok
-      self.content_type  ||= Mime::JSON
+      self.content_type  ||= Mime[:json]
       self.response_body   = json
       headers['Content-Length'] = Rack::Utils.bytesize(json).to_s
     end
