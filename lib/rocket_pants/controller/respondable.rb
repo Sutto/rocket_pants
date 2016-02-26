@@ -125,7 +125,7 @@ module RocketPants
       self.status        ||= :ok
       self.content_type  ||= Mime[:json]
       self.response_body   = json
-      headers['Content-Length'] = Rack::Utils.bytesize(json).to_s
+      headers['Content-Length'] = (json.bytesize).to_s
     end
 
     # Renders a raw object, without any wrapping etc.

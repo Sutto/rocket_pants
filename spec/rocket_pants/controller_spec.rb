@@ -410,7 +410,7 @@ describe RocketPants::Base do
       get :echo, :echo => "Hello World", :callback => "test"
       response.content_type.should include 'application/javascript'
       response.body.should == %|test({"response":{"echo":"Hello World"}});|
-      response.headers['Content-Length'].to_i.should == Rack::Utils.bytesize(response.body)
+      response.headers['Content-Length'].to_i.should == response.body.bytesize
     end
 
   end
