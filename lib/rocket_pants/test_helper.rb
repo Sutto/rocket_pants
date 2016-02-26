@@ -6,7 +6,7 @@ module RocketPants
 
     included do
       require 'action_controller/test_case'
-
+      class_attribute :_default_version
     end
 
     module ResponseHelper
