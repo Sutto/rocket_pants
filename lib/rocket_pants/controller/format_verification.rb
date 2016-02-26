@@ -3,7 +3,7 @@ module RocketPants
     extend ActiveSupport::Concern
 
     included do
-      before_filter :ensure_has_valid_format
+      before_action :ensure_has_valid_format
     end
 
     private
