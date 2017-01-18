@@ -16,7 +16,7 @@ Gem::Specification.new do |s|
   s.add_dependency 'actionpack', '>= 3.0', '< 5.0'
   s.add_dependency 'railties',   '>= 3.0', '< 5.0'
   s.add_dependency 'will_paginate', '~> 3.0'
-  s.add_dependency 'hashie',        '>= 1.0', '< 3'
+  s.add_dependency 'hashie',        '>= 1.0'
   s.add_dependency 'api_smith'
   s.add_dependency 'moneta'
   s.add_development_dependency 'rspec',       '>= 2.4', '< 4.0'
@@ -27,6 +27,7 @@ Gem::Specification.new do |s|
   s.add_development_dependency 'sqlite3'
   s.add_development_dependency 'reversible_data', '~> 1.0'
   s.add_development_dependency 'kaminari'
+  s.add_development_dependency 'test-unit', '~> 3.0'
 
   s.files        = Dir.glob("{lib}/**/*")
   s.require_path = 'lib'
