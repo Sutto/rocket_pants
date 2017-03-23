@@ -85,6 +85,24 @@ module RocketPants
       end
     end
 
+    # Like process, but automatically adds the api version.
+    def process(action, *args)
+
+      insert_action_controller_testing_into_base
+
+      # Rails 4 changes the method signature. In rails 3, parameters is the first argument.
+      # In Rails 4, it's the second.
+      if args.first.is_a?(String)
+        parameters = (args[1] ||= {})
+      else
+        parameters = (args[0] ||= {})
+      end
+
+      response.recycle_cached_body!
+
+      super action, *args
+    end
+
     def normalise_value(value)
       if value.is_a?(Hash)
         value.inject({}) do |acc, (k, v)|
