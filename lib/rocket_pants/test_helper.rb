@@ -100,6 +100,10 @@ module RocketPants
 
       response.recycle_cached_body!
 
+      if _default_version.present? && parameters[:version].blank? && parameters['version'].blank?
+        parameters[:version] = _default_version
+      end
+
       super action, *args
     end
 
