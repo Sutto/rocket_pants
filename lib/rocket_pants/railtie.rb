@@ -39,7 +39,7 @@ module RocketPants
 
     initializer "rocket_pants.setup_caching" do |app|
       if RocketPants.caching_enabled?
-        run_time_middleware = if Rails.version.to_i > 4
+        run_time_middleware = if Rails::VERSION::MAJOR >= 5
           Rack::Runtime
         else
           "Rack::Runtime"
