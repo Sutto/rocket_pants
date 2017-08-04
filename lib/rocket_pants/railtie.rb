@@ -39,7 +39,7 @@ module RocketPants
 
     initializer "rocket_pants.setup_caching" do |app|
       if RocketPants.caching_enabled?
-        app.middleware.insert 'Rack::Runtime', RocketPants::CacheMiddleware
+        app.middleware.insert Rack::Runtime, RocketPants::CacheMiddleware
       end
     end
 
