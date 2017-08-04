@@ -39,7 +39,12 @@ module RocketPants
 
     initializer "rocket_pants.setup_caching" do |app|
       if RocketPants.caching_enabled?
-        app.middleware.insert 'Rack::Runtime', RocketPants::CacheMiddleware
+        run_time_middleware = if Rails::VERSION::MAJOR >= 5
+          Rack::Runtime
+        else
+          "Rack::Runtime"
+        end
+        app.middleware.insert run_time_middleware, RocketPants::CacheMiddleware
       end
     end
 
