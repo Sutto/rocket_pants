@@ -14,7 +14,7 @@ if (moneta_version = ENV["MONETA_VERSION"])
   gem 'moneta', moneta_version
 end
 
-gem 'rspec', '~>3.3.0'
+gem 'rspec', '~>3.3.2'
 
 if (wp_version = ENV['WILL_PAGINATE_VERSION'])
   gem 'will_paginate', wp_version
