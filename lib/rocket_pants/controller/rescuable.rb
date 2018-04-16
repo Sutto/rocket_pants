@@ -23,7 +23,13 @@ module RocketPants
         end
       },
       :bugsnag => lambda { |controller, exception, request|
-        controller.send(:notify_bugsnag, exception, request: request)
+        if controller.respond_to?(:notify_bugsnag, true)
+          controller.send(:notify_bugsnag, exception, request: request)
+        else
+          # Bugsnag v6 removed #notify_bugsnag controller method
+          # Use #notify directly
+          Bugsnag.notify(exception)
+        end
       }
     }
 
