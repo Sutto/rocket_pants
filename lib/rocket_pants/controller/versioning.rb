@@ -12,7 +12,7 @@ module RocketPants
       def version(version)
         version = version..version if version.is_a?(Integer)
         self._version_range = version
-        before_filter :verify_api_version
+        before_action :verify_api_version
       end
 
     end

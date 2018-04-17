@@ -15,11 +15,9 @@ module RocketPants
     end
 
     MODULES = [
-      ActionController::HideActions,
       ActionController::UrlFor,
       ActionController::Redirecting,
       ActionController::ConditionalGet,
-      ActionController::RackDelegation,
       record_identifier_klass,
       ActionController::HttpAuthentication::Basic::ControllerMethods,
       ActionController::HttpAuthentication::Digest::ControllerMethods,

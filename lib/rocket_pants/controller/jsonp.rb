@@ -43,7 +43,7 @@ module RocketPants
       # Finally, set up the callback using the JSONP parameter.
       response.content_type     = 'application/javascript'
       response.body             = "#{jsonp_parameter}(#{response.body});"
-      headers['Content-Length'] = Rack::Utils.bytesize(response.body).to_s
+      headers['Content-Length'] = (response.body.bytesize).to_s
     end
 
   end

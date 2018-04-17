@@ -9,9 +9,6 @@ module RocketPants
 
       # Extend the response on first include.
       class_attribute :_default_version
-      unless ActionController::TestResponse < ResponseHelper
-        ActionController::TestResponse.send :include, ResponseHelper
-      end
 
       unless ActionDispatch::TestResponse < ResponseHelper
         ActionDispatch::TestResponse.send :include, ResponseHelper
@@ -90,21 +87,30 @@ module RocketPants
 
     # Like process, but automatically adds the api version.
     def process(action, *args)
-
       insert_action_controller_testing_into_base
 
-      # Rails 4 changes the method signature. In rails 3, parameters is the first argument.
-      # In Rails 4, it's the second.
-      if args.first.is_a?(String)
-        parameters = (args[1] ||= {})
+      if Rails::VERSION::MAJOR <= 4
+        # Rails 4 changes the method signature. In rails 3, parameters is the first argument.
+        # In Rails 4, it's the second.
+        if args.first.is_a?(String)
+          parameters = (args[1] ||= {})
+        else
+          parameters = (args[0] ||= {})
+        end
       else
         parameters = (args[0] ||= {})
       end
 
       response.recycle_cached_body!
 
-      if _default_version.present? && parameters[:version].blank? && parameters['version'].blank?
-        parameters[:version] = _default_version
+      if Rails::VERSION::MAJOR <= 4
+        if _default_version.present? && parameters[:version].blank? && parameters['version'].blank?
+          parameters[:version] = _default_version
+        end
+      else
+        if _default_version.present? && parameters[:params][:version].blank?
+          parameters[:params][:version] = _default_version
+        end
       end
 
       super action, *args
