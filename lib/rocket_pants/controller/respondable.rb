@@ -18,7 +18,7 @@ module RocketPants
     def self.pagination_type(object)
       if object.respond_to?(:total_entries)
         :will_paginate
-      elsif object.respond_to?(:num_pages) && object.respond_to?(:current_page)
+      elsif object.respond_to?(:total_pages) && object.respond_to?(:current_page)
         :kaminari
       else
         nil
@@ -49,7 +49,7 @@ module RocketPants
           :pages    => collection.total_pages.try(:to_i)
         }
       when :kaminari
-        current, total, per_page = collection.current_page, collection.num_pages, collection.limit_value
+        current, total, per_page = collection.current_page, collection.total_pages, collection.limit_value
         {
           :current  => current,
           :previous => (current > 1 ? (current - 1) : nil),
