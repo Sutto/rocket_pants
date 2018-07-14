@@ -18,12 +18,16 @@ end
 Dir[Pathname(__FILE__).dirname.join("support/**/*.rb")].each { |f| require f }
 
 RSpec.configure do |config|
-  config.mock_with :rr
   config.include I18nSpecHelper
   config.include ConfigHelper
   config.include WebmockResponses
   config.extend  ReversibleData::RSpec2Macros
   config.filter_run_excluding :integration => true
+
+  config.mock_with(:rspec) do |mocks|
+    # mocks.syntax = [:expect] # disallow old should syntax
+    mocks.verify_partial_doubles = true
+  end
 
   config.expect_with :rspec do |c|
     c.syntax = [:should, :expect]
