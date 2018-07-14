@@ -27,6 +27,7 @@ Gem::Specification.new do |s|
   s.add_development_dependency 'sqlite3'
   s.add_development_dependency 'reversible_data', '~> 1.0'
   s.add_development_dependency 'kaminari'
+  s.add_development_dependency 'bundler', '1.16.1' # specific version in sync with monorail
 
   s.files        = Dir.glob("{lib}/**/*")
   s.require_path = 'lib'

@@ -3,6 +3,7 @@ doc/
 coverage/
 pkg/
 Gemfile.lock
-
+.idea/
 .DS_Store
 **/.DS_Store
+.byebug_history
