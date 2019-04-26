@@ -24,6 +24,9 @@ module RocketPants
       },
       :bugsnag => lambda { |controller, exception, request|
         controller.send(:notify_bugsnag, exception, request: request)
+      },
+      :sentry => lambda { |_, exception, _|
+        Raven.capture_exception(exception)
       }
     }
 

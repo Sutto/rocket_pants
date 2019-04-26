@@ -65,6 +65,14 @@ module RocketPants
     rescue LoadError
     end
 
+    # If possible, include Raven methods in the Rails controller
+    begin
+      require 'sentry-raven'
+      require 'sentry-raven/rails/controller_methods'
+      MODULES << Raven::Rails::ControllerMethods
+    rescue LoadError => e
+    end
+
     MODULES.each do |mixin|
       include mixin
     end
